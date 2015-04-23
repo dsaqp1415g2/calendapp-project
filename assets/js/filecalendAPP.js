@@ -11,7 +11,6 @@ $("#boton_login").click(function(e) {
 	e.preventDefault();
 
 	if($('#user').val() == "" || $('#password').val()== ""){
-		console.log("hola");
 		$('<div class="alert alert-danger"> <strong>Error!</strong> Escribe usuario y contraseña </div>').appendTo($("#login_result"));
 	}else{
 	USERNAME = $("#user").val();
@@ -40,7 +39,7 @@ function getUser() {
 	}).done(
 		function(data, status, jqxhr) {
 
-				var gist = data;
+				var repo = data;
 		$("#login_result").text("Logeado");
 		window.location= "login.html";
 		
@@ -51,24 +50,24 @@ function getUser() {
 }
 
 
-$("#boton_mostrar_gists").click(function(e) {
+$("#boton_mostrar_repos").click(function(e) {
 	e.preventDefault();
-	getGists();
+	getrepos();
 });
 
-$("#boton_mostrar_gists_id").click(function(e) {
+$("#boton_mostrar_repos_id").click(function(e) {
 	e.preventDefault();
-	var id_gist = $("#id_gist").val();
-	getGistName(id_gist);
+	var id_repo = $("#id_repo").val();
+	getrepoName(id_repo);
 });
 
 
-$("#boton_crear_gist").click(function(e) {
+$("#boton_crear_repo").click(function(e) {
 	e.preventDefault();
 	
     	var newRepo = new Object();
-		newRepo.description = $("#description_gist").val();
-		newRepo.name = $("#file_name_gist").val();
+		newRepo.description = $("#description_repo").val();
+		newRepo.name = $("#file_name_repo").val();
 		newRepo.homepage = "https://github.com";
 		newRepo.private = false;
 		newRepo.has_issues = true;
@@ -76,28 +75,28 @@ $("#boton_crear_gist").click(function(e) {
 		newRepo.has_downloads = true;
 	
 
-	createGist(newRepo);
+	createrepo(newRepo);
 
 });
 
 $("#boton_borrar_repo_id").click(function(e) {
 	e.preventDefault();
-	$('#borrar_gist').text('');
-	var id_gist = $("#id_gist").val();
-	deleteGist(id_gist);
+	$('#borrar_repo').text('');
+	var id_repo = $("#id_repo").val();
+	deleterepo(id_repo);
 
 });
 
 
 
-$("#boton_editar_gist").click(function(e) {
+$("#boton_editar_repo").click(function(e) {
 	e.preventDefault();
 	$('#update_result').text('');
 
 	var updateRepo = new Object();
 	updateRepo.name = $("#nombre_fichero_nuevo_git").val();
-	updateRepo.description = $("#description_gist").val();
-	updateRepo.id = $('#id_gist').val();
+	updateRepo.description = $("#description_repo").val();
+	updateRepo.id = $('#id_repo').val();
 	actualizarRepo(updateRepo);
 			
 
@@ -128,10 +127,10 @@ function actualizarRepo(updateRepo)
 }
 
 
-function getGists(){
+function getrepos(){
 var url = API_BASE_URL+'/users/'+USERNAME+'/repos';
 
-	$("#resultadoGists").text('');
+	$("#resultadorepos").text('');
 	
 	$.ajax({
 		url : url,
@@ -139,21 +138,21 @@ var url = API_BASE_URL+'/users/'+USERNAME+'/repos';
 		crossDomain : true,
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
-				var gists = data;
+				var repos = data;
 				
-				$.each(gists, function(i, v) {
-					var gist = v;
+				$.each(repos, function(i, v) {
+					var repo = v;
 
-					$('<br>    </br>').appendTo($('#resultadoGists'));
-					$('<strong> ID: </strong> ' + gist.id + '<br>').appendTo($('#resultadoGists'));
-					$('<strong> URL: </strong> ' + gist.html_url + '<br>').appendTo($('#resultadoGists'));
-					$('<strong> Description: </strong> ' + gist.description + '<br>').appendTo($('#resultadoGists'));
-					$('<br>    </br>').appendTo($('#resultadoGists'));
+					$('<br>    </br>').appendTo($('#resultadorepos'));
+					$('<strong> ID: </strong> ' + repo.id + '<br>').appendTo($('#resultadorepos'));
+					$('<strong> URL: </strong> ' + repo.html_url + '<br>').appendTo($('#resultadorepos'));
+					$('<strong> Description: </strong> ' + repo.description + '<br>').appendTo($('#resultadorepos'));
+					$('<br>    </br>').appendTo($('#resultadorepos'));
 				});
 				
 	
 	}).fail(function() {
-		$("#resultadoGists").text("No repositories.");
+		$("#resultadorepos").text("No repositories.");
 	});
 
 
@@ -161,9 +160,9 @@ var url = API_BASE_URL+'/users/'+USERNAME+'/repos';
 }
 
 
-function getGistName(id) {
+function getrepoName(id) {
 	var url = API_BASE_URL + '/repos/' + USERNAME + '/' + id;
-	//$("#resultadoGist").text('');
+	//$("#resultadorepo").text('');
 	
 	$.ajax({
 		url : url,
@@ -171,31 +170,31 @@ function getGistName(id) {
 		crossDomain : true,
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
-				var gists = data;
+				var repos = data;
 				
 
 
-					$('<br>    </br>').appendTo($('#resultadoGist'));
-					$('<strong> ID: </strong> ' + gists.id + '<br>').appendTo($('#resultadoGist'));
-					$('<strong> URL: </strong> ' + gists.html_url + '<br>').appendTo($('#resultadoGist'));
-					$('<strong> Description: </strong> ' + gists.description + '<br>').appendTo($('#resultadoGist'));
-					$('<br>    </br>').appendTo($('#resultadoGist'));
+					$('<br>    </br>').appendTo($('#resultadorepo'));
+					$('<strong> ID: </strong> ' + repos.id + '<br>').appendTo($('#resultadorepo'));
+					$('<strong> URL: </strong> ' + repos.html_url + '<br>').appendTo($('#resultadorepo'));
+					$('<strong> Description: </strong> ' + repos.description + '<br>').appendTo($('#resultadorepo'));
+					$('<br>    </br>').appendTo($('#resultadorepo'));
 			
 				
 
 	}).fail(function() {
-		$("#resultadoGist").text("No repositories.");
+		$("#resultadorepo").text("No repositories.");
 	});
 
 }
 
 
 
-function createGist(gist){
+function createrepo(repo){
 	
 	var url = API_BASE_URL + '/user/repos';
-	var data = JSON.stringify(gist);
-	$("#gists_result").text('');
+	var data = JSON.stringify(repo);
+	$("#repos_result").text('');
 
 	$.ajax({
 		url : url,
@@ -204,9 +203,9 @@ function createGist(gist){
 		dataType : 'json',
 		data : data,
 	}).done(function(data, status, jqxhr) {
-		$('<div class="alert alert-success"> <strong>Ok!</strong> Gist Created</div>').appendTo($("#gists_result"));				
+		$('<div class="alert alert-success"> <strong>Ok!</strong> repo Created</div>').appendTo($("#repos_result"));				
   	}).fail(function() {
-		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#gists_result"));
+		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#repos_result"));
 	});
 
 }
@@ -214,9 +213,9 @@ function createGist(gist){
 
 
 
-function editarGist(gist, id){
-	var url = API_BASE_URL + '/gists/' + id;
-	var data = JSON.stringify(gist);
+function editarrepo(repo, id){
+	var url = API_BASE_URL + '/repos/' + id;
+	var data = JSON.stringify(repo);
 
 	$("#update_result").text('');
 
@@ -227,7 +226,7 @@ function editarGist(gist, id){
 		dataType : 'json',
 		data : data,
 	}).done(function(data, status, jqxhr) {
-		$('<div class="alert alert-success"> <strong>Ok!</strong> Gist Updated</div>').appendTo($("#update_result"));				
+		$('<div class="alert alert-success"> <strong>Ok!</strong> repo Updated</div>').appendTo($("#update_result"));				
   	}).fail(function() {
 		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#update_result"));
 	});
@@ -236,10 +235,10 @@ function editarGist(gist, id){
 
 
 
-function deleteGist(id){
+function deleterepo(id){
 
 	var url = API_BASE_URL + '/repos/' + USERNAME + '/' + id; 
-	$("#borrar_gist").text('');
+	$("#borrar_repo").text('');
 
 	$.ajax({
 		url : url,
@@ -247,9 +246,9 @@ function deleteGist(id){
 		crossDomain : true,
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
-		$('<div class="alert alert-success"> <strong>Ok!</strong> Repository Deleted</div>').appendTo($("#borrar_gist"));				
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Repository Deleted</div>').appendTo($("#borrar_repo"));				
   	}).fail(function() {
-		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#borrar_gist"));
+		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#borrar_repo"));
 	});
 
 	
@@ -258,8 +257,8 @@ function deleteGist(id){
 
 
 
-function GistCollection(gistCollection){
-	this.gists = gistCollection;
+function repoCollection(repoCollection){
+	this.repos = repoCollection;
 
 	var instance = this;
 
@@ -277,21 +276,21 @@ function GistCollection(gistCollection){
 
 	this.toHTML = function(){
 		var html = '';
-		$.each(this.gists, function(i, v) {
-			var gists = v;
-			html = html.concat('<br><strong> Description: ' + gists.description + '</strong><br>');
-			html = html.concat('<br><strong> ID: ' + gists.id + '</strong><br>');
+		$.each(this.repos, function(i, v) {
+			var repos = v;
+			html = html.concat('<br><strong> Description: ' + repos.description + '</strong><br>');
+			html = html.concat('<br><strong> ID: ' + repos.id + '</strong><br>');
 		});
 		
 		html = html.concat(' <br> ');
 
                 var prev = this.getLink('prev');
 		if (prev.length == 1) {
-			html = html.concat(' <a onClick="getGistsURL(\'' + prev[0].href + '\');" class="btn btn-info" type="button">Anterior</a> ');
+			html = html.concat(' <a onClick="getreposURL(\'' + prev[0].href + '\');" class="btn btn-info" type="button">Anterior</a> ');
 		}
                 var next = this.getLink('next');
 		if (next.length == 1) {
-			html = html.concat(' <a onClick="getGistsURL(\'' + next[0].href + '\');" class="btn btn-info" type="button">Siguiente</a> ');
+			html = html.concat(' <a onClick="getreposURL(\'' + next[0].href + '\');" class="btn btn-info" type="button">Siguiente</a> ');
 		}
 
  		return html;	
@@ -301,8 +300,8 @@ function GistCollection(gistCollection){
 
 
 
-function getGistsURL(url) {
-	$("#resultado_paginable_gist").text('');
+function getreposURL(url) {
+	$("#resultado_paginable_repo").text('');
 
 	$.ajax({
 		url : url,
@@ -311,12 +310,12 @@ function getGistsURL(url) {
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
         	var response = data;
-		var gistCollection = new GistCollection(response);
+		var repoCollection = new repoCollection(response);
                 var linkHeader = jqxhr.getResponseHeader('Link');
-                gistCollection.buildLinks(linkHeader);
+                repoCollection.buildLinks(linkHeader);
 
-		var html = gistCollection.toHTML();
-		$("#resultado_paginable_gist").html(html);
+		var html = repoCollection.toHTML();
+		$("#resultado_paginable_repo").html(html);
 
 	}).fail(function(jqXHR, textStatus) {
 		console.log(textStatus);
