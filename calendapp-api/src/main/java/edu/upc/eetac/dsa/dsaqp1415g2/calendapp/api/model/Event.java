@@ -4,8 +4,26 @@ public class Event {
 	private int eventid;
 	private int userid;
 	private int groupid;
+	private String name;
 	private long dateInitial;
 	private long dateFinish;
+	private long lastModified;
+
+	public long getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(long lastModified) {
+		this.lastModified = lastModified;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public int getEventid() {
 		return eventid;

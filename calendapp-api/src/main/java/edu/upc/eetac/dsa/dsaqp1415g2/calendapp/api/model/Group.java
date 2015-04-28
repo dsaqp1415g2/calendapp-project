@@ -4,11 +4,29 @@ public class Group {
 	private int groupid;
 	private String name;
 	private String admin;
-	private String coment;
+	private String description;
+	private long lastModified;
+	private long creationTimestamp;
 	private boolean shared;
 
 	public int getGroupid() {
 		return groupid;
+	}
+
+	public long getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(long lastModified) {
+		this.lastModified = lastModified;
+	}
+
+	public long getCreationTimestamp() {
+		return creationTimestamp;
+	}
+
+	public void setCreationTimestamp(long creationTimestamp) {
+		this.creationTimestamp = creationTimestamp;
 	}
 
 	public void setGroupid(int groupid) {
@@ -31,12 +49,12 @@ public class Group {
 		this.admin = admin;
 	}
 
-	public String getComent() {
-		return coment;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setComent(String coment) {
-		this.coment = coment;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public boolean isShared() {
