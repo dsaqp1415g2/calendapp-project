@@ -38,7 +38,7 @@ insert into events (userid, name, dateInitial, dateFinish) values ('2', 'ir al m
 select sleep(1);
 insert into events (userid, name, dateInitial, dateFinish) values ('4', 'partido con los amigos', '2015-6-2 17:00:00', '2015-6-2 19:30:00');
 select sleep(1);
-insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'examen', '2015-4-21 18:00:00', '2015-4-21 20:30:00');
+insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'evento prueba', '2015-4-21 18:00:00', '2015-7-21 20:30:00');
 select sleep(1);
 insert into events (groupid, name, dateInitial, dateFinish) values ('2', 'Fiesta Maxima en Barcelona', '2015-7-21 18:00:00', '2015-7-22 23:00:00');
 select sleep(1);

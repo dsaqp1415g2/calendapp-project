@@ -48,7 +48,7 @@ public class GroupResource {
 	private String DELETE_GROUP_QUERY = "delete from groups where groupid = ?";
 	private String GET_USERS_QUERY = "select u.userid, u.username, u.name, u.age, u.email from group_users g, users u where g.groupid = ? and u.userid = g.userid and g.state = ?";
 	private String INSERT_USER_IN_GROUP_QUERY = "update group_users set userid = ifnull(?, userid), state = ifnull(?, state) where groupid = ?";
-
+	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
 	@GET
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
 	public GroupCollection getGroups(@QueryParam("length") int length,
@@ -420,6 +420,42 @@ public class GroupResource {
 			}
 		}
 		return user;
+	}
+	
+	@DELETE
+	@Path("/{groupid}/{userid}")
+	public void deleteUserOfGroup(@PathParam("groupid") String groupid,
+			@PathParam("userid") String userid) {
+		//validates
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conn.prepareStatement(DELETE_USER_OF_GROUP_QUERY);
+			stmt.setInt(1, Integer.valueOf(userid));
+			stmt.setInt(2, Integer.valueOf(groupid));
+			int rows = stmt.executeUpdate();
+			if (rows == 0)
+				throw new NotFoundException("There's no relation userid = "
+						+ userid + " with groupid = " + groupid);
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
 	}
 
 }
