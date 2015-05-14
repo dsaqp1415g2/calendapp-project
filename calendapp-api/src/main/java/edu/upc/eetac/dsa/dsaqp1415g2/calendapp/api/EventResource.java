@@ -28,6 +28,8 @@ import javax.ws.rs.core.SecurityContext;
 
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.Event;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.EventCollection;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.User;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.UserCollection;
 
 @Path("/events")
 public class EventResource {
@@ -51,6 +53,8 @@ public class EventResource {
 	private String INSERT_EVENT_USER_QUERY = "insert into events (userid, name, dateInitial, dateFinish) values (?,?,?,?)";
 	private String UPDATE_EVENT_QUERY = "update events set name = ifnull(?, name), dateInitial = ifnull(?, dateInitial), dateFinish = ifnull(?, dateFinish) where eventid = ?";
 	private String DELETE_EVENT_QUERY = "delete from events where eventid = ?";
+	private String GET_USERS_STATE_QUERY = "select u.* from users u, state s where s.eventid = ? and s.state = ? and u.userid = s.userid";
+	private String UPDATE_STATE_QUERY = "update state set state = ifnull(?, state) where userid = ? and eventid = ?";
 
 	@GET
 	@Path("/group/{groupid}")
@@ -248,7 +252,7 @@ public class EventResource {
 					Response.Status.SERVICE_UNAVAILABLE);
 		}
 		PreparedStatement stmt = null;
-		try{
+		try {
 			stmt = conn.prepareStatement(GET_EVENTS_NOW_USER_QUERY);
 			stmt.setInt(1, Integer.valueOf(userid));
 			ResultSet rs = stmt.executeQuery();
@@ -276,7 +280,7 @@ public class EventResource {
 		}
 		return events;
 	}
-	
+
 	private EventCollection getEventsNowGroup(EventCollection events,
 			String userid) {
 		Connection conn = null;
@@ -287,7 +291,7 @@ public class EventResource {
 					Response.Status.SERVICE_UNAVAILABLE);
 		}
 		PreparedStatement stmt = null;
-		try{
+		try {
 			stmt = conn.prepareStatement(GET_EVENTS_NOW_GROUP_QUERY);
 			stmt.setInt(1, Integer.valueOf(userid));
 			ResultSet rs = stmt.executeQuery();
@@ -315,7 +319,7 @@ public class EventResource {
 		}
 		return events;
 	}
-	
+
 	@GET
 	@Path("/{eventid}")
 	@Produces(MediaType.CALENDAPP_API_EVENT)
@@ -397,7 +401,7 @@ public class EventResource {
 		}
 
 		PreparedStatement stmt = null;
-
+		boolean group = false;
 		try {
 			if (event.getGroupid() == 0 && event.getUserid() == 0) {
 				// error, poner mensaje de error.
@@ -405,6 +409,7 @@ public class EventResource {
 				stmt = conn.prepareStatement(INSERT_EVENT_GROUP_QUERY,
 						Statement.RETURN_GENERATED_KEYS);
 				stmt.setInt(1, event.getGroupid());
+				group = true;
 			} else if (event.getGroupid() == 0 && event.getUserid() != 0) {
 				stmt = conn.prepareStatement(INSERT_EVENT_USER_QUERY,
 						Statement.RETURN_GENERATED_KEYS);
@@ -432,7 +437,80 @@ public class EventResource {
 			} catch (SQLException e) {
 			}
 		}
+		if (group)
+			createEvento(event.getEventid());
 		return event;
+	}
+
+	private String CREATE_EVENT_STATE_PENDING_QUERY = "insert into state values (?, ?, 'pending')";
+
+	private void createEvento(int eventid) {
+		UserCollection users;
+		users = getUsersOfEventId(eventid);
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			for (int i = 0; i < users.getUsers().size(); i++) {
+				stmt = null;
+				stmt = conn.prepareStatement(CREATE_EVENT_STATE_PENDING_QUERY,
+						Statement.RETURN_GENERATED_KEYS);
+				stmt.setInt(1, users.getUsers().get(i).getUserid());
+				stmt.setInt(2, eventid);
+				stmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
+	private String GET_USERS_OF_EVENT = "select g.userid from group_users g, events e where e.eventid = ? and e.groupid = g.groupid";
+
+	private UserCollection getUsersOfEventId(int eventid) {
+		UserCollection users = new UserCollection();
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USERS_OF_EVENT);
+			stmt.setInt(1, eventid);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				User user = new User();
+				user.setUserid(rs.getInt("userid"));
+				users.addUser(user);
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return users;
 	}
 
 	@PUT
@@ -513,4 +591,94 @@ public class EventResource {
 			}
 		}
 	}
+
+	@GET
+	@Path("/state/{eventid}/{state}")
+	@Produces(MediaType.CALENDAPP_API_USER_COLLECTION)
+	public UserCollection getUsersState(@PathParam("eventid") String eventid,
+			@PathParam("state") String state) {
+		UserCollection users = new UserCollection();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USERS_STATE_QUERY);
+			stmt.setInt(1, Integer.valueOf(eventid));
+			if (state.equals("join") || state.equals("pending")
+					|| state.equals("decline")) {
+				stmt.setString(2, state);
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					User user = new User();
+					user.setUserid(rs.getInt("userid"));
+					user.setUsername(rs.getString("username"));
+					user.setName(rs.getString("name"));
+					user.setAge(rs.getInt("age"));
+					user.setEmail(rs.getString("email"));
+					users.addUser(user);
+				}
+			} else
+				throw new NotFoundException("URL incorrect");
+
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+
+		return users;
+	}
+
+	@PUT
+	@Path("/state/{eventid}/{userid}/{state}")
+	public void updateState(@PathParam("eventid") String eventid,
+			@PathParam("userid") String userid, @PathParam("state") String state) {
+		// validateUser();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(UPDATE_STATE_QUERY);
+			if (state.equals("join") || state.equals("pending")
+					|| state.equals("decline")) {
+				stmt.setString(1, state);
+				stmt.setInt(2, Integer.valueOf(userid));
+				stmt.setInt(3, Integer.valueOf(eventid));
+				int rows = stmt.executeUpdate();
+				if (rows != 1)
+					throw new NotFoundException(
+							"There's no state with userid = " + userid
+									+ " and eventid = " + eventid);
+			} else
+				throw new NotFoundException("Esta mal el estado");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
 }

@@ -1,7 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,6 +24,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.Group;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.GroupCollection;
@@ -34,8 +34,8 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.UserCollection;
 @Path("/groups")
 public class GroupResource {
 
-	// @Context
-	// private SecurityContext security;
+	@Context
+	private SecurityContext security;
 
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
 	private String GET_GROUPS_QUERY_FROM_LAST = "select * from groups where creation_timestamp > ifnull(?, now())  order by creation_timestamp desc limit ?";
@@ -49,6 +49,9 @@ public class GroupResource {
 	private String GET_USERS_QUERY = "select u.userid, u.username, u.name, u.age, u.email from group_users g, users u where g.groupid = ? and u.userid = g.userid and g.state = ?";
 	private String INSERT_USER_IN_GROUP_QUERY = "update group_users set userid = ifnull(?, userid), state = ifnull(?, state) where groupid = ?";
 	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
+	private String GET_GROUPS_OF_USERID_QUERY ="select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
+	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
+	
 	@GET
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
 	public GroupCollection getGroups(@QueryParam("length") int length,
@@ -457,5 +460,113 @@ public class GroupResource {
 			}
 		}
 	}
-
+	
+	@GET
+	@Path("/user/{userid}")
+	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
+	public GroupCollection getGroupsOfUser (@PathParam("userid") String userid) {
+		GroupCollection groups = new GroupCollection();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_GROUPS_OF_USERID_QUERY);
+			stmt.setInt(1, Integer.valueOf(userid));
+			ResultSet rs = stmt.executeQuery();
+			boolean first = true;
+			long oldestTimestamp = 0;
+			while (rs.next()) {
+				Group group = new Group();
+				group.setGroupid(rs.getInt("groupid"));
+				group.setName(rs.getString("name"));
+				group.setAdmin(rs.getString("admin"));
+				group.setDescription(rs.getString("description"));
+				group.setShared(rs.getBoolean("shared"));
+				group.setLastModified(rs.getTimestamp("last_modified")
+						.getTime());
+				group.setCreationTimestamp(rs
+						.getTimestamp("creation_timestamp").getTime());
+				oldestTimestamp = rs.getTimestamp("creation_timestamp")
+						.getTime();
+				if (first) {
+					first = false;
+					groups.setNewestTimestamp(group.getCreationTimestamp());
+				}
+				groups.addGroup(group);
+			}
+			groups.setOldestTimestamp(oldestTimestamp);
+			
+		}catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return groups;
+	}
+	
+	@GET
+	@Path("/admin/{userid}")
+	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
+	public GroupCollection getGroupsOfAdmin (@PathParam("userid") String userid) {
+		GroupCollection groups = new GroupCollection();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_GROUPS_ADMIN_USERID_QUERY);
+			stmt.setInt(1, Integer.valueOf(userid));
+			ResultSet rs = stmt.executeQuery();
+			boolean first = true;
+			long oldestTimestamp = 0;
+			while (rs.next()) {
+				Group group = new Group();
+				group.setGroupid(rs.getInt("groupid"));
+				group.setName(rs.getString("name"));
+				group.setAdmin(rs.getString("admin"));
+				group.setDescription(rs.getString("description"));
+				group.setShared(rs.getBoolean("shared"));
+				group.setLastModified(rs.getTimestamp("last_modified")
+						.getTime());
+				group.setCreationTimestamp(rs
+						.getTimestamp("creation_timestamp").getTime());
+				oldestTimestamp = rs.getTimestamp("creation_timestamp")
+						.getTime();
+				if (first) {
+					first = false;
+					groups.setNewestTimestamp(group.getCreationTimestamp());
+				}
+				groups.addGroup(group);
+			}
+			groups.setOldestTimestamp(oldestTimestamp);
+			
+		}catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return groups;
+	}
+	
 }
