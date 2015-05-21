@@ -7,6 +7,15 @@ public class User {
 	private String name;
 	private int age;
 	private String email;
+	private boolean loginSuccessful;
+
+	public boolean isLoginSuccessful() {
+		return loginSuccessful;
+	}
+
+	public void setLoginSuccessful(boolean loginSuccessful) {
+		this.loginSuccessful = loginSuccessful;
+	}
 
 	public int getUserid() {
 		return userid;
