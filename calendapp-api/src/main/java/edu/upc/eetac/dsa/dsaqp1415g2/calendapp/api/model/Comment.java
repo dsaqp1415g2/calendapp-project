@@ -26,22 +26,6 @@ public class Comment {
 		this.creationTimestamp = creationTimestamp;
 	}
 
-	public int getLikes() {
-		return likes;
-	}
-
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
-
-	public int getDislikes() {
-		return dislikes;
-	}
-
-	public void setDislikes(int dislikes) {
-		this.dislikes = dislikes;
-	}
-
 	public int getCommentid() {
 		return commentid;
 	}
@@ -56,6 +40,22 @@ public class Comment {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 
 	public int getEventid() {

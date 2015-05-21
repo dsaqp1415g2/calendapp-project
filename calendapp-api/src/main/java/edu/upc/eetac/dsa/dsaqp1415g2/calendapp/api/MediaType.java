@@ -9,5 +9,9 @@ public class MediaType {
 	public final static String CALENDAPP_API_EVENT_COLLECTION ="application/vnd.calendapp.api.event.collection+json";
 	public final static String CALENDAPP_API_COMMENT = "application/vnd.calendapp.api.comment+json";
 	public final static String CALENDAPP_API_COMMENT_COLLECTION = "application/vnd.calendapp.api.comment.collection+json";
+	public final static String CALENDAPP_API_LIKE = "application/vnd.calendapp.api.like+json";
+	public final static String CALENDAPP_API_LIKE_COLLECTION = "application/vnd.calendapp.api.like.collection+json";
+	
+	
 	public final static String CALENDAPP_API_ERROR = "application/vnd.dsa.calendapp.error+json";
 }

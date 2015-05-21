@@ -51,11 +51,11 @@ insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'entreg
 
 
 
-insert into comments (username, eventid, content) values ('angel', '1', 'comentario de prueba');
+insert into comments (username, eventid, content, likes) values ('angel', '1', 'comentario de prueba', '1');
 select sleep(1);
-insert into comments (username, eventid, content) values ('angel', '5', 'ahi estare!!!');
+insert into comments (username, eventid, content, likes, dislikes) values ('angel', '5', 'ahi estare!!!', '1','1');
 select sleep(1);
-insert into comments (username, eventid, content) values ('jordi', '6', 'Tener en cuenta de llevar todos los documentos');
+insert into comments (username, eventid, content, likes) values ('jordi', '6', 'Tener en cuenta de llevar todos los documentos', '1');
 select sleep(1);
 insert into comments (username, eventid, content) values ('angel', '8', 'ya falta poco para acabarlo');
 select sleep(1);
@@ -79,11 +79,8 @@ insert into state values ('2','8', 'join');
 insert into state values ('3','8', 'join');
 
 insert into likes (commentid, username, likeComment, dislikeComment) values ('1','angel', true, false);
-select sleep(1);
 insert into likes (commentid, username, likeComment, dislikeComment) values ('2','jordi', true, false);
-select sleep(1);
-insert into likes (commentid, username, likeComment, dislikeComment) values ('2' , 'manolito', false, true);
-select sleep(1);
+insert into likes (commentid, username, likeComment, dislikeComment) values ('2','manolito', false, true);
 insert into likes (commentid, username, likeComment, dislikeComment) values ('3','otal', true, false);
 
 
