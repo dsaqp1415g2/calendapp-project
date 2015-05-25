@@ -9,7 +9,11 @@ insert into users(username, userpass, name, age, email) values('pepito', MD5('pe
 
 insert into users(username, userpass, name, age, email) values('manolito', MD5('manolito'), 'Manolito Gafotas', '31', 'manolito@gafotas.com');
 
-
+insert into users_roles values ('angel', 'registered');
+insert into users_roles values ('otal', 'registered');
+insert into users_roles values ('jordi', 'registered');
+insert into users_roles values ('pepito', 'registered');
+insert into users_roles values ('manolito', 'registered');
 
 insert into groups(name, admin, description, shared) values('UPC-DSA', 'angel', 'grupo con los eventos de la asignatura DSA de la UPC', true);
 select sleep(1);

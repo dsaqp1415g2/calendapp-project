@@ -42,7 +42,7 @@ public class UserResource {
 	@Consumes(MediaType.CALENDAPP_API_USER)
 	@Produces(MediaType.CALENDAPP_API_USER)
 	public User createUser(User user) {
-		// validateUser(user);
+		validateUser(user);
 
 		Connection conn = null;
 		try {
@@ -95,6 +95,19 @@ public class UserResource {
 		}
 		user.setUserpass(null);
 		return user;
+	}
+
+	private void validateUser(User user) {
+		if (user.getUsername() == null)
+			throw new BadRequestException("username cannot be null.");
+		if (user.getUserpass() == null)
+			throw new BadRequestException("password cannot be null.");
+		if (user.getName() == null)
+			throw new BadRequestException("name cannot be null.");
+		if (user.getAge() == 0)
+			throw new BadRequestException("age cannot be null.");
+		if (user.getEmail() == null)
+			throw new BadRequestException("email cannot be null.");
 	}
 
 	@Path("/login")
@@ -159,7 +172,7 @@ public class UserResource {
 	@Consumes(MediaType.CALENDAPP_API_USER)
 	@Produces(MediaType.CALENDAPP_API_USER)
 	public User updateUser(@PathParam("userid") String userid, User user) {
-		// validateUser
+		validateUser(user);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();

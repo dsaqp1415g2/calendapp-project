@@ -12,6 +12,13 @@ create table users (
 	email 	 		varchar(70) not null
 );
 
+create table users_roles (
+	username			varchar(20) not null,
+	rolename 			varchar(20) not null,
+	foreign key(username) references users(username) on delete cascade,
+	primary key (username, rolename)
+);
+
 create table groups (
 	groupid 	 	int not null auto_increment primary key,
 	name 		 	varchar(30) not null,
@@ -48,7 +55,7 @@ create table comments (
 	commentid	 	int not null auto_increment primary key,
 	username	 	varchar(30) not null,
 	eventid		 	int not null,
-	content		 	varchar(150) not null,
+	content		 	varchar(200) not null,
 	likes			int not null default 0,
 	dislikes		int not null default 0,
 	last_modified		timestamp default current_timestamp ON UPDATE CURRENT_TIMESTAMP,

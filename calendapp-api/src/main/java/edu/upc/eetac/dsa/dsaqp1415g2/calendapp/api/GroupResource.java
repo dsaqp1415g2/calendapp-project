@@ -8,8 +8,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 import javax.sql.DataSource;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -49,9 +51,9 @@ public class GroupResource {
 	private String GET_USERS_QUERY = "select u.userid, u.username, u.name, u.age, u.email from group_users g, users u where g.groupid = ? and u.userid = g.userid and g.state = ?";
 	private String INSERT_USER_IN_GROUP_QUERY = "update group_users set userid = ifnull(?, userid), state = ifnull(?, state) where groupid = ?";
 	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
-	private String GET_GROUPS_OF_USERID_QUERY ="select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
+	private String GET_GROUPS_OF_USERID_QUERY = "select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
 	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
-	
+
 	@GET
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
 	public GroupCollection getGroups(@QueryParam("length") int length,
@@ -204,7 +206,7 @@ public class GroupResource {
 	@Consumes(MediaType.CALENDAPP_API_GROUP)
 	@Produces(MediaType.CALENDAPP_API_GROUP)
 	public Group createGroup(Group group) {
-		// validateGroup(group);
+		validateGroup(group);
 
 		Connection conn = null;
 		try {
@@ -251,7 +253,7 @@ public class GroupResource {
 	@Produces(MediaType.CALENDAPP_API_GROUP)
 	public Group updateGroup(@PathParam("groupid") String groupid, Group group) {
 		validateGroup(group);
-		validateUser(groupid);
+		validateAdmin(groupid);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -291,14 +293,18 @@ public class GroupResource {
 	}
 
 	private void validateGroup(Group group) {
-		// TODO Auto-generated method stub
-
+		if (group.getName() == null)
+			throw new BadRequestException("Name cannot be null.");
+		if (group.getAdmin() == null)
+			throw new BadRequestException("Admin cannot be null.");
+		if (group.getDescription() == null)
+			throw new BadRequestException("Description cannot be null.");
 	}
 
 	@DELETE
 	@Path("/{groupid}")
 	public void deleteGroup(@PathParam("groupid") String groupid) {
-		validateUser(groupid);
+		validateAdmin(groupid);
 
 		Connection conn = null;
 		try {
@@ -332,9 +338,11 @@ public class GroupResource {
 
 	}
 
-	private void validateUser(String groupid) {
-		// TODO Auto-generated method stub
-
+	private void validateAdmin(String groupid) {
+		Group group = getGroupFromDataBase(groupid);
+		String admin = group.getAdmin();
+		if (!security.getUserPrincipal().getName().equals(admin))
+			throw new ForbiddenException("You are not allowd to modify this group.");
 	}
 
 	@GET
@@ -390,7 +398,7 @@ public class GroupResource {
 	@Produces(MediaType.CALENDAPP_API_USER)
 	public User createUserInGroup(@PathParam("groupid") String groupid,
 			@PathParam("action") String action, User user) {
-		validateUser(groupid);
+		validateAdmin(groupid);
 
 		Connection conn = null;
 		try {
@@ -424,12 +432,12 @@ public class GroupResource {
 		}
 		return user;
 	}
-	
+
 	@DELETE
 	@Path("/{groupid}/{userid}")
 	public void deleteUserOfGroup(@PathParam("groupid") String groupid,
 			@PathParam("userid") String userid) {
-		//validates
+		validateAdmin(groupid);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -439,7 +447,7 @@ public class GroupResource {
 		}
 
 		PreparedStatement stmt = null;
-		
+
 		try {
 			stmt = conn.prepareStatement(DELETE_USER_OF_GROUP_QUERY);
 			stmt.setInt(1, Integer.valueOf(userid));
@@ -460,11 +468,11 @@ public class GroupResource {
 			}
 		}
 	}
-	
+
 	@GET
 	@Path("/user/{userid}")
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
-	public GroupCollection getGroupsOfUser (@PathParam("userid") String userid) {
+	public GroupCollection getGroupsOfUser(@PathParam("userid") String userid) {
 		GroupCollection groups = new GroupCollection();
 		Connection conn = null;
 		try {
@@ -500,8 +508,8 @@ public class GroupResource {
 				groups.addGroup(group);
 			}
 			groups.setOldestTimestamp(oldestTimestamp);
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
@@ -514,11 +522,11 @@ public class GroupResource {
 		}
 		return groups;
 	}
-	
+
 	@GET
 	@Path("/admin/{userid}")
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
-	public GroupCollection getGroupsOfAdmin (@PathParam("userid") String userid) {
+	public GroupCollection getGroupsOfAdmin(@PathParam("userid") String userid) {
 		GroupCollection groups = new GroupCollection();
 		Connection conn = null;
 		try {
@@ -554,8 +562,8 @@ public class GroupResource {
 				groups.addGroup(group);
 			}
 			groups.setOldestTimestamp(oldestTimestamp);
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
@@ -568,5 +576,5 @@ public class GroupResource {
 		}
 		return groups;
 	}
-	
+
 }

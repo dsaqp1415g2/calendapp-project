@@ -7,5 +7,5 @@
 	<Realm className="org.apache.catalina.realm.DataSourceRealm"
 		dataSourceName="jdbc/beeterdb" localDataSource="true" digest="MD5"
 		userTable="users" userNameCol="username" userCredCol="userpass"
-		userRoleTable="groups" roleNameCol="admin" />
+		userRoleTable="users_roles" roleNameCol="rolename" />
 </Context>

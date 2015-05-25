@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 import javax.sql.DataSource;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -187,7 +188,7 @@ public class CommentResource {
 	@Consumes(MediaType.CALENDAPP_API_COMMENT)
 	@Produces(MediaType.CALENDAPP_API_COMMENT)
 	public Comment createComment(Comment comment) {
-		// validateComment
+		validateComment(comment);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -222,6 +223,14 @@ public class CommentResource {
 			}
 		}
 		return comment;
+	}
+
+	private void validateComment(Comment comment) {
+		if (comment.getContent() == null)
+			throw new BadRequestException("Content can't be null.");
+		if (comment.getContent().length() > 200)
+			throw new BadRequestException(
+					"Content can't be greater than 200 characters. ");
 	}
 
 	@PUT

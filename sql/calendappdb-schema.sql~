@@ -49,6 +49,8 @@ create table comments (
 	username	 	varchar(30) not null,
 	eventid		 	int not null,
 	content		 	varchar(150) not null,
+	likes			int not null default 0,
+	dislikes		int not null default 0s,
 	last_modified		timestamp default current_timestamp ON UPDATE CURRENT_TIMESTAMP,
 	creation_timestamp	datetime not null default current_timestamp,
 	foreign key (username)  references users (username) on delete cascade,

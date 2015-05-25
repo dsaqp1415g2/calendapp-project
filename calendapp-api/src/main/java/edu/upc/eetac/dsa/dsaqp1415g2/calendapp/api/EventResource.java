@@ -8,8 +8,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 
 import javax.sql.DataSource;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -28,6 +30,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.Event;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.EventCollection;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.Group;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.User;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model.UserCollection;
 
@@ -63,7 +66,7 @@ public class EventResource {
 			@QueryParam("before") long before, @QueryParam("after") long after,
 			@QueryParam("name") String name,
 			@PathParam("groupid") String groupid) {
-
+		validateUserOfGroup(groupid);
 		EventCollection events = new EventCollection();
 
 		Connection conn = null;
@@ -145,13 +148,81 @@ public class EventResource {
 		return events;
 	}
 
+	private String ASK_USER_OF_GROUPID = "select g.* from group_users g, users u where g.userid = u.userid and u.username = ? and g.groupid = ? and g.state = 'accepted'";
+
+	private void validateUserOfGroup(String groupid) {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(ASK_USER_OF_GROUPID);
+			stmt.setString(1, security.getUserPrincipal().getName());
+			stmt.setInt(2, Integer.valueOf(groupid));
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.next())
+				throw new ForbiddenException(
+						"You are not allowed to make this. ");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
+	private String VALIDATE_USER = "select * from users where userid = ?";
+
+	private void validateUser(String userid) {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(VALIDATE_USER);
+			stmt.setInt(1, Integer.valueOf(userid));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				String username = rs.getString("username");
+				if (!security.getUserPrincipal().getName().equals(username))
+					throw new ForbiddenException("You aren't userid = "
+							+ userid);
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
 	@GET
 	@Path("/user/{userid}")
 	@Produces(MediaType.CALENDAPP_API_EVENT_COLLECTION)
 	public EventCollection getEventsUser(@QueryParam("length") int length,
 			@QueryParam("before") long before, @QueryParam("after") long after,
 			@QueryParam("name") String name, @PathParam("userid") String userid) {
-
+		validateUser(userid);
 		EventCollection events = new EventCollection();
 
 		Connection conn = null;
@@ -236,6 +307,7 @@ public class EventResource {
 	@GET
 	@Path("/now/{userid}")
 	public EventCollection getEventsNow(@PathParam("userid") String userid) {
+		validateUser(userid);
 		EventCollection events = new EventCollection();
 		events = getEventsNowUser(events, userid);
 		events = getEventsNowGroup(events, userid);
@@ -391,7 +463,8 @@ public class EventResource {
 	@Consumes(MediaType.CALENDAPP_API_EVENT)
 	@Produces(MediaType.CALENDAPP_API_EVENT)
 	public Event createEvent(Event event) {
-		// validateEvent(event);
+		validateEvent(event);
+		validateModifyEvent(event.getGroupid());
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -403,9 +476,7 @@ public class EventResource {
 		PreparedStatement stmt = null;
 		boolean group = false;
 		try {
-			if (event.getGroupid() == 0 && event.getUserid() == 0) {
-				// error, poner mensaje de error.
-			} else if (event.getGroupid() != 0 && event.getUserid() == 0) {
+			if (event.getGroupid() != 0 && event.getUserid() == 0) {
 				stmt = conn.prepareStatement(INSERT_EVENT_GROUP_QUERY,
 						Statement.RETURN_GENERATED_KEYS);
 				stmt.setInt(1, event.getGroupid());
@@ -440,6 +511,63 @@ public class EventResource {
 		if (group)
 			createEvento(event.getEventid());
 		return event;
+	}
+
+	private void validateEvent(Event event) {
+		if (event.getGroupid() == 0 && event.getUserid() == 0) {
+			throw new BadRequestException("This event who is?");
+		}
+		if (event.getName() == null)
+			throw new BadRequestException("The name can't be null");
+		if (event.getName().length() > 100)
+			throw new BadRequestException(
+					"The name can't be greater than 100 characters");
+
+	}
+
+	private String VALIDATE_MODIFY_EVENT = "select * from groups where groupid = ?";
+
+	private void validateModifyEvent(int groupid) {
+		Group group = new Group();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(VALIDATE_MODIFY_EVENT);
+			stmt.setInt(1, groupid);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				group.setShared(rs.getBoolean("shared"));
+				group.setAdmin(rs.getString("admin"));
+				if (group.isShared()) {
+					validateUserOfGroup(Integer.toString(groupid));
+				} else {
+					if (!security.getUserPrincipal().getName()
+							.equals(group.getAdmin()))
+						throw new ForbiddenException(
+								"You are not the admin of group with groupid = "
+										+ groupid);
+				}
+			} else
+				throw new NotFoundException("There's no group with groupid = "
+						+ groupid);
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
 	}
 
 	private String CREATE_EVENT_STATE_PENDING_QUERY = "insert into state values (?, ?, 'pending')";
@@ -518,7 +646,8 @@ public class EventResource {
 	@Consumes(MediaType.CALENDAPP_API_EVENT)
 	@Produces(MediaType.CALENDAPP_API_EVENT)
 	public Event updateEvent(@PathParam("eventid") String eventid, Event event) {
-		// hacer validates de user y event
+		validateEvent(event);
+		validateModifyEvent(event.getGroupid());
 
 		Connection conn = null;
 		try {
@@ -559,7 +688,8 @@ public class EventResource {
 	@DELETE
 	@Path("/{eventid}")
 	public void deleteEvent(@PathParam("eventid") String eventid) {
-		// validates
+		Event event = getEventFromDataBase(eventid);
+		validateModifyEvent(event.getGroupid());
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -597,6 +727,8 @@ public class EventResource {
 	@Produces(MediaType.CALENDAPP_API_USER_COLLECTION)
 	public UserCollection getUsersState(@PathParam("eventid") String eventid,
 			@PathParam("state") String state) {
+		Event event = getEventFromDataBase(eventid);
+		validateUserOfGroup(Integer.toString(event.getGroupid()));
 		UserCollection users = new UserCollection();
 		Connection conn = null;
 		try {
@@ -645,7 +777,8 @@ public class EventResource {
 	@Path("/state/{eventid}/{userid}/{state}")
 	public void updateState(@PathParam("eventid") String eventid,
 			@PathParam("userid") String userid, @PathParam("state") String state) {
-		// validateUser();
+		Event event = getEventFromDataBase(eventid);
+		validateUserOfGroup(Integer.toString(event.getGroupid()));
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
