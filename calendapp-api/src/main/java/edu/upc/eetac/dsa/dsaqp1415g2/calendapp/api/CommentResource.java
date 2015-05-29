@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -56,6 +57,7 @@ public class CommentResource {
 	public CommentCollection getComments(@QueryParam("length") int length,
 			@PathParam("eventid") String eventid,
 			@QueryParam("before") long before, @QueryParam("after") long after) {
+		// validateUserOfGroup(eventid);
 		CommentCollection comments = new CommentCollection();
 		Connection conn = null;
 		try {
@@ -138,6 +140,39 @@ public class CommentResource {
 		return rb.build();
 	}
 
+	private String ASK_USER_OF_GROUPID = "select g.* from group_users g, events e, users u where g.userid = u.userid and u.username = ? and g.state = 'accepted' and e.eventid = ? and e.groupid = g.groupid;";
+
+	private void validateUserOfGroup(String eventid) {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(ASK_USER_OF_GROUPID);
+			stmt.setString(1, security.getUserPrincipal().getName());
+			stmt.setInt(2, Integer.valueOf(eventid));
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.next())
+				throw new ForbiddenException(
+						"You are not allowed to make this. ");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
 	private Comment getCommentFromDataBase(String commentid) {
 		Comment comment = new Comment();
 
@@ -188,6 +223,7 @@ public class CommentResource {
 	@Consumes(MediaType.CALENDAPP_API_COMMENT)
 	@Produces(MediaType.CALENDAPP_API_COMMENT)
 	public Comment createComment(Comment comment) {
+		// validateUserOfGroup(Integer.toString(comment.getEventid()));
 		validateComment(comment);
 		Connection conn = null;
 		try {
@@ -239,6 +275,8 @@ public class CommentResource {
 	@Produces(MediaType.CALENDAPP_API_COMMENT)
 	public Comment updateComment(@PathParam("commentid") String commentid,
 			Comment comment) {
+		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateComment(comment);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -276,7 +314,9 @@ public class CommentResource {
 	@DELETE
 	@Path("/{commentid}")
 	public void deleteComment(@PathParam("commentid") String commentid) {
-		// validateUser
+		Comment comment = getCommentFromDataBase(commentid);
+		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -311,6 +351,8 @@ public class CommentResource {
 	@Produces(MediaType.CALENDAPP_API_LIKE_COLLECTION)
 	public LikeCollection getLikes(@PathParam("commentid") String commentid,
 			@PathParam("like") String likeQuery) {
+		Comment comment = getCommentFromDataBase(commentid);
+		// validateUserOfGroup(Integer.toString(comment.getEventid()));
 		LikeCollection likes = new LikeCollection();
 		Connection conn = null;
 		try {
@@ -359,6 +401,8 @@ public class CommentResource {
 	@Path("/likes/{commentid}")
 	@Consumes(MediaType.CALENDAPP_API_LIKE)
 	public void createLike(@PathParam("commentid") String commentid, Like like) {
+		Comment comment = getCommentFromDataBase(commentid);
+		// validateUserOfGroup(Integer.toString(comment.getEventid()));
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -370,11 +414,15 @@ public class CommentResource {
 		try {
 			stmt = conn.prepareStatement(INSERT_LIKE_QUERY);
 			stmt.setInt(1, like.getCommentid());
-			stmt.setString(2, like.getUsername());
+			stmt.setString(2, security.getUserPrincipal().getName());
 			stmt.setBoolean(3, like.isLikeComment());
 			stmt.setBoolean(4, like.isDislikeComment());
-			stmt.executeUpdate();
-
+			int rows = stmt.executeUpdate();
+			if (rows == 1) {
+				updateLikes(commentid);
+			} else
+				throw new NotFoundException(
+						"There's no comment with commentid = " + commentid);
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
@@ -388,10 +436,119 @@ public class CommentResource {
 		}
 	}
 
+	private String UPDATE_LIKES_OF_COMMENT_QUERY = "update comments set likes = ifnull(?, likes), dislikes = if null(?, dislikes) where commentid = ?";
+
+	private void updateLikes(String commentid) {
+		int likes = getLikesOfCommentid(commentid);
+		int dislikes = getDislikesOfCommentid(commentid);
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(UPDATE_LIKES_OF_COMMENT_QUERY);
+			stmt.setInt(1, likes);
+			stmt.setInt(2, dislikes);
+			stmt.setInt(3, Integer.valueOf(commentid));
+			int rows = stmt.executeUpdate();
+			if (rows != 0)
+				throw new NotFoundException(
+						"There's no comment with commentid = " + commentid);
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
+	private String GET_COUNT_LIKES_QUERY = "select count(*) from likes where likeComment = 1 and commentid = ?";
+	private String GET_COUNT_DISLIKES_QUERY = " select count(*) from likes where dislikeComment = 1 and commentid = ?";
+
+	private int getDislikesOfCommentid(String commentid) {
+		int likes = 0;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_COUNT_LIKES_QUERY);
+			stmt.setInt(1, Integer.valueOf(commentid));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				likes = rs.getInt(1);
+			} else
+				throw new NotFoundException("ha fallado algo.");
+
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return likes;
+	}
+
+	private int getLikesOfCommentid(String commentid) {
+		int likes = 0;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_COUNT_DISLIKES_QUERY);
+			stmt.setInt(1, Integer.valueOf(commentid));
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				likes = rs.getInt(1);
+			} else
+				throw new NotFoundException("ha fallado algo.");
+
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return likes;
+	}
+
 	@PUT
 	@Path("/likes/{commentid}")
 	@Consumes(MediaType.CALENDAPP_API_LIKE)
 	public void updateLike(@PathParam("commentid") String commentid, Like like) {
+		Comment comment = getCommentFromDataBase(commentid);
+		// validateUserOfGroup(Integer.toString(comment.getEventid()));
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -406,6 +563,11 @@ public class CommentResource {
 			stmt.setBoolean(2, like.isDislikeComment());
 			stmt.setInt(3, like.getLikeid());
 			int rows = stmt.executeUpdate();
+			if (rows == 1) {
+				updateLikes(commentid);
+			} else
+				throw new NotFoundException(
+						"There's no comment with commentid = " + commentid);
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);

@@ -66,7 +66,7 @@ public class EventResource {
 			@QueryParam("before") long before, @QueryParam("after") long after,
 			@QueryParam("name") String name,
 			@PathParam("groupid") String groupid) {
-		validateUserOfGroup(groupid);
+		//validateUserOfGroup(groupid);
 		EventCollection events = new EventCollection();
 
 		Connection conn = null;
@@ -222,7 +222,7 @@ public class EventResource {
 	public EventCollection getEventsUser(@QueryParam("length") int length,
 			@QueryParam("before") long before, @QueryParam("after") long after,
 			@QueryParam("name") String name, @PathParam("userid") String userid) {
-		validateUser(userid);
+		//validateUser(userid);
 		EventCollection events = new EventCollection();
 
 		Connection conn = null;
@@ -307,7 +307,7 @@ public class EventResource {
 	@GET
 	@Path("/now/{userid}")
 	public EventCollection getEventsNow(@PathParam("userid") String userid) {
-		validateUser(userid);
+		//validateUser(userid);
 		EventCollection events = new EventCollection();
 		events = getEventsNowUser(events, userid);
 		events = getEventsNowGroup(events, userid);
@@ -464,7 +464,7 @@ public class EventResource {
 	@Produces(MediaType.CALENDAPP_API_EVENT)
 	public Event createEvent(Event event) {
 		validateEvent(event);
-		validateModifyEvent(event.getGroupid());
+		//validateModifyEvent(event.getGroupid());
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -647,7 +647,7 @@ public class EventResource {
 	@Produces(MediaType.CALENDAPP_API_EVENT)
 	public Event updateEvent(@PathParam("eventid") String eventid, Event event) {
 		validateEvent(event);
-		validateModifyEvent(event.getGroupid());
+		//validateModifyEvent(event.getGroupid());
 
 		Connection conn = null;
 		try {
@@ -689,7 +689,7 @@ public class EventResource {
 	@Path("/{eventid}")
 	public void deleteEvent(@PathParam("eventid") String eventid) {
 		Event event = getEventFromDataBase(eventid);
-		validateModifyEvent(event.getGroupid());
+		//validateModifyEvent(event.getGroupid());
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -728,7 +728,7 @@ public class EventResource {
 	public UserCollection getUsersState(@PathParam("eventid") String eventid,
 			@PathParam("state") String state) {
 		Event event = getEventFromDataBase(eventid);
-		validateUserOfGroup(Integer.toString(event.getGroupid()));
+		//validateUserOfGroup(Integer.toString(event.getGroupid()));
 		UserCollection users = new UserCollection();
 		Connection conn = null;
 		try {
@@ -778,7 +778,7 @@ public class EventResource {
 	public void updateState(@PathParam("eventid") String eventid,
 			@PathParam("userid") String userid, @PathParam("state") String state) {
 		Event event = getEventFromDataBase(eventid);
-		validateUserOfGroup(Integer.toString(event.getGroupid()));
+		//validateUserOfGroup(Integer.toString(event.getGroupid()));
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();

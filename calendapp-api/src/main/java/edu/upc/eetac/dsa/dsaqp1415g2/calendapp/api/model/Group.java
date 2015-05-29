@@ -1,6 +1,29 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model;
 
+import java.util.List;
+
+import javax.ws.rs.core.Link;
+
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
+
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.GroupResource;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
+
 public class Group {
+	@InjectLinks({
+		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "groups", title = "Latest Groups", type = MediaType.CALENDAPP_API_GROUP_COLLECTION),
+		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "self edit", title = "Group", type = MediaType.CALENDAPP_API_GROUP, method = "getGroup", bindings = @Binding(name = "groupid", value = "${instance.groupid}")) })
+	private List<Link> links;
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
 	private int groupid;
 	private String name;
 	private String admin;

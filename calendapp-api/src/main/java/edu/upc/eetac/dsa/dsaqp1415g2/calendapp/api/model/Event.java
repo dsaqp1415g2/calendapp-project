@@ -1,6 +1,30 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model;
 
+import java.util.List;
+
+import javax.ws.rs.core.Link;
+
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
+
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.EventResource;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
+
 public class Event {
+	@InjectLinks({
+		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "events", title = "Latest event", type = MediaType.CALENDAPP_API_EVENT_COLLECTION),
+		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "self edit", title = "Event", type = MediaType.CALENDAPP_API_EVENT, method = "getEvent", bindings = @Binding(name = "eventid", value = "${instance.eventid}"))
+	})
+	private List<Link> links;
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
 	private int eventid;
 	private int userid;
 	private int groupid;

@@ -1,6 +1,30 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model;
 
+import java.util.List;
+
+import javax.ws.rs.core.Link;
+
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLink.Style;
+import org.glassfish.jersey.linking.InjectLinks;
+
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.CommentResource;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
+
 public class Comment {
+	@InjectLinks({
+		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "self edit", title = "Comment", type = MediaType.CALENDAPP_API_COMMENT, method = "getComment" ,bindings = @Binding(name = "commentid", value = "${instance.commentid}")),
+		@InjectLink(value = "/comments/{eventid}", style = Style.ABSOLUTE, rel = "comments", title = "Latest comments", type = MediaType.CALENDAPP_API_COMMENT_COLLECTION, bindings = @Binding(name = "eventid", value = "${instance.eventid}") )
+	})
+	private List<Link> links;
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
 	private int commentid;
 	private String username;
 	private int eventid;
