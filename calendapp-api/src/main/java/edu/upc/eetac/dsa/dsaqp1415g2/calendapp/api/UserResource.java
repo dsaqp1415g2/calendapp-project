@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -37,6 +38,47 @@ public class UserResource {
 	private String INSERT_USER_QUERY = "insert into users values(NULL, ?, MD5(?), ?, ?, ?)";
 	private String UPDATE_USER_QUERY = "update users set username = ifnull(?, username), userpass = ifnull(MD5(?), name = ifnull(?, name), age =ifnull(?, age), email = ifnull(?, email) where userid = ?";
 	private String DELETE_USER_QUERY = "delete from users where userid = ?";
+
+	@GET
+	@Path("/{username}")
+	@Consumes(MediaType.CALENDAPP_API_USER)
+	public User getUser(@PathParam("username") String username) {
+		User user = new User();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USER_BY_USERNAME_QUERY);
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				user.setUserid(rs.getInt("userid"));
+				user.setUsername(rs.getString("username"));
+				user.setUserpass(rs.getString("userpass"));
+				user.setName(rs.getString("name"));
+				user.setAge(rs.getInt("age"));
+				user.setEmail(rs.getString("email"));
+			} else
+				throw new NotFoundException("There's no user with username = "
+						+ username);
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return user;
+	}
 
 	@POST
 	@Consumes(MediaType.CALENDAPP_API_USER)
