@@ -20,14 +20,14 @@ public class LoginActivity extends Activity {
         Log.d(TAG, "onCreate()");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        SharedPreferences prefs = getSharedPreferences("beeter-profile",
+        SharedPreferences prefs = getSharedPreferences("calendapp-profile",
                 Context.MODE_PRIVATE);
         String username = prefs.getString("username", null);
         String password = prefs.getString("password", null);
          //Uncomment the next two lines to test the application without login
        //  each time
-         username = "jordi";
-         password = "jordi";
+      //   username = "jordi";
+        // password = "jordi";
         if ((username != null) && (password != null)) {
             Intent intent = new Intent(this, CalendappMainActivity.class);
             startActivity(intent);
