@@ -24,8 +24,7 @@ public class LoginActivity extends Activity {
                 Context.MODE_PRIVATE);
         String username = prefs.getString("username", null);
         String password = prefs.getString("password", null);
-         //Uncomment the next two lines to test the application without login
-       //  each time
+         //entramos con el usuario jordi-jordi para probar SIN api
          username = "jordi";
          password = "jordi";
         if ((username != null) && (password != null)) {
