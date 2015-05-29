@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+	<title> CalendApp - Login & Register Screen</title>
+	<!-- Archivos CSS-->   
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style-responsive.css" rel="stylesheet">
+</head>
+<body>
+	<div id ="header">
+	<header class="header black-bg">
+	<h1> Welcome to CalendApp</h1>
+	<h4> An easier way to organize your life!</h4>
+	</header>
+	</div>
+	<div id ="login">
+		<div class="container">
+		
+			<form class="form-login">
+				<h2 class="form-login-heading">Sign in now!</h2>
+					<input type="text" placeholder="Nickname" autofocus="" required>
+					<br>
+					<input type="password" placeholder="Password" autofocus="" required>
+					<br>
+					<input type="button" value="Log in" onClick=" window.location.href='index.html'">
+
+					<a  href=""type="button" data-toggle="collapse" data-target="#expandible">Register</a>
+					<!--Arreglo temporal queda mal graficamente-->
+					</form>
+					<form class="form-login">
+					<div id="expandible" class="collapse-in">
+					<h2 class="form-login-heading">Register!</h2>
+					<input type="text" placeholder="Name" autofocus="" required>
+					<br>
+					<input type="email" placeholder="Email" autofocus="" required>
+					<br>
+					<button type ="submit">Proceed</button>
+					</div>
+					</form>
+			</form>	
+		</div>
+
+	</div>	
+	<!-- Entorno gráfico-->
+	
+
+	<!-- Entorno gráfico-->
+
+	<script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>  
+	<script type="text/javascript" src="assets/js/jquery.backstretch.min.js"></script>
+
+
+	
+
+
+    <script src="assets/js/filecalendAPP.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script>
+    // Closes the sidebar menu
+    $("#menu-close").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+    </script>
+
+</body>
+
+</html>
