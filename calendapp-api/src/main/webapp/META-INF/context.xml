@@ -5,7 +5,7 @@
 		driverClassName="com.mysql.jdbc.Driver"
 		url="jdbc:mysql://localhost:3306/calendappdb?autoReconnect=true" />
 	<Realm className="org.apache.catalina.realm.DataSourceRealm"
-		dataSourceName="jdbc/beeterdb" localDataSource="true" digest="MD5"
+		dataSourceName="jdbc/calendappdb" localDataSource="true" digest="MD5"
 		userTable="users" userNameCol="username" userCredCol="userpass"
 		userRoleTable="users_roles" roleNameCol="rolename" />
 </Context>
