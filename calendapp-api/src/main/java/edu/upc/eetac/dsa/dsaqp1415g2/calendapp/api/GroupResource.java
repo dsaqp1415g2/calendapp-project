@@ -254,7 +254,7 @@ public class GroupResource {
 	@Produces(MediaType.CALENDAPP_API_GROUP)
 	public Group updateGroup(@PathParam("groupid") String groupid, Group group) {
 		validateGroup(group);
-		//validateAdmin(groupid);
+		validateAdmin(groupid);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -305,7 +305,7 @@ public class GroupResource {
 	@DELETE
 	@Path("/{groupid}")
 	public void deleteGroup(@PathParam("groupid") String groupid) {
-		//validateAdmin(groupid);
+		validateAdmin(groupid);
 
 		Connection conn = null;
 		try {
@@ -399,7 +399,7 @@ public class GroupResource {
 	@Produces(MediaType.CALENDAPP_API_USER)
 	public User createUserInGroup(@PathParam("groupid") String groupid,
 			@PathParam("action") String action, User user) {
-		//validateAdmin(groupid);
+		validateAdmin(groupid);
 
 		Connection conn = null;
 		try {
@@ -438,7 +438,7 @@ public class GroupResource {
 	@Path("/{groupid}/{userid}")
 	public void deleteUserOfGroup(@PathParam("groupid") String groupid,
 			@PathParam("userid") String userid) {
-		//validateAdmin(groupid);
+		validateAdmin(groupid);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
