@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Calendapp</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_l_username">¿Cual es tu ID?</string>
+    <string name="login_l_signin">Entrar</string>
+    <string name="login_l_password">¿Cual es tu clave?</string>
+    <string name="login_l_register"> Registrar </string>
+
+
+
+</resources>
