@@ -2,6 +2,7 @@ package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.model;
 
 import java.util.List;
 
+
 import javax.ws.rs.core.Link;
 
 import org.glassfish.jersey.linking.Binding;
