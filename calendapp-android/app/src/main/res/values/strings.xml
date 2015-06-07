@@ -7,6 +7,7 @@
     <string name="login_l_signin">Entrar</string>
     <string name="login_l_password">¿Cual es tu clave?</string>
     <string name="login_l_register"> Registrar </string>
+    <string name="title_activity_register">Register</string>
 
 
 
