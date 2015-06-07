@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Register">
+    <item
+        android:id="@+id/refreshGroupsMenuItem"
+        android:title="Refrescar"
+        android:icon="@drawable/ic_action_refresh"
+        android:showAsAction="withText|always" />
+    <item
+        android:id="@+id/createGroupMenuItem"
+        android:title="Crear grupo"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="withText|always" />
+</menu>
