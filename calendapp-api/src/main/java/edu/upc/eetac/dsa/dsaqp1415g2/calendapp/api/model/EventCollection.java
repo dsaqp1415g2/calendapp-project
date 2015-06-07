@@ -17,8 +17,8 @@ public class EventCollection {
 	
 	@InjectLinks({
 		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "create-event", title = "Create event", type = MediaType.CALENDAPP_API_EVENT),
-	//	@InjectLink(value = "/events/group/{groupid}?before={before}", style = Style.ABSOLUTE, rel = "previous", title = "Previous events", type = MediaType.CALENDAPP_API_EVENT_COLLECTION, bindings = {@Binding(name = "before", value = "${instance.lastTimestamp}" ), @Binding(name = "groupid", value = "${instance.events.get(0).getGroupid()")})
-//		@InjectLink(value = "/events/group/{groupid}?after={after}", style = Style.ABSOLUTE, rel = "current", title = "Newest events", type = MediaType.CALENDAPP_API_EVENT_COLLECTION, bindings = @Binding(name = "after", value = "${instance.firstTimestamp}" ))
+		@InjectLink(value = "/events/group/{groupid}?before={before}", style = Style.ABSOLUTE, rel = "previous", title = "Previous events", type = MediaType.CALENDAPP_API_EVENT_COLLECTION, bindings = {@Binding(name = "before", value = "${instance.lastTimestamp}"), @Binding(name = "groupid", value = "${instance.events.get(0).getGroupid()}")}),
+		@InjectLink(value = "/events/group/{groupid}?after={after}", style = Style.ABSOLUTE, rel = "current", title = "Newest events", type = MediaType.CALENDAPP_API_EVENT_COLLECTION, bindings = {@Binding(name = "after", value = "${instance.firstTimestamp}" ), @Binding(name = "groupid", value = "${instance.events.get(0).getGroupid()}")})
 	})
 	
 	private List<Link> links;

@@ -21,7 +21,7 @@ create table users_roles (
 
 create table groups (
 	groupid 	 	int not null auto_increment primary key,
-	name 		 	varchar(30) not null,
+	name 		 	varchar(100) not null,
 	admin 		 	varchar(30) not null,
 	description	 	varchar (500) not null,
 	shared		 	boolean not null,

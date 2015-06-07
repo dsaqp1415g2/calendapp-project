@@ -16,7 +16,7 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
 public class CommentCollection {
 	@InjectLinks({
 		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "create-comment", title = "Create comment", type = MediaType.CALENDAPP_API_COMMENT),
-		@InjectLink(value = "/comments/{eventid}", style = Style.ABSOLUTE, rel = "comments", title = "Latest comments", type = MediaType.CALENDAPP_API_COMMENT_COLLECTION, bindings = @Binding(name = "eventid", value = "${instance.comments.get(0).getEventid()}") )
+		@InjectLink(value = "/comments/{eventid}", style = Style.ABSOLUTE, rel = "comments", title = "Latest comments", type = MediaType.CALENDAPP_API_COMMENT_COLLECTION, bindings = @Binding(name = "eventid", value = "${instance.comments.get(0).getEventid()}"))
 	})
 	private List<Link> links;
 	public List<Link> getLinks() {

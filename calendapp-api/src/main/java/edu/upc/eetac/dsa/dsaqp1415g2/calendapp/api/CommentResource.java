@@ -57,7 +57,7 @@ public class CommentResource {
 	public CommentCollection getComments(@QueryParam("length") int length,
 			@PathParam("eventid") String eventid,
 			@QueryParam("before") long before, @QueryParam("after") long after) {
-		// validateUserOfGroup(eventid);
+		validateUserOfGroup(eventid);
 		CommentCollection comments = new CommentCollection();
 		Connection conn = null;
 		try {
@@ -223,7 +223,7 @@ public class CommentResource {
 	@Consumes(MediaType.CALENDAPP_API_COMMENT)
 	@Produces(MediaType.CALENDAPP_API_COMMENT)
 	public Comment createComment(Comment comment) {
-		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateUserOfGroup(Integer.toString(comment.getEventid()));
 		validateComment(comment);
 		Connection conn = null;
 		try {
@@ -275,7 +275,7 @@ public class CommentResource {
 	@Produces(MediaType.CALENDAPP_API_COMMENT)
 	public Comment updateComment(@PathParam("commentid") String commentid,
 			Comment comment) {
-		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateUserOfGroup(Integer.toString(comment.getEventid()));
 		validateComment(comment);
 		Connection conn = null;
 		try {
@@ -315,7 +315,7 @@ public class CommentResource {
 	@Path("/{commentid}")
 	public void deleteComment(@PathParam("commentid") String commentid) {
 		Comment comment = getCommentFromDataBase(commentid);
-		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateUserOfGroup(Integer.toString(comment.getEventid()));
 
 		Connection conn = null;
 		try {
@@ -352,7 +352,7 @@ public class CommentResource {
 	public LikeCollection getLikes(@PathParam("commentid") String commentid,
 			@PathParam("like") String likeQuery) {
 		Comment comment = getCommentFromDataBase(commentid);
-		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateUserOfGroup(Integer.toString(comment.getEventid()));
 		LikeCollection likes = new LikeCollection();
 		Connection conn = null;
 		try {
@@ -402,7 +402,7 @@ public class CommentResource {
 	@Consumes(MediaType.CALENDAPP_API_LIKE)
 	public void createLike(@PathParam("commentid") String commentid, Like like) {
 		Comment comment = getCommentFromDataBase(commentid);
-		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateUserOfGroup(Integer.toString(comment.getEventid()));
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -548,7 +548,7 @@ public class CommentResource {
 	@Consumes(MediaType.CALENDAPP_API_LIKE)
 	public void updateLike(@PathParam("commentid") String commentid, Like like) {
 		Comment comment = getCommentFromDataBase(commentid);
-		// validateUserOfGroup(Integer.toString(comment.getEventid()));
+		validateUserOfGroup(Integer.toString(comment.getEventid()));
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
