@@ -66,15 +66,6 @@ User user = null;
 // I'll suppose that u/p are correct:
     }
 
-    private void startuTrollActivity() {
-        String urlUser = user.getLinks().get("self").getTarget();
-
-        Intent intent = new Intent(this, CalendappMainActivity.class);
-        intent.putExtra("url", urlUser);
-        startActivity(intent);
-        finish(); //Si no acabamos la actividad de Login, al darle al botón "back" en el móvil volvería a ella
-    }
-
 
     private void evaluateLogin(Boolean loginOK) {
         if (loginOK) {
@@ -84,7 +75,7 @@ User user = null;
             final String username = etUsername.getText().toString();
             final String password = etPassword.getText().toString();
 
-            SharedPreferences prefs = getSharedPreferences("Calendapp-profile",
+            SharedPreferences prefs = getSharedPreferences("calendapp-profile",
                     Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
@@ -109,25 +100,45 @@ User user = null;
         }
     }
 
+    private void startCalendappActivity() {
+        Intent intent = new Intent(this, CalendappMainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
-        private class checkLoginTask extends AsyncTask<String, Void, Boolean> {
+    private class checkLoginTask extends AsyncTask<String, Void, Boolean> {
 
-            private ProgressDialog pd;
+        private ProgressDialog pd;
 
-            @Override
-            protected Boolean doInBackground(String... params) {
-                Boolean correctLogin = false;
-                try {
-                    user = CalendappAPI.getInstance(LoginActivity.this)
+        @Override
+        protected Boolean doInBackground(String... params) {
+            Boolean correctLogin = false;
+            try {
+                user = CalendappAPI.getInstance(LoginActivity.this)
                             .checkLogin(params[0], params[1]);
-                    correctLogin = user.isLoginSuccessful();
+                    correctLogin = user.isLoginSuccesfull();
                 } catch (AppException e) {
                     e.printStackTrace();
                 }
                 return correctLogin;
             }
-    }
+        @Override
+        protected void onPostExecute(Boolean loginOK) {
+            evaluateLogin(loginOK);
+            if (pd != null) {
+                pd.dismiss();
+            }
+        }
 
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(LoginActivity.this);
+            pd.setTitle("Buscando...");
+            pd.setCancelable(false);
+            pd.setIndeterminate(true);
+            pd.show();
+        }
+    }
 
 }

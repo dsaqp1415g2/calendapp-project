@@ -9,6 +9,48 @@
     <string name="login_l_register"> Registrar </string>
     <string name="title_activity_register">Register</string>
 
+    <string name="action_logout">Cerrar Sesión</string>
+    <string name="action_joinGroup">Mostrar grupos</string>
+    <string name="action_searchUsers">Buscar usuarios</string>
+    <string name="action_updateUser">Actualizar perfil</string>
+
+    <string name="main_group">No estás en ningún grupo</string>
+
+    <string name="like">Me Gusta</string>
+    <string name="like_count">0</string>
+    <string name="dislike">No me gusta</string>
+    <string name="dislike_count">0</string>
+
+
+    <string name="group_detail_ending">Activación:</string>
+    <string name="group_detail_closing">Cierre:</string>
+    <string name="group_user_list">Usuarios en este grupo:</string>
+    <string name="group_detail_btn">Unirse al grupo</string>
+    <string name="group_detail_btn_activate">Activar</string>
+    <string name="group_detail_btn_close">Cerrar</string>
+    <string name="group_detail_btn_vote">Votar</string>
+
+    <string name="write_comment_tv">Contenido:</string>
+    <string name="write_comment_choose_user_tv">Elige un usuario:</string>
+    <string name="write_comment_hint">Escribe tus inquietudes aquí</string>
+    <string name="write_comment_send_btn">Enviar</string>
+    <string name="write_comment_cancel_btn">Cancelar</string>
+
+    <string name="create_user_username_tv">ID:</string>
+    <string name="create_user_username_hint">Máx 5 Caracteres</string>
+    <string name="create_user_age_tv">Edad:</string>
+    <string name="create_user_name_tv">Nombre:</string>
+    <string name="create_user_name_hint">Nombre real</string>
+    <string name="create_user_email_tv">Email:</string>
+    <string name="create_user_email_hint">Escribe tu email</string>
+    <string name="create_user_password_tv">Contraseña:</string>
+    <string name="create_user_password2_tv">Repite la contraseña:</string>
+    <string name="create_user_password_hint">***</string>
+    <string name="create_user_btn"> Registrar</string>
+
+    <string name="update_user_btn">Actualizar perfil</string>
+
+
 
 
 </resources>

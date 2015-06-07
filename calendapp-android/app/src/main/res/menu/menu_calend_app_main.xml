@@ -1,6 +1,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendAppMainActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".uTrollMainActivity">
+    <item
+        android:id="@+id/refreshMenuItem"
+        android:title="Actualizar"
+        android:icon="@drawable/refresh"
+        android:showAsAction="withText|always" />
+    <item
+        android:id="@+id/writeCommentMenuItem"
+        android:title="Escribir Comentario"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:showAsAction="withText|always" />
+    <item
+        android:id="@+id/friendshipNotificationsMenuItem"
+        android:title="Ver solicitudes de amistad"
+        android:icon="@drawable/ic_action_person"
+        android:showAsAction="withText|always" />
+    <item android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_joinGroup"
+        android:title="@string/action_joinGroup"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_searchUsers"
+        android:title="@string/action_searchUsers"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_updateUser"
+        android:title="@string/action_updateUser"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>
+
