@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by angel on 8/06/15.
+ * Created by jordi on 8/06/15.
  */
 public class Event {
     private int eventid;

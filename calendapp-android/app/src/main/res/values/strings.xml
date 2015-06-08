@@ -47,8 +47,8 @@
     <string name="create_user_password2_tv">Repite la contraseña:</string>
     <string name="create_user_password_hint">***</string>
     <string name="create_user_btn"> Registrar</string>
+     <string name="update_user_btn">Actualizar perfil</string>
 
-    <string name="update_user_btn">Actualizar perfil</string>
 
 
 
