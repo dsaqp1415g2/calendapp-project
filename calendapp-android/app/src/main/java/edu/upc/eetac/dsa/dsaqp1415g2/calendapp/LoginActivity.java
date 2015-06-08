@@ -55,7 +55,7 @@ User user = null;
         EditText etUsername = (EditText) findViewById(R.id.etUsername); // Obtener campos de texto de usuario y contraseña
         EditText etPassword = (EditText) findViewById(R.id.etPassword);
 
-        final String username = etUsername.getText().toString(); // Obtener usuario y contraseña
+        final String username = etUsername.getText().toString();
         final String password = etPassword.getText().toString();
 
         // Se debería acceder a la API y comprobar que las credenciales son correctas
@@ -63,7 +63,6 @@ User user = null;
         Log.d("mytag", "username: " + username + " y pass: " + password);
         (new checkLoginTask()).execute(username, password);
 
-// I'll suppose that u/p are correct:
     }
 
 
