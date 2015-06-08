@@ -61,7 +61,7 @@ User user = null;
         final String password = "angel";
         // Se debería acceder a la API y comprobar que las credenciales son correctas
 
-
+        Log.d("mytag", "username: " + username + " y pass: " + password);
         (new checkLoginTask()).execute(username, password);
 
     }

@@ -92,7 +92,10 @@ public class CalendappAPI {
         User user = new User();
         user.setUsername(username);
         user.setUserpass(password);
-
+        String as = user.getUsername();
+        String pass = user.getUserpass();
+        Log.e(as, "user: "+as);
+        Log.e(pass, "pass: " + pass);
         HttpURLConnection urlConnection = null;
        
         try {
@@ -120,7 +123,7 @@ public class CalendappAPI {
                 sb.append(line);
             }
             jsonUser = new JSONObject(sb.toString());
-            user.setLoginSuccesfull(jsonUser.getBoolean("loginSuccessful"));
+            user.setLoginSuccesfull(jsonUser.getBoolean("loginSuccessfull"));
 
             JSONArray jsonLinks = jsonUser.getJSONArray("links");
             parseLinks(jsonLinks, user.getLinks());
