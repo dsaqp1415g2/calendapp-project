@@ -18,10 +18,11 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.UserResource;
 public class User {
 	
 	@InjectLinks({
-		@InjectLink(resource = UserResource.class, style = Style.ABSOLUTE, rel = "self", title = "Get user", type = MediaType.CALENDAPP_API_USER, method = "getUser", bindings = @Binding(name = "username", value = "${instance.username}"))
-		
+		@InjectLink(resource = UserResource.class, style = Style.ABSOLUTE, rel = "self", title = "Get user", type = MediaType.CALENDAPP_API_USER, method = "getUser", bindings = @Binding(name = "username", value = "${instance.username}")),
+		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "my-groups", title = "My Groups", type = MediaType.CALENDAPP_API_GROUP_COLLECTION, method = "getGroupsOfUser", bindings = @Binding(name = "userid", value ="${instance.userid}")),
+		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel ="my-groups-admin", title = "My groups admin", type = MediaType.CALENDAPP_API_GROUP_COLLECTION, method = "getGroupsOfAdmin", bindings = @Binding(name = "userid", value ="${instance.userid}")),
+		@InjectLink(value = "/events/user/{userid}", style = Style.ABSOLUTE, rel = "my-events", title = "My events", type = MediaType.CALENDAPP_API_EVENT_COLLECTION, bindings = @Binding(name = "userid", value ="${instance.userid}")),
 	})
-	
 	
 	private List<Link> links;
 	public List<Link> getLinks() {
