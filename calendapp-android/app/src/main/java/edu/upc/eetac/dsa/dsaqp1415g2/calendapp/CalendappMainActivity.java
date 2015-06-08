@@ -5,25 +5,36 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Event;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
+
 
 public class CalendappMainActivity extends ActionBarActivity {
+
+    private final static String TAG = CalendappMainActivity.class.toString();
+
+    User user = null;
+
+    private EventAdapter adapter;
+    private ArrayList<Event> eventsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calend_app_main);
 
+}
 
-    }
-
-   @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_calend_app_main, menu);
         return true;
     }
 
-    @Override
+   @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long

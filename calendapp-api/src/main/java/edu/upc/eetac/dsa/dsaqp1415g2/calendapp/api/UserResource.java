@@ -42,7 +42,7 @@ public class UserResource {
 
 	@GET
 	@Path("/{username}")
-	@Consumes(MediaType.CALENDAPP_API_USER)
+	@Produces(MediaType.CALENDAPP_API_USER)
 	public User getUser(@PathParam("username") String username) {
 		User user = new User();
 		Connection conn = null;
@@ -164,9 +164,11 @@ public class UserResource {
 		String pwdDigest = DigestUtils.md5Hex(user.getUserpass());
 		String storedPwd = getUserFromDatabase(user.getUsername(), true)
 				.getUserpass();
-
+		
+		user = getUserFromDatabase(user.getUsername(), false);
 		user.setLoginSuccessful(pwdDigest.equals(storedPwd));
 		user.setUserpass(null);
+		
 		return user;
 	}
 

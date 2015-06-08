@@ -5,17 +5,17 @@
         android:id="@+id/refreshMenuItem"
         android:title="Actualizar"
         android:icon="@drawable/refresh"
-        android:showAsAction="withText|always" />
+        app:showAsAction="withText|always" />
     <item
         android:id="@+id/writeCommentMenuItem"
         android:title="Escribir Comentario"
         android:icon="@android:drawable/ic_menu_edit"
-        android:showAsAction="withText|always" />
+        app:showAsAction="withText|always" />
     <item
         android:id="@+id/friendshipNotificationsMenuItem"
         android:title="Ver solicitudes de amistad"
         android:icon="@drawable/ic_action_person"
-        android:showAsAction="withText|always" />
+        app:showAsAction="withText|always" />
     <item android:id="@+id/action_logout"
         android:title="@string/action_logout"
         android:orderInCategory="100"
