@@ -113,8 +113,10 @@ public class CalendappAPI {
             urlConnection.connect();
             PrintWriter writer = new PrintWriter(
                     urlConnection.getOutputStream());
-            writer.println(jsonUser.toString());
+            String data = jsonUser.toString();
+            writer.println(data);
             writer.close();
+            int rc = urlConnection.getResponseCode();
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     urlConnection.getInputStream()));
             StringBuilder sb = new StringBuilder();
@@ -123,7 +125,7 @@ public class CalendappAPI {
                 sb.append(line);
             }
             jsonUser = new JSONObject(sb.toString());
-            user.setLoginSuccesfull(jsonUser.getBoolean("loginSuccessfull"));
+            user.setLoginSuccesfull(jsonUser.getBoolean("loginSuccessful"));
 
             JSONArray jsonLinks = jsonUser.getJSONArray("links");
             parseLinks(jsonLinks, user.getLinks());
@@ -161,10 +163,8 @@ public class CalendappAPI {
     private JSONObject createJsonUser(User user) throws JSONException {
         JSONObject jsonUser = new JSONObject();
         jsonUser.put("username", user.getUsername());
-        jsonUser.put("password", user.getUserpass());
-        jsonUser.put("name", user.getName());
-        jsonUser.put("email", user.getEmail());
-        jsonUser.put("age", user.getAge());
+        jsonUser.put("userpass", user.getUserpass());
+
         return jsonUser;
     }
 
