@@ -62,7 +62,7 @@ public class CalendappAPI {
             urlConnection.connect(); //Hacer la petición
         } catch (IOException e) {
             throw new AppException(
-                    "Can't connect to uTroll API Web Service");
+                    "Can't connect to Calendapp API Web Service");
         }
 
         BufferedReader reader; //Leer la respuesta
