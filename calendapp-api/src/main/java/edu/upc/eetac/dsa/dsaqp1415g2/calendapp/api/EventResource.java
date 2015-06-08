@@ -270,30 +270,27 @@ public class EventResource {
 			ResultSet rs = stmt.executeQuery();
 			boolean first = true;
 			long lastTimestamp = 0;
-			if (rs.wasNull()) {
-				throw new NotFoundException(
-						"No events for the user with userid =" + userid);
-			} else {
-				while (rs.next()) {
-					Event event = new Event();
-					event.setEventid(rs.getInt("eventid"));
-					event.setUserid(rs.getInt("userid"));
-					event.setName(rs.getString("name"));
-					event.setDateInitial(rs.getTimestamp("dateInitial")
-							.getTime());
-					event.setDateFinish(rs.getTimestamp("dateFinish").getTime());
-					event.setLastModified(rs.getTimestamp("last_modified")
-							.getTime());
-					lastTimestamp = rs.getTimestamp("dateInitial").getTime();
 
-					if (first) {
-						first = false;
-						events.setFirstTimestamp(event.getDateInitial());
-					}
-					events.addEvent(event);
+			while (rs.next()) {
+				Event event = new Event();
+				event.setEventid(rs.getInt("eventid"));
+				event.setUserid(rs.getInt("userid"));
+				event.setName(rs.getString("name"));
+				event.setDateInitial(rs.getTimestamp("dateInitial").getTime());
+				event.setDateFinish(rs.getTimestamp("dateFinish").getTime());
+				event.setLastModified(rs.getTimestamp("last_modified")
+						.getTime());
+				lastTimestamp = rs.getTimestamp("dateInitial").getTime();
+
+				if (first) {
+					first = false;
+					events.setFirstTimestamp(event.getDateInitial());
 				}
-				events.setLastTimestamp(lastTimestamp);
+				events.addEvent(event);
 			}
+			events.setLastTimestamp(lastTimestamp);
+			if (events.getEvents().size() == 0)
+				throw new NotFoundException("No hay eventos");
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
@@ -315,6 +312,8 @@ public class EventResource {
 		EventCollection events = new EventCollection();
 		events = getEventsNowUser(events, userid);
 		events = getEventsNowGroup(events, userid);
+		if (events.getEvents().size() == 0)
+			throw new NotFoundException("No hay eventos");
 		return events;
 	}
 

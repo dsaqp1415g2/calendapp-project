@@ -17,6 +17,22 @@ public class Group {
     private long creationTimestamp;
     private boolean shared;
 
+    public Map<String, Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Map<String, Link> links) {
+        this.links = links;
+    }
+
+    public String geteTag() {
+        return eTag;
+    }
+
+    public void seteTag(String eTag) {
+        this.eTag = eTag;
+    }
+
     public boolean isShared() {
         return shared;
     }
