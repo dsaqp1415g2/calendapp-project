@@ -39,8 +39,9 @@ User user = null;
         String password = prefs.getString("password", null);
          //Uncomment the next two lines to test the application without login
        //  each time
-      //   username = "jordi";
+        // username = "jordi";
         // password = "jordi";
+
         if ((username != null) && (password != null)) {
             Intent intent = new Intent(this, CalendappMainActivity.class);
             startActivity(intent);
