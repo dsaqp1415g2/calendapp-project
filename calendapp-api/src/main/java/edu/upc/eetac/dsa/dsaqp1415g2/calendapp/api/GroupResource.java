@@ -54,7 +54,7 @@ public class GroupResource {
 	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
 	private String GET_GROUPS_OF_USERID_QUERY = "select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
 	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
-
+	private String INSERT_ADMIN_GROUP = "insert into group_users values (?,?,'accepted')";
 	@GET
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
 	public GroupCollection getGroups(@QueryParam("length") int length,
@@ -230,6 +230,7 @@ public class GroupResource {
 			if (rs.next()) {
 				int groupid = rs.getInt(1);
 				group = getGroupFromDataBase(Integer.toString(groupid));
+				acceptedAdmin(group.getGroupid(), group.getAdmin());
 			} else {
 
 			}
@@ -247,7 +248,74 @@ public class GroupResource {
 		return group;
 
 	}
+	
+	
+	
+	private void acceptedAdmin(int groupid, String admin) {
+		int userid = getUserid (admin);
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
 
+		PreparedStatement stmt = null;
+		try{
+			stmt  = conn.prepareStatement(INSERT_ADMIN_GROUP);
+			stmt.setInt(1, groupid);
+			stmt.setInt(2, userid);
+			ResultSet rs = stmt.getGeneratedKeys();
+			if (!rs.next()){
+				throw new NotFoundException("Algo ha ido mal");
+			}
+		}catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	private String GET_USERID_OF_USERNAME= "select userid from users where username = ?";
+	private int getUserid(String username){
+		int userid = 0;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
+		PreparedStatement stmt = null;
+		try{
+			stmt = conn.prepareStatement(GET_USERID_OF_USERNAME);
+			stmt.setString(1, username);
+			ResultSet rs = stmt.getGeneratedKeys();
+			if (rs.next()){
+				userid = rs.getInt(1);
+			} else
+				throw new NotFoundException("Algo ha ido mal");
+		}catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return userid;
+	}
+	
 	@PUT
 	@Path("/{groupid}")
 	@Consumes(MediaType.CALENDAPP_API_GROUP)
