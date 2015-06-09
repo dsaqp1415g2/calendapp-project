@@ -54,7 +54,8 @@ public class GroupResource {
 	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
 	private String GET_GROUPS_OF_USERID_QUERY = "select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
 	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
-	private String INSERT_ADMIN_GROUP = "insert into group_users values (?,?,'accepted')";
+	private String INSERT_ADMIN_GROUP = "insert into group_users values(?,?,?)";
+	
 	@GET
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
 	public GroupCollection getGroups(@QueryParam("length") int length,
@@ -250,7 +251,6 @@ public class GroupResource {
 	}
 	
 	
-	
 	private void acceptedAdmin(int groupid, String admin) {
 		int userid = getUserid (admin);
 		Connection conn = null;
@@ -263,11 +263,13 @@ public class GroupResource {
 
 		PreparedStatement stmt = null;
 		try{
+			String accepted = "accepted";
 			stmt  = conn.prepareStatement(INSERT_ADMIN_GROUP);
 			stmt.setInt(1, groupid);
 			stmt.setInt(2, userid);
-			ResultSet rs = stmt.getGeneratedKeys();
-			if (!rs.next()){
+			stmt.setString(3, accepted);
+			int rs = stmt.executeUpdate();
+			if (rs == 0){
 				throw new NotFoundException("Algo ha ido mal");
 			}
 		}catch (SQLException e) {
@@ -283,6 +285,7 @@ public class GroupResource {
 		}
 	}
 	private String GET_USERID_OF_USERNAME= "select userid from users where username = ?";
+	
 	private int getUserid(String username){
 		int userid = 0;
 		Connection conn = null;
@@ -297,7 +300,7 @@ public class GroupResource {
 		try{
 			stmt = conn.prepareStatement(GET_USERID_OF_USERNAME);
 			stmt.setString(1, username);
-			ResultSet rs = stmt.getGeneratedKeys();
+			ResultSet rs = stmt.executeQuery();
 			if (rs.next()){
 				userid = rs.getInt(1);
 			} else

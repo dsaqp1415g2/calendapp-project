@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -168,5 +170,114 @@ public class CalendappAPI {
         return jsonUser;
     }
 
+    public User getUser(String urlUser) throws AppException{
+        User user = new User();
+        HttpURLConnection urlConnection = null;
+        Log.d("TAG", urlUser);
+        try {
+            URL url = new URL(urlUser);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
 
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonUser = new JSONObject(sb.toString());
+
+            user.setUserid(jsonUser.getInt("userid"));
+            user.setUsername(jsonUser.getString("username"));
+            user.setName(jsonUser.getString("name"));
+            user.setAge(jsonUser.getInt("age"));
+            user.setEmail(jsonUser.getString("email"));
+            JSONArray jsonLinks = jsonUser.getJSONArray("links");
+            parseLinks(jsonLinks, user.getLinks());
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Bad sting url");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception when getting the sting");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception parsing response");
+        }
+        return user;
+    }
+
+    public EventCollection getEvents(String urlEvents) throws AppException {
+        //Log.d(TAG, "getEvents(String urlEvents)");
+        EventCollection events = new EventCollection();
+
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL (urlEvents);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+                Log.d(TAG, "CACHE");
+                return null;
+            }
+            } catch (IOException e) {
+                throw new AppException(
+                    "Can't connect to Calendapp API Web Service");
+            }
+
+
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            JSONObject jsonObject = new JSONObject(sb.toString());
+            JSONArray jsonLinks = jsonObject.getJSONArray("links");
+            parseLinks(jsonLinks, events.getLinks());
+
+            events.setFirstTimestamp(jsonObject.getLong("firstTimestamp"));
+            events.setLastTimestamp(jsonObject.getLong("lastTimestamp"));
+            JSONArray jsonEvents = jsonObject.getJSONArray("events");
+            for (int i = 0; i < jsonEvents.length(); i++){
+                Event event = new Event();
+                JSONObject jsonEvent = jsonEvents.getJSONObject(i);
+                event.setEventid(jsonEvent.getInt("eventid"));
+                event.setUserid(jsonEvent.getInt("userid"));
+                event.setGroupid(jsonEvent.getInt("groupid"));
+                event.setName(jsonEvent.getString("name"));
+                event.setDateInitial(jsonEvent.getLong("dateInitial"));
+                event.setDateFinish(jsonEvent.getLong("dateFinish"));
+                event.setLastModified(jsonEvent.getLong("lastModified"));
+                jsonLinks = jsonEvent.getJSONArray("links");
+                parseLinks(jsonLinks, event.getLinks());
+                events.getEvents().add(event);
+            }
+        }catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Bad sting url");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception when getting the event");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception parsing response");
+        }
+
+        return events;
+    }
+
+
+    private Map<String, Event> eventsCache = new HashMap<String, Event>();
 }

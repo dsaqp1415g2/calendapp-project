@@ -28,9 +28,9 @@ public class EventAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        TextView tvname;
-        TextView tvUsername;
-        TextView tvDate;
+        TextView tvNameEvent;
+        TextView tvDateInitial;
+        TextView tvDateFinish;
     }
 
     @Override
@@ -52,24 +52,26 @@ public class EventAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_row_sting, null);
+            convertView = inflater.inflate(R.layout.list_row_event, null);
             viewHolder = new ViewHolder();
-            viewHolder.tvname = (TextView) convertView
-                    .findViewById(R.id.tvname);
-            viewHolder.tvUsername = (TextView) convertView
-                    .findViewById(R.id.tvUsername);
-            viewHolder.tvDate = (TextView) convertView
-                    .findViewById(R.id.tvDate);
+            viewHolder.tvNameEvent = (TextView) convertView
+                    .findViewById(R.id.tvNameEvent);
+            viewHolder.tvDateInitial = (TextView) convertView
+                    .findViewById(R.id.tvDateInitial);
+            viewHolder.tvDateFinish = (TextView) convertView
+                    .findViewById(R.id.tvDateFinish);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        String subject = data.get(position).getSubject();
-        String username = data.get(position).getUsername();
-        String date = SimpleDateFormat.getInstance().format(
-                data.get(position).getLastModified());
-        viewHolder.tvSubject.setText(subject);
-        viewHolder.tvUsername.setText(username);
-        viewHolder.tvDate.setText(date);
+        String nameEvent = data.get(position).getName();
+        String dateInitial = SimpleDateFormat.getInstance().format(
+                data.get(position).getDateInitial());
+        String dateFinish = SimpleDateFormat.getInstance().format(
+                data.get(position).getDateFinish());
+        viewHolder.tvNameEvent.setText(nameEvent);
+        viewHolder.tvDateInitial.setText(dateInitial);
+        viewHolder.tvDateFinish.setText(dateFinish);
         return convertView;
     }
+}
