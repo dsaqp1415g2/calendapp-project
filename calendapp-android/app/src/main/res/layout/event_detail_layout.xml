@@ -67,7 +67,7 @@
             android:id="@+id/DateFinish"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/dateInitial"
+            android:text="@string/dateFinish"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="20dp" />
 
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:onClick="postSting"
+            android:onClick="putEvent"
             android:text="@string/lb_edit" />
     </LinearLayout>
 

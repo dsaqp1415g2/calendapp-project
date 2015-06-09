@@ -277,7 +277,66 @@ public class CalendappAPI {
 
         return events;
     }
-
-
     private Map<String, Event> eventsCache = new HashMap<String, Event>();
+
+    public Event getEvent(String urlEvent) throws AppException{
+        Event event = new Event ();
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(urlEvent);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Accept",
+                    MediaType.CALENDAPP_API_EVENT);
+            urlConnection.setDoInput(true);
+
+            event = eventsCache.get(urlEvent);
+            String eTag = (event == null) ? null : event.geteTag();
+            if(eTag != null)
+                urlConnection.setRequestProperty("If-None-Match", eTag);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED){
+                Log.d(TAG, "CACHE");
+                return eventsCache.get(urlEvent);
+            }
+            Log.d(TAG, "NOT IN CACHE");
+            event = new Event();
+            eTag = urlConnection.getHeaderField("ETag");
+            event.seteTag(eTag);
+            eventsCache.put(urlEvent, event);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            JSONObject jsonEvent = new JSONObject(sb.toString());
+            event.setEventid(jsonEvent.getInt("eventid"));
+            event.setUserid(jsonEvent.getInt("userid"));
+            event.setGroupid(jsonEvent.getInt("groupid"));
+            event.setName(jsonEvent.getString("name"));
+            event.setDateInitial(jsonEvent.getLong("dateInitial"));
+            event.setDateFinish(jsonEvent.getLong("dateFinish"));
+            event.setLastModified(jsonEvent.getLong("lastModified"));
+            JSONArray jsonLinks = jsonEvent.getJSONArray("links");
+            parseLinks(jsonLinks, event.getLinks());
+
+        }catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Bad sting url");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception when getting the sting");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception parsing response");
+        } catch (AppException e) {
+            e.printStackTrace();
+        }
+        return event;
+    }
+
+
 }

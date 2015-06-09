@@ -3,12 +3,15 @@ package edu.upc.eetac.dsa.dsaqp1415g2.calendapp;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
@@ -62,12 +65,10 @@ public class CalendappMainActivity extends ListActivity {
 
    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        
+
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
     private class FetchEventsTask extends AsyncTask<String, Void, EventCollection> {
@@ -122,4 +123,14 @@ public class CalendappMainActivity extends ListActivity {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Event event = eventsList.get(position);
+        Log.d(TAG, event.getLinks().get("self-edit").getTarget());
+        String data = event.getLinks().get("self-edit").getTarget();
+
+        Intent intent = new Intent(this, EventPrivateDetailActiviy.class);
+        intent.putExtra("url", event.getLinks().get("self-edit").getTarget());
+        startActivity(intent);
+    }
 }
