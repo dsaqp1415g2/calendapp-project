@@ -37,20 +37,25 @@ public class LoginActivity extends Activity {
                 Context.MODE_PRIVATE);
         String username = prefs.getString("username", null);
         String password = prefs.getString("password", null);
-         //Uncomment the next two lines to test the application without login
-       //  each time
+        //Uncomment the next two lines to test the application without login
+        //  each time
         // username = "jordi";
         // password = "jordi";
 
-      //  if ((username != null) && (password != null)) {
+        //  if ((username != null) && (password != null)) {
         //    Intent intent = new Intent(this, CalendappMainActivity.class);
-         //   startActivity(intent);
-          //  finish();
+        //   startActivity(intent);
+        //  finish();
         //}
         setContentView(R.layout.login_layout);
-    }
 
-    public void signIn(View v) throws AppException {
+    }
+    public void register (View v) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+}
+
+public void signIn(View v) throws AppException {
 
 
         EditText etUsername = (EditText) findViewById(R.id.etUsername); // Obtener campos de texto de usuario y contraseña
