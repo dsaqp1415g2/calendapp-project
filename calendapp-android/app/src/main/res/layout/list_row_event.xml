@@ -2,11 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tvSubject"
+        android:id="@+id/tvNameEvent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dip"
@@ -20,14 +19,14 @@
         android:paddingRight="5dip" >
 
         <TextView
-            android:id="@+id/tvUsername"
+            android:id="@+id/tvDateInitial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/tvDate"
+            android:id="@+id/tvDateFinish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"

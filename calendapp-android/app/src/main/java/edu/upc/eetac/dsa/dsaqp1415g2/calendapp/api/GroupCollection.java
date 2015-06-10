@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,10 @@ public class GroupCollection {
     private long oldestTimestamp;
     private Map<String, Link> links = new HashMap<String, Link>();
 
+    public GroupCollection(){
+        super();
+        groups = new ArrayList<Group>();
+    }
     public List<Group> getGroups() {
         return groups;
     }

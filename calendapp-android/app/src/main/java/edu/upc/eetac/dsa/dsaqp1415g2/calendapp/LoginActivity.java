@@ -25,7 +25,7 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 public class LoginActivity extends Activity {
     private final static String TAG = LoginActivity.class.getName();
 
-User user = null;
+    User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,11 @@ User user = null;
         // username = "jordi";
         // password = "jordi";
 
-        if ((username != null) && (password != null)) {
-            Intent intent = new Intent(this, CalendappMainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+      //  if ((username != null) && (password != null)) {
+        //    Intent intent = new Intent(this, CalendappMainActivity.class);
+         //   startActivity(intent);
+          //  finish();
+        //}
         setContentView(R.layout.login_layout);
     }
 
@@ -81,6 +81,7 @@ User user = null;
             editor.clear();
             editor.putString("username", username);
             editor.putString("password", password);
+            editor.putString("urlUser", user.getLinks().get("self").getTarget());
             boolean done = editor.commit();
             if (done)
                 Log.d(TAG, "preferences set");
@@ -88,6 +89,10 @@ User user = null;
                 Log.d(TAG, "preferences not set. THIS A SEVERE PROBLEM");
 
             startCalendappActivity();
+           // Intent intent = new Intent(this, CalendappMainActivity.class);
+            //intent.putExtra("urlUser", user.getLinks().get("self").getTarget());
+            //final String urlUser = prefs.getString("username", user.getLinks().get("self").getTarget());
+            //startActivity(intent);
         } else {
             Context context = getApplicationContext();
             CharSequence text = "El usuario o la contraseña son incorrectos";

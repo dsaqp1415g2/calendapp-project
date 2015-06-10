@@ -36,11 +36,11 @@ insert into group_users values ('3', '1', 'pending');
 
 
 
-insert into events (userid, name, dateInitial, dateFinish) values ('1', 'empezar proyecto DSA, la api', '2015-4-4 10:00:00', '2015-5-10 10:00:00');
+insert into events (userid, name, dateInitial, dateFinish) values ('1', 'empezar proyecto DSA, la api', '2015-4-4 10:00:00', '2015-7-10 10:00:00');
 select sleep(1);
 insert into events (userid, name, dateInitial, dateFinish) values ('2', 'ir al medico', '2015-7-2 10:00:00', '2015-7-2 11:00:00');
 select sleep(1);
-insert into events (userid, name, dateInitial, dateFinish) values ('4', 'partido con los amigos', '2015-6-2 17:00:00', '2015-6-2 19:30:00');
+insert into events (userid, name, dateInitial, dateFinish) values ('4', 'partido con los amigos', '2015-8-2 17:00:00', '2015-8-2 19:30:00');
 select sleep(1);
 insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'evento prueba', '2015-4-21 18:00:00', '2015-7-21 20:30:00');
 select sleep(1);
@@ -48,9 +48,9 @@ insert into events (groupid, name, dateInitial, dateFinish) values ('2', 'Fiesta
 select sleep(1);
 insert into events (groupid, name, dateInitial, dateFinish) values ('3', 'reunion de ejecutivos', '2015-9-25 08:00:00', '2015-9-25 10:30:00');
 select sleep(1);
-insert into events (groupid, name, dateInitial, dateFinish) values ('3', 'Visita a las nuevas instalaciones', '2015-6-19 18:00:00', '2015-6-19 21:00:00');
+insert into events (groupid, name, dateInitial, dateFinish) values ('3', 'Visita a las nuevas instalaciones', '2015-10-19 18:00:00', '2015-10-19 21:00:00');
 select sleep(1);
-insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'entrega final proyecto', '2015-6-15 09:00:00', '2015-6-15 10:00:00');
+insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'entrega final proyecto', '2015-11-15 09:00:00', '2015-11-15 10:00:00');
 
 
 
