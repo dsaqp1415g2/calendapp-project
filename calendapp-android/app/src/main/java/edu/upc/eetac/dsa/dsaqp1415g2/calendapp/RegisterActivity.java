@@ -20,8 +20,8 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 /**
  * Created by Jordi on 10/06/2015.
  */
-public class CreateUserActivity extends Activity {
-    private final static String TAG = CreateUserActivity.class.getName();
+public class RegisterActivity extends Activity {
+    private final static String TAG = RegisterActivity.class.getName();
 
     private class createUserTask extends AsyncTask<String, Void, User> {
         private ProgressDialog pd;
@@ -30,7 +30,7 @@ public class CreateUserActivity extends Activity {
         protected User doInBackground(String... params) {
             User user = new User();
             try {
-                user = CalendappAPI.getInstance(CreateUserActivity.this).createUser(params[0], params[1], Integer.parseInt(params[2]), params[3], params[4]);
+                user = CalendappAPI.getInstance(RegisterActivity.this).createUser(params[0], params[1], Integer.valueOf(params[2]), params[3], params[4]);
             } catch (AppException e) {
                 e.printStackTrace();
             }
@@ -39,15 +39,7 @@ public class CreateUserActivity extends Activity {
 
         @Override
         protected void onPostExecute(User result) {
-            if (result.getPoints() == -1){
-                Context context = getApplicationContext();
-                CharSequence text = "Ese username ya existe";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            } else {
                 Context context = getApplicationContext();
                 CharSequence text = "Usuario creado correcatmente\nPuedes iniciar sesión";
                 int duration = Toast.LENGTH_SHORT;
@@ -56,7 +48,7 @@ public class CreateUserActivity extends Activity {
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 finish();
-            }
+
             if (pd != null) {
                 pd.dismiss();
             }
@@ -64,7 +56,7 @@ public class CreateUserActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            pd = new ProgressDialog(CreateUserActivity.this);
+            pd = new ProgressDialog(RegisterActivity.this);
             pd.setTitle("Buscando...");
             pd.setCancelable(false);
             pd.setIndeterminate(true);
@@ -76,6 +68,7 @@ public class CreateUserActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_register);
     }
 
@@ -89,12 +82,12 @@ public class CreateUserActivity extends Activity {
 
         String username = etUsername.getText().toString();
         String name = etName.getText().toString();
-        String ageS = etAge.getText().toString();
+        String ages = etAge.getText().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String password2 = etPassword2.getText().toString();
 
-        if ((username.equals("")) || (name.equals("")) || (email.equals("")) || (ageS.equals("")) || (password.equals("")) || (password2.equals(""))) {
+        if ((username.equals("")) || (name.equals("")) || (email.equals("")) || (ages.equals("")) || (password.equals("")) || (password2.equals(""))) {
             Context context = getApplicationContext();
             CharSequence text = "Todos los campos son obligatorios";
             int duration = Toast.LENGTH_SHORT;
@@ -110,7 +103,7 @@ public class CreateUserActivity extends Activity {
             Toast toast = Toast.makeText(context, text, duration);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-        } else if (username.length() > 20){
+        } else if (username.length() > 30){
             Context context = getApplicationContext();
             CharSequence text = "El username es demasiado largo";
             int duration = Toast.LENGTH_SHORT;
@@ -119,7 +112,8 @@ public class CreateUserActivity extends Activity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            (new createUserTask()).execute(username, name, ageS, email, password);
+            (new createUserTask()).execute(username, name, ages, email, password);
+            finish();
         }
     }
 }

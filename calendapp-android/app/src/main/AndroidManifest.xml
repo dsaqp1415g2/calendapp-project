@@ -21,6 +21,7 @@
         <activity android:name=".CalendappMainActivity" />
         <activity android:name=".EventPrivateDetailActiviy" />
         <activity android:name=".EditEventPrivateActivity" />
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name=".api.Register"
             android:label="@string/title_activity_register" >

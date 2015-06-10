@@ -36,7 +36,7 @@
     <string name="write_comment_send_btn">Enviar</string>
     <string name="write_comment_cancel_btn">Cancelar</string>
 
-    <string name="create_user_username_tv">ID:</string>
+    <string name="create_user_username_tv">Nombre:</string>
     <string name="create_user_username_hint">Máx 5 Caracteres</string>
     <string name="create_user_age_tv">Edad:</string>
     <string name="create_user_name_tv">Nombre:</string>

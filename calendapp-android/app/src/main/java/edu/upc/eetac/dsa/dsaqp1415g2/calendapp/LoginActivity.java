@@ -50,12 +50,12 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.login_layout);
 
     }
-    public void register (View v) {
+    public void register (View v) throws AppException{
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
-}
+    }
 
-public void signIn(View v) throws AppException {
+    public void signIn(View v) throws AppException {
 
 
         EditText etUsername = (EditText) findViewById(R.id.etUsername); // Obtener campos de texto de usuario y contraseña

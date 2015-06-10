@@ -61,6 +61,23 @@
         android:layout_marginTop="20dip"
         android:layout_marginLeft="20dip">
 
+        <TextView
+            android:id="@+id/tvCreateUserAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_user_age_tv"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/etCreateUserAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:hint="@string/create_user_name_hint"
+            android:inputType="text"
+            android:layout_alignBaseline="@+id/tvCreateUserAge"
+            android:layout_toRightOf="@+id/tvCreateUserAge" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -85,6 +102,14 @@
             android:hint="@string/create_user_email_hint"
             android:layout_alignBaseline="@+id/tvCreateUserEmail"
             android:layout_toRightOf="@+id/tvCreateUserEmail" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="20dip">
 
     </RelativeLayout>
 

@@ -11,7 +11,7 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Group;
  * Created by angel on 10/06/15.
  */
 public class GroupActivity extends ListActivity {
-    private ArrayList<Group> groupsList;
+ /*   private ArrayList<Group> groupsList;
     private GroupAdapter adapter;
 
     @Override
@@ -24,5 +24,5 @@ public class GroupActivity extends ListActivity {
         setListAdapter(adapter);
 
         (new FetchGroupsTask()).execute();
-    }
+    }*/
 }

@@ -518,10 +518,10 @@ public class GroupResource {
 		}
 		PreparedStatement stmt = null;
 		try {
-			for (int j = 0; j < i.length; j++) {
+			for (int j = 1; j < i.length; j++) {
 				stmt = conn.prepareStatement(CREATE_PENDING_NEW_USER_QUERY);
 				stmt.setInt(1, userid);
-				stmt.setInt(2, i[j]);
+				stmt.setInt(2, i[j-1]);
 				stmt.setString(3, "pending");
 				stmt.executeUpdate();
 			}

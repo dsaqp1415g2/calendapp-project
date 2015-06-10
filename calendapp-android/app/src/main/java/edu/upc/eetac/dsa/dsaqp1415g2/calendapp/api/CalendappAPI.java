@@ -53,14 +53,14 @@ public class CalendappAPI {
         return instance;
     }
 
-    public User createUser(String username, String name, String email, String userpass, int age) throws AppException {
+    public User createUser(String username, String name, int ages, String email, String userpass) throws AppException {
         Log.d(TAG, "createUser()");
         User user = new User();
         user.setUsername(username);
         user.setName(name);
         user.setEmail(email);
         user.setUserpass(userpass);
-        user.setAge(age);
+        user.setAge(ages);
 
         HttpURLConnection urlConnection = null;
         try {
@@ -222,7 +222,10 @@ public class CalendappAPI {
         JSONObject jsonUser = new JSONObject();
         jsonUser.put("username", user.getUsername());
         jsonUser.put("userpass", user.getUserpass());
-
+        jsonUser.put("name", user.getName());
+        jsonUser.put("userid", user.getUserid());
+        jsonUser.put("age", user.getAge());
+        jsonUser.put("email", user.getEmail());
         return jsonUser;
     }
 
