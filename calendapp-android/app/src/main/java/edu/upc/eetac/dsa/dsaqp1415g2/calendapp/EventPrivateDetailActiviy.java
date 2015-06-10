@@ -69,10 +69,6 @@ public class EventPrivateDetailActiviy extends Activity {
     }
     private final static int WRITE_ACTIVITY = 0;
 
-    public void putEvent(View v){
-        Intent intent = new Intent(this, EditEventPrivateActivity.class);
-        startActivityForResult(intent, WRITE_ACTIVITY);
-    }
 
     private void loadEvent(Event event) {
         TextView tvNameEvent = (TextView) findViewById(R.id.tvNameEvent);
