@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -518,12 +519,15 @@ public class GroupResource {
 		}
 		PreparedStatement stmt = null;
 		try {
-			for (int j = 1; j < i.length; j++) {
+			int j = 0;
+			while (i[j] != 0) {
+				stmt = null;
 				stmt = conn.prepareStatement(CREATE_PENDING_NEW_USER_QUERY);
 				stmt.setInt(1, userid);
-				stmt.setInt(2, i[j-1]);
+				stmt.setInt(2, i[j]);
 				stmt.setString(3, "pending");
 				stmt.executeUpdate();
+				j++;
 			}
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
@@ -559,6 +563,7 @@ public class GroupResource {
 				i[j] = rs.getInt("eventid");
 				j++;
 			}
+
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);

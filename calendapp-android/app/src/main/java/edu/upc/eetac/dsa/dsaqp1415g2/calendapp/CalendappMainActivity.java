@@ -65,8 +65,12 @@ public class CalendappMainActivity extends ListActivity {
 
    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
+        switch(item.getItemId()) {
+            case R.id.action_my_groups:
+                Intent intent = new Intent(this, GroupsActivity.class);
+                startActivity(intent);
+                finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 

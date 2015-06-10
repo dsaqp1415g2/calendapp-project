@@ -397,5 +397,62 @@ public class CalendappAPI {
         return event;
     }
 
+    public GroupCollection getGroups() throws AppException {
+        Log.d(TAG, "getGroups()");
+        GroupCollection groups = new GroupCollection();
+
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) new URL(rootAPI.getLinks()
+                    .get("groups").getTarget()).openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Accept",
+                    MediaType.CALENDAPP_API_GROUP_COLLECTION);
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't connect to Calendapp API Web Service");
+        }
+        BufferedReader reader;
+        try{
+            reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonObject = new JSONObject(sb.toString());
+            JSONArray jsonLinks = jsonObject.getJSONArray("links");
+            parseLinks(jsonLinks, groups.getLinks());
+
+            groups.setNewestTimestamp(jsonObject.getLong("newestTimestamp"));
+            groups.setOldestTimestamp(jsonObject.getLong("oldestTimestamp"));
+            JSONArray jsonGroups = jsonObject.getJSONArray("groups");
+            for (int i = 0; i < jsonGroups.length(); i++){
+                Group group = new Group();
+                JSONObject jsonGroup = jsonGroups.getJSONObject(i);
+                group.setAdmin(jsonGroup.getString("admin"));
+                group.setCreationTimestamp(jsonGroup.getLong("creationTimestamp"));
+                group.setDescription(jsonGroup.getString("description"));
+                group.setGroupid(jsonGroup.getInt("groupid"));
+                group.setLastModified(jsonGroup.getLong("lastModified"));
+                group.setName(jsonGroup.getString("name"));
+                group.setShared(jsonGroup.getBoolean("shared"));
+                jsonLinks = jsonGroup.getJSONArray("links");
+                parseLinks(jsonLinks, group.getLinks());
+                groups.getGroups().add(group);
+            }
+
+        }catch (IOException e) {
+            throw new AppException(
+                    "Can't get response from Beeter API Web Service");
+        } catch (JSONException e) {
+            throw new AppException("Error parsing Beeter Root API");
+        }
+        return groups;
+    }
+
 
 }
