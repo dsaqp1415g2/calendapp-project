@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dip"
+    android:id="@+id/">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre Evento"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip"
+        android:id="@+id/eventname" />
+
+    <EditText
+        android:id="@+id/etCreateGroupGroupname"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.07"
+        android:layout_margin="10dip"
+        android:gravity="top|left"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripcion"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip"
+        android:id="@+id/" />
+
+    <EditText
+        android:id="@+id/etCreateGroupPrice"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.05"
+        android:layout_margin="10dip"
+        android:gravity="top|left"
+        android:inputType="number" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ending Timestamp"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSetDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setDate"
+            android:text="Date"
+            android:layout_marginRight="20dip" />
+
+        <Button
+            android:id="@+id/btnSetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setTime"
+            android:text="Time" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCreateGroupDate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="2020-10-20"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="5dip" />
+
+            <TextView
+                android:id="@+id/tvCreateGroupTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12:00:00"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="5dip" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Closing Timestamp"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSetDateClosing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setDateClosing"
+            android:text="Date"
+            android:layout_marginRight="20dip" />
+
+        <Button
+            android:id="@+id/btnSetTimeClosing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setTimeClosing"
+            android:text="Time" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCreateGroupDateClosing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2020-10-20"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="5dip" />
+
+            <TextView
+                android:id="@+id/tvCreateGroupTimeClosing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12:00:00"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="5dip" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCreateGroupCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="cancel"
+            android:text="@string/write_comment_cancel_btn"
+            android:layout_marginRight="20dip" />
+
+        <Button
+            android:id="@+id/btnCreateGroupSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="post"
+            android:text="@string/write_comment_send_btn" />
+    </LinearLayout>
+
+</LinearLayout> 
