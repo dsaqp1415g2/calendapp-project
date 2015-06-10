@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,12 @@ public class EventCollection {
     private long firstTimestamp;
     private long lastTimestamp;
     private List<Event> events;
+
+    public EventCollection(){
+        super();
+        events = new ArrayList<Event>();
+    }
+
     private Map<String, Link> links = new HashMap<String, Link>();
 
     public Map<String, Link> getLinks() {

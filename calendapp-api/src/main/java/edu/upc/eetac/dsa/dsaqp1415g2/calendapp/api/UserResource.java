@@ -37,7 +37,7 @@ public class UserResource {
 
 	private String GET_USER_BY_USERNAME_QUERY = "select * from users where username = ?";
 	private String INSERT_USER_QUERY = "insert into users values(NULL, ?, MD5(?), ?, ?, ?)";
-	private String UPDATE_USER_QUERY = "update users set username = ifnull(?, username), userpass = ifnull(MD5(?), name = ifnull(?, name), age =ifnull(?, age), email = ifnull(?, email) where userid = ?";
+	private String UPDATE_USER_QUERY = "update users set username = ifnull(?, username), userpass = ifnull(MD5(?), userpass), name = ifnull(?, name), age =ifnull(?, age), email = ifnull(?, email) where userid = ?";
 	private String DELETE_USER_QUERY = "delete from users where userid = ?";
 
 	@GET
@@ -102,8 +102,7 @@ public class UserResource {
 
 			ResultSet rs = stmtGetUsername.executeQuery();
 			if (rs.next())
-				throw new WebApplicationException(user.getUsername()
-						+ " already exists. ", Status.CONFLICT);
+				
 			rs.close();
 
 			conn.setAutoCommit(false);
@@ -237,7 +236,7 @@ public class UserResource {
 			stmt.setInt(6, Integer.valueOf(userid));
 			int rows = stmt.executeUpdate();
 			if (rows == 1) {
-				user = getUserFromDatabase(userid, true);
+				user = getUserFromDatabase(user.getUsername(), true);
 			} else {
 				throw new NotFoundException("There's no user with userid = "
 						+ userid);

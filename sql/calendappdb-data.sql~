@@ -9,7 +9,11 @@ insert into users(username, userpass, name, age, email) values('pepito', MD5('pe
 
 insert into users(username, userpass, name, age, email) values('manolito', MD5('manolito'), 'Manolito Gafotas', '31', 'manolito@gafotas.com');
 
-
+insert into users_roles values ('angel', 'registered');
+insert into users_roles values ('otal', 'registered');
+insert into users_roles values ('jordi', 'registered');
+insert into users_roles values ('pepito', 'registered');
+insert into users_roles values ('manolito', 'registered');
 
 insert into groups(name, admin, description, shared) values('UPC-DSA', 'angel', 'grupo con los eventos de la asignatura DSA de la UPC', true);
 select sleep(1);
@@ -51,11 +55,11 @@ insert into events (groupid, name, dateInitial, dateFinish) values ('1', 'entreg
 
 
 
-insert into comments (username, eventid, content) values ('angel', '1', 'comentario de prueba');
+insert into comments (username, eventid, content, likes) values ('angel', '1', 'comentario de prueba', '1');
 select sleep(1);
-insert into comments (username, eventid, content) values ('angel', '5', 'ahi estare!!!');
+insert into comments (username, eventid, content, likes, dislikes) values ('angel', '5', 'ahi estare!!!', '1','1');
 select sleep(1);
-insert into comments (username, eventid, content) values ('jordi', '6', 'Tener en cuenta de llevar todos los documentos');
+insert into comments (username, eventid, content, likes) values ('jordi', '6', 'Tener en cuenta de llevar todos los documentos', '1');
 select sleep(1);
 insert into comments (username, eventid, content) values ('angel', '8', 'ya falta poco para acabarlo');
 select sleep(1);
@@ -80,7 +84,7 @@ insert into state values ('3','8', 'join');
 
 insert into likes (commentid, username, likeComment, dislikeComment) values ('1','angel', true, false);
 insert into likes (commentid, username, likeComment, dislikeComment) values ('2','jordi', true, false);
-insert into likes (commentid, username, likeComment, dislikeComment) values ('2' , 'manolito', false, true);
+insert into likes (commentid, username, likeComment, dislikeComment) values ('2','manolito', false, true);
 insert into likes (commentid, username, likeComment, dislikeComment) values ('3','otal', true, false);
 
 

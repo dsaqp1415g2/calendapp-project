@@ -47,10 +47,21 @@
     <string name="create_user_password2_tv">Repite la contraseña:</string>
     <string name="create_user_password_hint">***</string>
     <string name="create_user_btn"> Registrar</string>
-     <string name="update_user_btn">Actualizar perfil</string>
+    <string name="update_user_btn">Actualizar perfil</string>
+
+    <string name="events_now">Eventos activos</string>
+    <string name="my_groups">Mis grupos</string>
+    <string name="create_event">Crear evento nuevo</string>
+    <string name="my_user">Info cuenta</string>
+    <string name="info_app">Info Calendapp</string>
 
 
+    <string name="name">Nombre: </string>
+    <string name="dateInitial">Fecha inicio: </string>
+    <string name="dateFinish">Fecha final: </string>
 
-
+    <string name="lb_cancel">Cancelar</string>
+    <string name="lb_edit">Editar</string>
+    <string name="nameEdit">Editar evento</string>
 
 </resources>

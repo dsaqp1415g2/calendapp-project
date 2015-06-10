@@ -1,35 +1,36 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".uTrollMainActivity">
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendappMainActivity">
     <item
-        android:id="@+id/refreshMenuItem"
+        android:id="@+id/action_resfresc"
         android:title="Actualizar"
         android:icon="@drawable/refresh"
         app:showAsAction="withText|always" />
+
     <item
-        android:id="@+id/writeCommentMenuItem"
-        android:title="Escribir Comentario"
+        android:id="@+id/action_events_now"
+        android:title="@string/events_now"
         android:icon="@android:drawable/ic_menu_edit"
         app:showAsAction="withText|always" />
+
     <item
-        android:id="@+id/friendshipNotificationsMenuItem"
-        android:title="Ver solicitudes de amistad"
+        android:id="@+id/action_my_groups"
+        android:title="@string/my_groups"
         android:icon="@drawable/ic_action_person"
-        app:showAsAction="withText|always" />
-    <item android:id="@+id/action_logout"
-        android:title="@string/action_logout"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_create_event"
+        android:title="@string/create_event"
         android:orderInCategory="100"
         app:showAsAction="never"/>
-    <item android:id="@+id/action_joinGroup"
-        android:title="@string/action_joinGroup"
+
+    <item android:id="@+id/action_my_user"
+        android:title="@string/my_user"
         android:orderInCategory="100"
         app:showAsAction="never"/>
-    <item android:id="@+id/action_searchUsers"
-        android:title="@string/action_searchUsers"
-        android:orderInCategory="100"
-        app:showAsAction="never"/>
-    <item android:id="@+id/action_updateUser"
-        android:title="@string/action_updateUser"
+
+    <item android:id="@+id/action_info_app"
+        android:title="@string/info_app"
         android:orderInCategory="100"
         app:showAsAction="never"/>
 </menu>

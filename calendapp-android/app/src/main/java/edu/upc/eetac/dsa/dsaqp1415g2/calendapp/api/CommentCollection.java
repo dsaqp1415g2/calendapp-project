@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,11 @@ public class CommentCollection {
     private long oldestTimestamp;
     private List<Comment> comments;
     private Map<String, Link> links = new HashMap<String, Link>();
+
+    public CommentCollection(){
+        super();
+        comments = new ArrayList<Comment>();
+    }
 
     public long getNewestTimestamp() {
         return newestTimestamp;

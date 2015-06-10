@@ -1,7 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +53,8 @@ public class GroupResource {
 	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
 	private String GET_GROUPS_OF_USERID_QUERY = "select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
 	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
-	private String INSERT_ADMIN_GROUP = "insert into group_users values (?,?,'accepted')";
+	private String INSERT_ADMIN_GROUP = "insert into group_users values(?,?,?)";
+
 	@GET
 	@Produces(MediaType.CALENDAPP_API_GROUP_COLLECTION)
 	public GroupCollection getGroups(@QueryParam("length") int length,
@@ -248,11 +248,9 @@ public class GroupResource {
 		return group;
 
 	}
-	
-	
-	
+
 	private void acceptedAdmin(int groupid, String admin) {
-		int userid = getUserid (admin);
+		int userid = getUserid(admin);
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -262,15 +260,17 @@ public class GroupResource {
 		}
 
 		PreparedStatement stmt = null;
-		try{
-			stmt  = conn.prepareStatement(INSERT_ADMIN_GROUP);
+		try {
+			String accepted = "accepted";
+			stmt = conn.prepareStatement(INSERT_ADMIN_GROUP);
 			stmt.setInt(1, groupid);
 			stmt.setInt(2, userid);
-			ResultSet rs = stmt.getGeneratedKeys();
-			if (!rs.next()){
+			stmt.setString(3, accepted);
+			int rs = stmt.executeUpdate();
+			if (rs == 0) {
 				throw new NotFoundException("Algo ha ido mal");
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
@@ -282,8 +282,10 @@ public class GroupResource {
 			}
 		}
 	}
-	private String GET_USERID_OF_USERNAME= "select userid from users where username = ?";
-	private int getUserid(String username){
+
+	private String GET_USERID_OF_USERNAME = "select userid from users where username = ?";
+
+	private int getUserid(String username) {
 		int userid = 0;
 		Connection conn = null;
 		try {
@@ -294,15 +296,15 @@ public class GroupResource {
 		}
 
 		PreparedStatement stmt = null;
-		try{
+		try {
 			stmt = conn.prepareStatement(GET_USERID_OF_USERNAME);
 			stmt.setString(1, username);
-			ResultSet rs = stmt.getGeneratedKeys();
-			if (rs.next()){
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
 				userid = rs.getInt(1);
 			} else
 				throw new NotFoundException("Algo ha ido mal");
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
 		} finally {
@@ -315,7 +317,7 @@ public class GroupResource {
 		}
 		return userid;
 	}
-	
+
 	@PUT
 	@Path("/{groupid}")
 	@Consumes(MediaType.CALENDAPP_API_GROUP)
@@ -411,7 +413,8 @@ public class GroupResource {
 		Group group = getGroupFromDataBase(groupid);
 		String admin = group.getAdmin();
 		if (!security.getUserPrincipal().getName().equals(admin))
-			throw new ForbiddenException("You are not allowd to modify this group.");
+			throw new ForbiddenException(
+					"You are not allowd to modify this group.");
 	}
 
 	@GET
@@ -444,6 +447,7 @@ public class GroupResource {
 					user.setAge(rs.getInt("age"));
 					user.setEmail(rs.getString("email"));
 					users.addUser(user);
+
 				}
 			} else
 				throw new NotFoundException("URL incorrect");
@@ -486,7 +490,8 @@ public class GroupResource {
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				int gid = rs.getInt(2);
-
+				if (action.equals("accepted"))
+					pendingEvents(groupid, user.getUserid());
 			}
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
@@ -500,6 +505,74 @@ public class GroupResource {
 			}
 		}
 		return user;
+	}
+
+	private String CREATE_PENDING_NEW_USER_QUERY = "insert into state values (?, ?, ?)";
+
+	private void pendingEvents(String groupid, int userid) {
+		int[] i = getEventsOfGroupid(groupid);
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			for (int j = 0; j < i.length; j++) {
+				stmt = conn.prepareStatement(CREATE_PENDING_NEW_USER_QUERY);
+				stmt.setInt(userid, 1);
+				stmt.setInt(2, i[j]);
+				stmt.setString(3, "pending");
+				stmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
+	private String GET_EVENTS_OF_GROUPID = "select e.eventid from events e, groups g, where g.groupid = ? and g.groupid = e.groupid";
+
+	private int[] getEventsOfGroupid(String groupid) {
+		int[] i = new int[100];
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_EVENTS_OF_GROUPID);
+			stmt.setInt(1, Integer.valueOf(groupid));
+			ResultSet rs = stmt.executeQuery();
+			int j = 0;
+			while (rs.next()) {
+				i[j] = rs.getInt("eventid");
+				j++;
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return i;
 	}
 
 	@DELETE
