@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigationModel
+  ns = "http://schemas.android.com?import=com.android.tools.idea.editors.navigation.model.*">
+  <locations  
+    class = "java.util.ArrayList">
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.MenuState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Register"/>
+      <point      
+        x = "1768"      
+        y = "2860"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Register"/>
+      <point      
+        x = "500"      
+        y = "2860"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.LoginActivity"/>
+      <point      
+        x = "1644"      
+        y = "3084"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.MenuState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.CalendappMainActivity"/>
+      <point      
+        x = "1768"      
+        y = "100"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.CalendappMainActivity"/>
+      <point      
+        x = "500"      
+        y = "100"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.EditEventPrivateActivity"/>
+      <point      
+        x = "550"      
+        y = "4290"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "edu.upc.eetac.dsa.dsaqp1415g2.calendapp.EventPrivateDetailActiviy"/>
+      <point      
+        x = "1768"      
+        y = "1480"/>
+    </statePointEntry>
+  </locations>
+</navigationModel>
