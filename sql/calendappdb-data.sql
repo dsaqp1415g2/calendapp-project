@@ -32,7 +32,6 @@ insert into group_users values ('2', '5', 'accepted');
 insert into group_users values ('3', '2', 'accepted');
 insert into group_users values ('3', '3', 'accepted');
 insert into group_users values ('3', '4', 'accepted');
-insert into group_users values ('3', '1', 'pending');
 
 
 

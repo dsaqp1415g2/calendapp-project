@@ -49,7 +49,7 @@ public class GroupResource {
 	private String INSERT_GROUP_QUERY = "insert into groups (name, admin, description, shared) values (?,?,?,?)";
 	private String DELETE_GROUP_QUERY = "delete from groups where groupid = ?";
 	private String GET_USERS_QUERY = "select u.userid, u.username, u.name, u.age, u.email from group_users g, users u where g.groupid = ? and u.userid = g.userid and g.state = ?";
-	private String INSERT_USER_IN_GROUP_QUERY = "update group_users set userid = ifnull(?, userid), state = ifnull(?, state) where groupid = ?";
+	private String INSERT_USER_IN_GROUP_QUERY = "insert into group_users values (?, ?, 'accepted')";
 	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
 	private String GET_GROUPS_OF_USERID_QUERY = "select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
 	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
@@ -434,7 +434,7 @@ public class GroupResource {
 
 		PreparedStatement stmt = null;
 		try {
-			if (action.equals("accepted") || action.equals("pending")) {
+			if (action.equals("accepted")) {
 				stmt = conn.prepareStatement(GET_USERS_QUERY);
 				stmt.setInt(1, Integer.valueOf(groupid));
 				stmt.setString(2, action);
@@ -482,17 +482,15 @@ public class GroupResource {
 		}
 		PreparedStatement stmt = null;
 		try {
-			stmt = conn.prepareStatement(INSERT_USER_IN_GROUP_QUERY);
-			stmt.setInt(1, user.getUserid());
-			stmt.setString(2, action);
-			stmt.setInt(3, Integer.valueOf(groupid));
-			stmt.executeUpdate();
-			ResultSet rs = stmt.getGeneratedKeys();
-			if (rs.next()) {
-				int gid = rs.getInt(2);
-				if (action.equals("accepted"))
-					pendingEvents(groupid, user.getUserid());
-			}
+			stmt = conn.prepareStatement(INSERT_USER_IN_GROUP_QUERY,
+					Statement.RETURN_GENERATED_KEYS);
+			stmt.setInt(1, Integer.valueOf(groupid));
+			stmt.setInt(2, user.getUserid());
+			int rows = stmt.executeUpdate();
+			if (rows == 1) {
+				pendingEvents(groupid, user.getUserid());
+			} else
+				throw new BadRequestException("Bar url");
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
@@ -522,7 +520,7 @@ public class GroupResource {
 		try {
 			for (int j = 0; j < i.length; j++) {
 				stmt = conn.prepareStatement(CREATE_PENDING_NEW_USER_QUERY);
-				stmt.setInt(userid, 1);
+				stmt.setInt(1, userid);
 				stmt.setInt(2, i[j]);
 				stmt.setString(3, "pending");
 				stmt.executeUpdate();
@@ -540,7 +538,7 @@ public class GroupResource {
 		}
 	}
 
-	private String GET_EVENTS_OF_GROUPID = "select e.eventid from events e, groups g, where g.groupid = ? and g.groupid = e.groupid";
+	private String GET_EVENTS_OF_GROUPID = "select e.eventid from events e, groups g where g.groupid = ? and g.groupid = e.groupid";
 
 	private int[] getEventsOfGroupid(String groupid) {
 		int[] i = new int[100];
@@ -579,7 +577,7 @@ public class GroupResource {
 	@Path("/{groupid}/{userid}")
 	public void deleteUserOfGroup(@PathParam("groupid") String groupid,
 			@PathParam("userid") String userid) {
-		validateAdmin(groupid);
+
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
