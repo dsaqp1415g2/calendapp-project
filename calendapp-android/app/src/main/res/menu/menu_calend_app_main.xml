@@ -1,6 +1,6 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".uTrollMainActivity">
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendappMainActivity">
     <item
         android:id="@+id/action_resfresc"
         android:title="Actualizar"
@@ -17,7 +17,7 @@
         android:id="@+id/action_my_groups"
         android:title="@string/my_groups"
         android:icon="@drawable/ic_action_person"
-        app:showAsAction="withText|always" />
+        app:showAsAction="never" />
 
     <item android:id="@+id/action_create_event"
         android:title="@string/create_event"

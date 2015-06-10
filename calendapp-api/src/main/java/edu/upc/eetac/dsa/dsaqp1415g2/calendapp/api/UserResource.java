@@ -102,8 +102,7 @@ public class UserResource {
 
 			ResultSet rs = stmtGetUsername.executeQuery();
 			if (rs.next())
-				throw new WebApplicationException(user.getUsername()
-						+ " already exists. ", Status.CONFLICT);
+				
 			rs.close();
 
 			conn.setAutoCommit(false);

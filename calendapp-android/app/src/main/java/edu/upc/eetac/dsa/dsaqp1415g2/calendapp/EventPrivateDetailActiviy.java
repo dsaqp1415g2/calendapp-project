@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.dsaqp1415g2.calendapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -66,10 +67,13 @@ public class EventPrivateDetailActiviy extends Activity {
         setResult(RESULT_CANCELED);
         finish();
     }
+    private final static int WRITE_ACTIVITY = 0;
 
     public void putEvent(View v){
-
+        Intent intent = new Intent(this, EditEventPrivateActivity.class);
+        startActivityForResult(intent, WRITE_ACTIVITY);
     }
+
     private void loadEvent(Event event) {
         TextView tvNameEvent = (TextView) findViewById(R.id.tvNameEvent);
         TextView tvDateInitial = (TextView) findViewById(R.id.tvDateInitial);

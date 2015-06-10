@@ -62,5 +62,6 @@
 
     <string name="lb_cancel">Cancelar</string>
     <string name="lb_edit">Editar</string>
+    <string name="nameEdit">Editar evento</string>
 
 </resources>
