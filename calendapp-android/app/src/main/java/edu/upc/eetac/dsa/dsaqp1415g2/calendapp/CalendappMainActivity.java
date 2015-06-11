@@ -70,6 +70,14 @@ public class CalendappMainActivity extends ListActivity {
                 Intent intent = new Intent(this, GroupsActivity.class);
                 startActivity(intent);
                 finish();
+                return true;
+            case R.id.action_create_event:
+                Intent intent_create = new Intent(this, CreateEventActivity.class);
+                intent_create.putExtra("userid", user.getUserid());
+                startActivity(intent_create);
+                finish();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
