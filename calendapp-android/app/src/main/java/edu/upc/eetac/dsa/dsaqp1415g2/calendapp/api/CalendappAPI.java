@@ -454,5 +454,9 @@ public class CalendappAPI {
         return groups;
     }
 
+    public Event createEventPrivate(String name, int userid, String dateInitial, String dateFinish) throws AppException{
+
+    }
+
 
 }
