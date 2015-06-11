@@ -87,7 +87,7 @@ public class CreateEventActivity extends FragmentActivity {
 
     public void setTimeInitial(View v){
         DialogFragment newFragment = new TimeInitialPickerFragment();
-        newFragment.show(getSupportFragmentManager(), "TimeInitialPicker");
+        newFragment.show(getFragmentManager().beginTransaction(), "TimeInitialPicker");
     }
 
     public class TimeFinishPickerFragment extends DialogFragment
@@ -114,7 +114,7 @@ public class CreateEventActivity extends FragmentActivity {
 
     public void setTimeFinish(View v){
         DialogFragment newFragment = new TimeFinishPickerFragment();
-        newFragment.show(getSupportFragmentManager(), "TimeInitialPicker");
+        newFragment.show(getFragmentManager().beginTransaction(), "TimeFinishPicker");
     }
 
     public class DateInitialPickerFragment extends DialogFragment
@@ -151,7 +151,7 @@ public class CreateEventActivity extends FragmentActivity {
 
     public void setDateInitial(View v) {
         DialogFragment newFragment = new DateInitialPickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        newFragment.show(getFragmentManager().beginTransaction(), "dateInitialPicker");
     }
 
     public class DateFinishPickerFragment extends DialogFragment
@@ -188,7 +188,7 @@ public class CreateEventActivity extends FragmentActivity {
 
     public void setDateFinish(View v) {
         DialogFragment newFragment = new DateFinishPickerFragment();
-        newFragment.show(getSupportFragmentManager(), "dateFinish()");
+        newFragment.show(getFragmentManager(), "DateFinishPicker");
     }
 
 
