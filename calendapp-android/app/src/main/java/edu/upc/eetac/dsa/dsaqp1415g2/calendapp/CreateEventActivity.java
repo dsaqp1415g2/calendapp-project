@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.AppException;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.CalendappAPI;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Event;
 
@@ -243,7 +245,10 @@ public class CreateEventActivity extends FragmentActivity {
 
                 event = CalendappAPI.getInstance(CreateEventActivity.this).createEventPrivate(name, userid, dateInitial, dateFinish);
 
+            }catch (AppException e) {
+                Log.e(TAG, e.getMessage(), e);
             }
+            return event;
         }
     }
 
