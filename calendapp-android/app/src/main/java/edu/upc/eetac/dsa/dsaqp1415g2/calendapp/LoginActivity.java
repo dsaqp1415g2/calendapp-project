@@ -53,6 +53,7 @@ public class LoginActivity extends Activity {
     public void register (View v) throws AppException{
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void signIn(View v) throws AppException {

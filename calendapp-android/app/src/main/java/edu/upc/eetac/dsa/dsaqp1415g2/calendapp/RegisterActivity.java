@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -25,23 +26,34 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 public class RegisterActivity extends Activity {
     private final static String TAG = RegisterActivity.class.getName();
 
+    User user;
 
-    private void startCalendappActivity() {
+/*    private void startCalendappActivity(String password) {
         Intent intent = new Intent(this, CalendappMainActivity.class);
+        SharedPreferences prefs = getSharedPreferences("calendapp-profile",
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.putString("username", user.getName());
+        editor.putString("password", password);
+        editor.putString("urlUser", user.getLinks().get("self").getTarget());
         startActivity(intent);
 
-    }
+    }*/
     private class createUserTask extends AsyncTask<String, Void, User> {
         private ProgressDialog pd;
 
+        private String pass;
         @Override
         protected User doInBackground(String... params) {
-            User user = new User();
+            user = new User();
             try {
-                user = CalendappAPI.getInstance(RegisterActivity.this).createUser(params[0], params[1], Integer.valueOf(params[2]), params[3], params[4]);
+                int age = Integer.valueOf(params[2]);
+                user = CalendappAPI.getInstance(RegisterActivity.this).createUser(params[0], params[1], age, params[3], params[4]);
             } catch (AppException e) {
                 e.printStackTrace();
             }
+            pass = params[4];
             return user;
         }
 
@@ -57,7 +69,8 @@ public class RegisterActivity extends Activity {
                //6 toast.setGravity(Gravity.CENTER, 0, 0);
                 //toast.show();
                 //finish();
-            startCalendappActivity();
+            //startCalendappActivity(pass);
+
             if (pd != null) {
                 pd.dismiss();
             }
@@ -124,9 +137,13 @@ public class RegisterActivity extends Activity {
             toast.show();
         } else {
             (new createUserTask()).execute(username, name, ages, email, password);
+            Context context = getApplicationContext();
+            CharSequence text = "Registrado!";
+            int duration = Toast.LENGTH_SHORT;
 
-            
-            finish();
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
     }
 }
