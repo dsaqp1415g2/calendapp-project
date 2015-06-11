@@ -24,6 +24,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".GroupsActivity"/>
         <activity android:name=".CreateEventActivity"/>
+        <activity android:name=".GroupDetailActivity"/>
         <activity
             android:name=".api.Register"
             android:label="@string/title_activity_register" >

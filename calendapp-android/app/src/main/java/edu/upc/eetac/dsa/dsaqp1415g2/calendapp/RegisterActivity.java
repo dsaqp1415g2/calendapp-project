@@ -28,18 +28,7 @@ public class RegisterActivity extends Activity {
 
     User user;
 
-/*    private void startCalendappActivity(String password) {
-        Intent intent = new Intent(this, CalendappMainActivity.class);
-        SharedPreferences prefs = getSharedPreferences("calendapp-profile",
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.putString("username", user.getName());
-        editor.putString("password", password);
-        editor.putString("urlUser", user.getLinks().get("self").getTarget());
-        startActivity(intent);
 
-    }*/
     private class createUserTask extends AsyncTask<String, Void, User> {
         private ProgressDialog pd;
 
@@ -144,6 +133,7 @@ public class RegisterActivity extends Activity {
             Toast toast = Toast.makeText(context, text, duration);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
+
         }
     }
 }
