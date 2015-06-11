@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dip">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dip">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre Evento"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:id="@+id/eventname"
+            android:textSize="30dp" />
+
+        <EditText
+            android:id="@+id/etCreateEventName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="10dip"
+            android:gravity="top|left"
+            android:inputType="text" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha inicio"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:id="@+id/eventDateInitial"
+            android:textSize="30dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnSetDateInitial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setDateInitial"
+                android:text="Date"
+                android:layout_marginRight="20dip" />
+            <TextView
+                android:id="@+id/tvSetDateInitial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:id="@+id/btnSetTimeInitial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setTimeInitial"
+                android:text="Time"
+                android:layout_marginRight="20dip"/>
+            <TextView
+                android:id="@+id/tvSetTimeInitial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha final"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:id="@+id/eventDateFinish"
+            android:textSize="30dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:id="@+id/btnSetDateFinish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setDateFinish"
+                android:text="Date"
+                android:layout_marginRight="20dip" />
+            <TextView
+                android:id="@+id/tvSetDateFinish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+            <Button
+                android:id="@+id/btnSetTimeFinish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setTimeFinish"
+                android:text="Time"
+                android:layout_marginRight="20dip"/>
+
+            <TextView
+                android:id="@+id/tvSetTimeFinish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCreateGroupCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="cancel"
+            android:text="@string/write_comment_cancel_btn"
+            android:layout_marginRight="20dip" />
+
+        <Button
+            android:id="@+id/btnCreateGroupSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="putEvent"
+            android:text="@string/write_comment_send_btn" />
+    </LinearLayout>
+
+</LinearLayout> 
