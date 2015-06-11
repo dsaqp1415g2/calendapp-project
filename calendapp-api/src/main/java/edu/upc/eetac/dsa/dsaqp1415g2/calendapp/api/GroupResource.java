@@ -51,7 +51,7 @@ public class GroupResource {
 	private String DELETE_GROUP_QUERY = "delete from groups where groupid = ?";
 	private String GET_USERS_QUERY = "select u.userid, u.username, u.name, u.age, u.email from group_users g, users u where g.groupid = ? and u.userid = g.userid and g.state = ?";
 	private String INSERT_USER_IN_GROUP_QUERY = "insert into group_users values (?, ?, 'accepted')";
-	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_user where userid = ? and groupid = ?";
+	private String DELETE_USER_OF_GROUP_QUERY = "delete from group_users where userid = ? and groupid = ?";
 	private String GET_GROUPS_OF_USERID_QUERY = "select g.* from group_users gu, groups g where gu.userid = ? and gu.groupid = g.groupid";
 	private String GET_GROUPS_ADMIN_USERID_QUERY = "select g.* from users u, groups g where u.userid = ? and u.username = g.admin";
 	private String INSERT_ADMIN_GROUP = "insert into group_users values(?,?,?)";
@@ -576,6 +576,43 @@ public class GroupResource {
 			}
 		}
 		return i;
+	} 
+	
+	private String DELETE_USER_OF_STATE = "delete from state where userid = ? and eventid = ?";
+	
+	private void borrarState(String groupid, String userid) {
+		int[] i = getEventsOfGroupid(groupid);
+
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		
+		try {
+			int j = 0;
+			while (i[j] != 0) {
+				stmt = null;
+				stmt = conn.prepareStatement(DELETE_USER_OF_STATE);
+				stmt.setInt(1, Integer.valueOf(userid));
+				stmt.setInt(2, i[j]);
+				stmt.executeUpdate();
+				j++;
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
 	}
 
 	@DELETE
@@ -601,6 +638,8 @@ public class GroupResource {
 			if (rows == 0)
 				throw new NotFoundException("There's no relation userid = "
 						+ userid + " with groupid = " + groupid);
+			else
+				borrarState(groupid, userid);
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
