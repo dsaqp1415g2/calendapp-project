@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.dsaqp1415g2.calendapp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -24,6 +25,12 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 public class RegisterActivity extends Activity {
     private final static String TAG = RegisterActivity.class.getName();
 
+
+    private void startCalendappActivity() {
+        Intent intent = new Intent(this, CalendappMainActivity.class);
+        startActivity(intent);
+
+    }
     private class createUserTask extends AsyncTask<String, Void, User> {
         private ProgressDialog pd;
 
@@ -45,15 +52,18 @@ public class RegisterActivity extends Activity {
                 CharSequence text = "Usuario creado correcatmente\nPuedes iniciar sesión";
                 int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-                finish();
 
+             //   Toast toast = Toast.makeText(context, text, duration);
+               //6 toast.setGravity(Gravity.CENTER, 0, 0);
+                //toast.show();
+                //finish();
+            startCalendappActivity();
             if (pd != null) {
                 pd.dismiss();
             }
         }
+
+
 
         @Override
         protected void onPreExecute() {
@@ -114,6 +124,8 @@ public class RegisterActivity extends Activity {
             toast.show();
         } else {
             (new createUserTask()).execute(username, name, ages, email, password);
+
+            
             finish();
         }
     }

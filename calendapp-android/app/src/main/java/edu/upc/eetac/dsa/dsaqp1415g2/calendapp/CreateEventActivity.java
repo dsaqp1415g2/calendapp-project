@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa.dsaqp1415g2.calendapp;
+/*package edu.upc.eetac.dsa.dsaqp1415g2.calendapp;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -31,7 +31,7 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 
 /**
  * Created by Jordi on 10/06/2015.
- */
+
 public class CreateEventActivity extends FragmentActivity {
     private final static String TAG = CreateEventActivity.class.getName();
     private static TextView tvDate = null;
@@ -293,4 +293,4 @@ public class CreateEventActivity extends FragmentActivity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
+*/
