@@ -188,7 +188,7 @@ public class CreateEventActivity extends FragmentActivity {
 
     public void setDateFinish(View v) {
         DialogFragment newFragment = new DateFinishPickerFragment();
-        newFragment.show(getFragmentManager(), "DateFinishPicker");
+        newFragment.show(getFragmentManager().beginTransaction(), "DateFinishPicker");
     }
 
 
