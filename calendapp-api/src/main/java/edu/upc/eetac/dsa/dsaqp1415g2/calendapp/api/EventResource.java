@@ -58,6 +58,7 @@ public class EventResource {
 	private String DELETE_EVENT_QUERY = "delete from events where eventid = ?";
 	private String GET_USERS_STATE_QUERY = "select u.* from users u, state s where s.eventid = ? and s.state = ? and u.userid = s.userid";
 	private String UPDATE_STATE_QUERY = "update state set state = ifnull(?, state) where userid = ? and eventid = ?";
+	private String GET_EVENTS_STATE_QUERY = "select eventid from state where userid = ? and state = ?";
 
 	@GET
 	@Path("/group/{groupid}")
@@ -815,6 +816,51 @@ public class EventResource {
 			} catch (SQLException e) {
 			}
 		}
+	}
+
+	@GET
+	@Path("/state/{userid}/{state}")
+	@Produces(MediaType.CALENDAPP_API_EVENT_COLLECTION)
+	public EventCollection getEventsState(@PathParam("userid") String userid,
+			@PathParam("state") String state) {
+		validateUser(userid);
+		EventCollection events = new EventCollection();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			if (state.equals("join") || state.equals("pending")
+					|| state.equals("decline")) {
+				stmt = conn.prepareStatement(GET_EVENTS_STATE_QUERY);
+				stmt.setInt(1, Integer.valueOf(userid));
+				stmt.setString(2, state);
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					Event event = new Event();
+					event = getEventFromDataBase(Integer.toString(rs
+							.getInt("eventid")));
+					events.addEvent(event);
+				}
+			} else
+				throw new BadRequestException(
+						"State tiene que ser 'join', 'pending' o 'decline'");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return events;
 	}
 
 }
