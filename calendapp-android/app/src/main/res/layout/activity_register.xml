@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dip">
+    android:padding="8dip"
+    android:background="@color/background_material_light">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -74,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dip"
             android:hint="@string/create_user_name_hint"
-            android:inputType="text"
+            android:inputType="number"
             android:layout_alignBaseline="@+id/tvCreateUserAge"
             android:layout_toRightOf="@+id/tvCreateUserAge" />
 

@@ -280,6 +280,8 @@ public class CalendappAPI {
             URL url = new URL (urlEvents);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Accept",
+                    MediaType.CALENDAPP_API_EVENT_COLLECTION);
             urlConnection.setDoInput(true);
             urlConnection.connect();
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
@@ -397,14 +399,74 @@ public class CalendappAPI {
         return event;
     }
 
-    public GroupCollection getGroups() throws AppException {
+    private Map<String, Group> groupsCache = new HashMap<>();
+
+    public Group getGroup(String urlGroup) throws AppException{
+        Group group = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(urlGroup);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Accept",
+                    MediaType.CALENDAPP_API_GROUP);
+            urlConnection.setDoInput(true);
+
+            group = groupsCache.get(urlGroup);
+            String eTag = (group == null) ? null : group.geteTag();
+            if(eTag != null){
+                urlConnection.setRequestProperty("If-None-Match", eTag);
+            }
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED)
+            {
+                Log.d(TAG, "CACHE");
+                return groupsCache.get(urlGroup);
+            }
+            Log.d(TAG, "NOT IN CACHE");
+            group = new Group();
+            eTag = urlConnection.getHeaderField("ETag");
+            group.seteTag(eTag);
+            groupsCache.put(urlGroup, group);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonGroup = new JSONObject(sb.toString());
+            group.setAdmin(jsonGroup.getString("admin"));
+            group.setCreationTimestamp(jsonGroup.getLong("creationTimestamp"));
+            group.setDescription(jsonGroup.getString("description"));
+            group.setGroupid(jsonGroup.getInt("groupid"));
+            group.setLastModified(jsonGroup.getLong("lastModified"));
+            group.setName(jsonGroup.getString("name"));
+            group.setShared(jsonGroup.getBoolean("shared"));
+            JSONArray jsonLinks = jsonGroup.getJSONArray("links");
+            parseLinks(jsonLinks, group.getLinks());
+
+        }catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Bad sting url");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception when getting the sting");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception parsing response");
+        }
+        return group;
+    }
+    public GroupCollection getGroups(String urlMyGroups) throws AppException {
         Log.d(TAG, "getGroups()");
         GroupCollection groups = new GroupCollection();
 
         HttpURLConnection urlConnection = null;
         try {
-            urlConnection = (HttpURLConnection) new URL(rootAPI.getLinks()
-                    .get("groups").getTarget()).openConnection();
+            urlConnection = (HttpURLConnection) new URL(urlMyGroups).openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setRequestProperty("Accept",
                     MediaType.CALENDAPP_API_GROUP_COLLECTION);
@@ -454,13 +516,6 @@ public class CalendappAPI {
         return groups;
     }
 
-    public Event createEventPrivate(String name, int userid, long dateInitial, long dateFinish) throws AppException{
-        Event event = new Event();
-
-
-
-        return event;
-    }
 
 
 }

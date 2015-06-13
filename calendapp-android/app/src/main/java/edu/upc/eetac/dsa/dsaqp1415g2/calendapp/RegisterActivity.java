@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -25,39 +27,40 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 public class RegisterActivity extends Activity {
     private final static String TAG = RegisterActivity.class.getName();
 
+    User user;
 
-    private void startCalendappActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
 
-    }
     private class createUserTask extends AsyncTask<String, Void, User> {
         private ProgressDialog pd;
 
+        private String pass;
         @Override
         protected User doInBackground(String... params) {
-            User user = new User();
+            user = new User();
             try {
-                user = CalendappAPI.getInstance(RegisterActivity.this).createUser(params[0], params[1], Integer.valueOf(params[2]), params[3], params[4]);
+                int age = Integer.valueOf(params[2]);
+                user = CalendappAPI.getInstance(RegisterActivity.this).createUser(params[0], params[1], age, params[3], params[4]);
             } catch (AppException e) {
                 e.printStackTrace();
             }
+            pass = params[4];
             return user;
         }
 
         @Override
         protected void onPostExecute(User result) {
 
-                Context context = getApplicationContext();
-                CharSequence text = "Usuario creado correcatmente\nPuedes iniciar sesión";
-                int duration = Toast.LENGTH_SHORT;
+            Context context = getApplicationContext();
+            CharSequence text = "Usuario creado correcatmente\nPuedes iniciar sesión";
+            int duration = Toast.LENGTH_SHORT;
 
 
-             //   Toast toast = Toast.makeText(context, text, duration);
-               //6 toast.setGravity(Gravity.CENTER, 0, 0);
-                //toast.show();
-                //finish();
-            startCalendappActivity();
+            //   Toast toast = Toast.makeText(context, text, duration);
+            //6 toast.setGravity(Gravity.CENTER, 0, 0);
+            //toast.show();
+            //finish();
+            //startCalendappActivity(pass);
+
             if (pd != null) {
                 pd.dismiss();
             }
@@ -81,6 +84,12 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_register);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calend_app_main, menu);
+        return true;
     }
 
     public void createUser(View v) {
@@ -124,9 +133,14 @@ public class RegisterActivity extends Activity {
             toast.show();
         } else {
             (new createUserTask()).execute(username, name, ages, email, password);
+            Context context = getApplicationContext();
+            CharSequence text = "Registrado!";
+            int duration = Toast.LENGTH_SHORT;
 
-            
-            finish();
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
         }
     }
 }

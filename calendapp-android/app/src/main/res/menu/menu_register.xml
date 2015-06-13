@@ -1,15 +1,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Register">
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendappMainActivity">
     <item
-        android:id="@+id/refreshGroupsMenuItem"
-        android:title="Refrescar"
-        android:icon="@drawable/ic_action_refresh"
-        android:showAsAction="withText|always" />
+        android:id="@+id/action_resfresc"
+        android:title="Salir"
+        android:icon="@drawable/refresh"
+        app:showAsAction="withText|always" />
+
     <item
-        android:id="@+id/createGroupMenuItem"
-        android:title="Crear grupo"
-        android:icon="@drawable/ic_action_new"
-        android:showAsAction="withText|always" />
+        android:id="@+id/action_events_now"
+        android:title="@string/events_now"
+        android:icon="@android:drawable/ic_menu_edit"
+        app:showAsAction="withText|always" />
+
+    <item
+        android:id="@+id/action_my_groups"
+        android:title="@string/my_groups"
+        android:icon="@drawable/ic_action_person"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_create_event"
+        android:title="@string/create_event"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_my_user"
+        android:title="@string/my_user"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_info_app"
+        android:title="@string/info_app"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>

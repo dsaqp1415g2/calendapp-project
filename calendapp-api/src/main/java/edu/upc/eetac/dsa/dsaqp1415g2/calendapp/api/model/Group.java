@@ -16,7 +16,9 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
 public class Group {
 	@InjectLinks({
 		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "groups", title = "Latest Groups", type = MediaType.CALENDAPP_API_GROUP_COLLECTION),
-		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "self edit", title = "Group", type = MediaType.CALENDAPP_API_GROUP, method = "getGroup", bindings = @Binding(name = "groupid", value = "${instance.groupid}"))
+		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "self", title = "Group", type = MediaType.CALENDAPP_API_GROUP, method = "getGroup", bindings = @Binding(name = "groupid", value = "${instance.groupid}")),
+		@InjectLink(resource = GroupResource.class, style = Style.ABSOLUTE, rel = "users-of-group", title ="Users of this group", type = MediaType.CALENDAPP_API_USER_COLLECTION, method = "getUsers", bindings = {@Binding(name = "groupid", value ="${instance.groupid}"), @Binding(name = "action", value = "accepted")}),	
+		@InjectLink(value="/events/group/{groupid}", style = Style.ABSOLUTE, rel = "events-of-group", title = "Events of this group", type = MediaType.CALENDAPP_API_EVENT_COLLECTION, bindings = @Binding(name = "groupid", value = "${instance.groupid}"))
 	})
 	private List<Link> links;
 	public List<Link> getLinks() {

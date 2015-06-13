@@ -53,13 +53,13 @@ public class CreateEventActivity extends FragmentActivity {
     }
     public void cancel(View v) {
         setResult(RESULT_CANCELED);
-        finish();
+
     }
 
     public void putEvent(){
         EditText etCreateEventName = (EditText) findViewById(R.id.etCreateEventName);
-       // EditText etCreateDateInitial = (EditText) findViewById(R.id.etCreateEventDateInitial);
-       // EditText etCreateDateFinish = (EditText) findViewById(R.id.etCreateEventDateFinish);
+        // EditText etCreateDateInitial = (EditText) findViewById(R.id.etCreateEventDateInitial);
+        // EditText etCreateDateFinish = (EditText) findViewById(R.id.etCreateEventDateFinish);
 
     }
 
@@ -228,28 +228,25 @@ public class CreateEventActivity extends FragmentActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else{
-            (new CreateEventTask()).execute(name, DateInitial, DateFinish);
+            //(new CreateEventTask()).execute(name, DateInitial, DateFinish);
         }
     }
-
+/*
     private class CreateEventTask extends AsyncTask<String, Void, Event> {
         private ProgressDialog pd;
-
         @Override
         protected Event doInBackground(String... params){
-            Event event = null;
+         Event event = null;
             try{
                 String name = params[0];
                 String dateInitial = params[1];
                 String dateFinish = params[2];
-
                 event = CalendappAPI.getInstance(CreateEventActivity.this).createEventPrivate(name, userid, dateInitial, dateFinish);
-
             }catch (AppException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
             return event;
         }
-    }
+    }*/
 
 }

@@ -42,11 +42,11 @@ public class LoginActivity extends Activity {
         // username = "jordi";
         // password = "jordi";
 
-        //  if ((username != null) && (password != null)) {
-        //    Intent intent = new Intent(this, CalendappMainActivity.class);
-        //   startActivity(intent);
-        //  finish();
-        //}
+        if ((username != null) && (password != null)) {
+            Intent intent = new Intent(this, CalendappMainActivity.class);
+            startActivity(intent);
+            finish();
+        }
         setContentView(R.layout.login_layout);
 
     }

@@ -1,7 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,10 +17,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -36,7 +33,7 @@ public class UserResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
 
 	private String GET_USER_BY_USERNAME_QUERY = "select * from users where username = ?";
-	private String INSERT_USER_QUERY = "insert into users values(NULL, ?, MD5(?), ?, ?, ?)";
+	private String INSERT_USER_QUERY = "insert users(username, userpass, name, age, email) values(?, MD5(?), ?, ?, ?)";
 	private String UPDATE_USER_QUERY = "update users set username = ifnull(?, username), userpass = ifnull(MD5(?), userpass), name = ifnull(?, name), age =ifnull(?, age), email = ifnull(?, email) where userid = ?";
 	private String DELETE_USER_QUERY = "delete from users where userid = ?";
 
@@ -102,8 +99,8 @@ public class UserResource {
 
 			ResultSet rs = stmtGetUsername.executeQuery();
 			if (rs.next())
-				
-			rs.close();
+
+				rs.close();
 
 			conn.setAutoCommit(false);
 			stmtInsertUser = conn.prepareStatement(INSERT_USER_QUERY);
@@ -112,10 +109,15 @@ public class UserResource {
 			stmtInsertUser.setString(3, user.getName());
 			stmtInsertUser.setInt(4, user.getAge());
 			stmtInsertUser.setString(5, user.getEmail());
-			stmtInsertUser.executeUpdate();
+			int rows = stmtInsertUser.executeUpdate();
 
 			conn.commit();
-
+			if (rows == 1) {
+				userRegister(user.getUsername());
+				user = getUserFromDatabase(user.getUsername(), false);
+			} else{
+				throw new BadRequestException("Algo ha ido mal.");
+			}
 		} catch (SQLException e) {
 			if (conn != null)
 				try {
@@ -137,6 +139,36 @@ public class UserResource {
 		}
 		user.setUserpass(null);
 		return user;
+	}
+
+	private String REGISTER_USER_QUERY = "insert into users_roles values (?, 'registered')";
+
+	private void userRegister(String username) {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(REGISTER_USER_QUERY);
+			stmt.setString(1, username);
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+
 	}
 
 	private void validateUser(User user) {
@@ -163,11 +195,11 @@ public class UserResource {
 		String pwdDigest = DigestUtils.md5Hex(user.getUserpass());
 		String storedPwd = getUserFromDatabase(user.getUsername(), true)
 				.getUserpass();
-		
+
 		user = getUserFromDatabase(user.getUsername(), false);
 		user.setLoginSuccessful(pwdDigest.equals(storedPwd));
 		user.setUserpass(null);
-		
+
 		return user;
 	}
 

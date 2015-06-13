@@ -4,9 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="login_l_username">¿Cual es tu ID?</string>
-    <string name="login_l_signin">Entrar</string>
+    <string name="login_l_signin">LOGIN</string>
     <string name="login_l_password">¿Cual es tu clave?</string>
-    <string name="login_l_register"> Registrar </string>
+    <string name="login_l_register"> Sing Up NOW </string>
     <string name="title_activity_register">Register</string>
 
     <string name="action_logout">Cerrar Sesión</string>
@@ -63,5 +63,8 @@
     <string name="lb_cancel">Cancelar</string>
     <string name="lb_edit">Editar</string>
     <string name="nameEdit">Editar evento</string>
+    <string name="TextAdmin">Administrador:</string>
+    <string name="TextDescription">Descripcion:</string>
+    <string name="detail_events">Eventos del grupo:</string>
 
 </resources>

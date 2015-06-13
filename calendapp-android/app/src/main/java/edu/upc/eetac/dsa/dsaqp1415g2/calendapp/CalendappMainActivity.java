@@ -68,8 +68,8 @@ public class CalendappMainActivity extends ListActivity {
         switch(item.getItemId()) {
             case R.id.action_my_groups:
                 Intent intent = new Intent(this, GroupsActivity.class);
+                intent.putExtra("urlmygroups", user.getLinks().get("my-groups").getTarget());
                 startActivity(intent);
-                finish();
                 return true;
             case R.id.action_create_event:
                 Intent intent_create = new Intent(this, CreateEventActivity.class);
@@ -77,6 +77,10 @@ public class CalendappMainActivity extends ListActivity {
                 startActivity(intent_create);
                 finish();
                 return true;
+            case R.id.action_salir:
+                finish();
+                return true;
+
 
         }
         return super.onOptionsItemSelected(item);
@@ -126,8 +130,6 @@ public class CalendappMainActivity extends ListActivity {
             pd.setIndeterminate(true);
             pd.show();
         }
-
-
     }
 
     private void addEvents(EventCollection events) {

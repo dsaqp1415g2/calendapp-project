@@ -14,24 +14,21 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:background="@drawable/fondoeventospneumamusicacordoba">
 
-        <TextView
-            android:id="@+id/header"
-            android:layout_marginTop="20dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_centerHorizontal="true"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-            android:textColor="#AACCCC"/>
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/header"
             android:orientation="vertical"
-            android:padding="30dip">
+            android:padding="30dip"
+            android:id="@+id/linearLayout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/login"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/imageView"
+                android:layout_below="@+id/linearLayout"
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:id="@+id/lUsername"
@@ -47,9 +44,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
                 android:layout_marginTop="5dip"
+                android:gravity="center"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textColor="#FF4400"/>
+                android:textColor="#ffd2cdc0"
+                android:hint="Username"
+                android:background="#ffafadb0"
+                android:layout_weight="0.08" />
+
 
             <TextView
                 android:id="@+id/lPassword"
@@ -62,11 +64,17 @@
             <EditText
                 android:id="@+id/etPassword"
                 android:layout_width="fill_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:singleLine="true"
-                android:textColor="#68b9ff" />
+                android:textColor="#ffd2cdc0"
+                android:background="#ffafadb0"
+                android:hint="Password"
+                android:layout_weight="0.08" />
+
+
 
             <Button
                 android:id="@+id/bLogin"
@@ -75,21 +83,23 @@
                 android:layout_marginTop="25dip"
                 android:onClick="signIn"
                 android:text="@string/login_l_signin"
-                android:background="#FF4400"
+                android:background="#28fff5e7"
                 android:textColor="#FFAA20"
                 android:textStyle="bold|italic"
-                android:textSize="20dip"/>
+                android:textSize="20dip"
+                android:layout_weight="0.08" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_marginTop="50dip">
 
                 <TextView
                     android:id="@+id/lLinkRegister"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="148dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="60dip"
                     android:layout_marginLeft="10dip"
                     android:clickable="true"
@@ -97,17 +107,14 @@
                     android:gravity="center"
                     android:text="@string/login_l_register"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#ff7fadff" />
+                    android:textColor="#ff7fadff"
+                    android:background="#f02a2c2f"
+                    android:autoText="false" />
 
-                <ImageView
-                    android:layout_width="150dip"
-                    android:layout_height="150dip"
-                    android:src="@drawable/login"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="10dip"/>
 
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 
-</ScrollView> 
+</ScrollView>
