@@ -27,7 +27,7 @@ public class RegisterActivity extends Activity {
 
 
     private void startCalendappActivity() {
-        Intent intent = new Intent(this, CalendappMainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
 
     }
