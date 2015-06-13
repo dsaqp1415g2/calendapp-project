@@ -63,7 +63,9 @@ public class CalendappMainActivity extends ListActivity {
         return true;
     }
 
-   @Override
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_my_groups:
@@ -77,12 +79,32 @@ public class CalendappMainActivity extends ListActivity {
                 startActivity(intent_create);
                 finish();
                 return true;
+
+            case R.id.writeCommentMenuItem:
+                Intent intent3 = new Intent(this, GroupsActivity.class);
+                startActivity(intent3);
+                return true;
+
+            case R.id.action_updateUser:
+                Intent intent_updateUser = new Intent(this, UpdateUserActivity.class);
+                startActivity(intent_updateUser);
+                return true;
+
             case R.id.action_salir:
-                finish();
+                SharedPreferences prefs = getSharedPreferences("Calendapp-profile",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit(); //Esto siempre se hace así -> obtener editor + clear
+                editor.remove("username");
+                editor.remove("password");
+                editor.clear();
+                editor.commit();
+                setContentView(R.layout.login_layout);
+//                Intent intent1 = new Intent(this, LoginActivity.class);
+//                startActivity(intent1);
+//                finish();
                 return true;
 
 
-        }
+                        }
         return super.onOptionsItemSelected(item);
     }
 

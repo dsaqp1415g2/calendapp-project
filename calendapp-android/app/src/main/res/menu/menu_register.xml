@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendappMainActivity">
     <item
-        android:id="@+id/action_resfresc"
+        android:id="@+id/action_salir"
         android:title="Salir"
         android:icon="@drawable/refresh"
         app:showAsAction="withText|always" />
@@ -33,4 +33,7 @@
         android:title="@string/info_app"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+
+
+
 </menu>

@@ -48,6 +48,7 @@
                 android:layout_marginRight="20dip" />
             <TextView
                 android:id="@+id/tvSetDateInitial"
+                android:text="2020-10-20"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -63,11 +64,13 @@
                 android:id="@+id/btnSetTimeInitial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:onClick="setTimeInitial"
                 android:text="Time"
                 android:layout_marginRight="20dip"/>
             <TextView
                 android:id="@+id/tvSetTimeInitial"
+                android:text="12:00:00"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -97,6 +100,7 @@
                 android:layout_marginRight="20dip" />
             <TextView
                 android:id="@+id/tvSetDateFinish"
+                android:text="2020-10-20"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -117,6 +121,7 @@
 
             <TextView
                 android:id="@+id/tvSetTimeFinish"
+                android:text="12:00:00"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

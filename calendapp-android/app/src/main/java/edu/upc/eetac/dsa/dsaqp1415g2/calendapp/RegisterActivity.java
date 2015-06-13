@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -90,6 +91,23 @@ public class RegisterActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_calend_app_main, menu);
         return true;
+    }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+                case R.id.action_salir:
+                SharedPreferences prefs = getSharedPreferences("Calendapp-profile",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                Intent intent1 = new Intent(this, GroupsActivity.class);
+                startActivity(intent1);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void createUser(View v) {

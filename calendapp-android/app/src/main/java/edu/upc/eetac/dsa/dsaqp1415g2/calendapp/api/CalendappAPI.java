@@ -53,6 +53,125 @@ public class CalendappAPI {
         return instance;
     }
 
+    public Comment createComment(String content, String username) throws AppException {
+        Log.d(TAG, "createComment()");
+        Comment comment = new Comment();
+        comment.setContent(content);
+        if (username != null)
+            comment.setUsername(username);
+        HttpURLConnection urlConnection = null;
+        try {
+            JSONObject jsonComment = createJsonComment(comment);
+            URL urlPostComments = new URL(rootAPI.getLinks().get("post-comment")
+                    .getTarget());
+            urlConnection = (HttpURLConnection) urlPostComments.openConnection();
+            String mediaType = rootAPI.getLinks().get("post-comment").getParameters().get("type"); //Esta línea no estaba en el gist
+            urlConnection.setRequestProperty("Accept",
+                    mediaType); //Esto estaba mal en los gists
+            urlConnection.setRequestProperty("Content-Type",
+                    mediaType);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+            PrintWriter writer = new PrintWriter(
+                    urlConnection.getOutputStream());
+            writer.println(jsonComment.toString());
+            writer.close();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            jsonComment = new JSONObject(sb.toString());
+
+            comment.setCommentid(jsonComment.getInt("commentid"));
+            comment.setContent(jsonComment.getString("content"));
+            comment.setDislikes(jsonComment.getInt("dislikes"));
+            comment.setLikes(jsonComment.getInt("likes"));
+            comment.setUsername(jsonComment.getString("username"));
+
+            JSONArray jsonLinks = jsonComment.getJSONArray("links");
+            parseLinks(jsonLinks, comment.getLinks());
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error parsing response");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error getting response");
+        } finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
+        }
+
+        return comment;
+    }
+
+    private JSONObject createJsonComment(Comment comment) throws JSONException {
+        JSONObject jsonComment = new JSONObject();
+        jsonComment.put("content", comment.getContent());
+        if (comment.getUsername() != null)
+            jsonComment.put("username", comment.getUsername());
+
+        return jsonComment;
+    }
+
+    public User updateUser(String name, int age, String email) throws AppException {
+        Log.d(TAG, "updateUser()");
+        User user = new User();
+        user.setName(name);
+        user.setAge(age);
+        user.setEmail(email);
+
+        HttpURLConnection urlConnection = null;
+        try {
+            JSONObject jsonUser = createJsonUser(user);
+            URL urlPostUsers = new URL(rootAPI.getLinks().get("create-user")
+                    .getTarget());
+            urlConnection = (HttpURLConnection) urlPostUsers.openConnection();
+            String mediaType = rootAPI.getLinks().get("update-user").getParameters().get("type"); //Esta línea no estaba en el gist
+            urlConnection.setRequestProperty("Accept",
+                    mediaType); //Esto estaba mal en los gists
+            urlConnection.setRequestProperty("Content-Type",
+                    mediaType);
+            urlConnection.setRequestMethod("PUT");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+            PrintWriter writer = new PrintWriter(
+                    urlConnection.getOutputStream());
+            writer.println(jsonUser.toString());
+            writer.close();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            jsonUser = new JSONObject(sb.toString());
+
+            user.setUsername(jsonUser.getString("username"));
+            user.setEmail(jsonUser.getString("email"));
+            user.setName(jsonUser.getString("name"));
+            user.setAge(jsonUser.getInt("age"));
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error parsing response");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error getting response");
+        } finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
+        }
+
+        return user;
+    }
+
     public User createUser(String username, String name, int ages, String email, String userpass) throws AppException {
         Log.d(TAG, "createUser()");
         User user = new User();

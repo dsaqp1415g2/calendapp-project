@@ -7,12 +7,16 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,6 +35,7 @@ import java.util.Date;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.AppException;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.CalendappAPI;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Event;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.User;
 
 /**
  * Created by Jordi on 10/06/2015.
@@ -43,6 +48,7 @@ public class CreateEventActivity extends FragmentActivity {
     private static TextView tvTimeInitial = null;
     private static TextView tvTimeFinish= null;
     private static int userid = 0;
+    User user = null;
 
 
     @Override
@@ -55,6 +61,48 @@ public class CreateEventActivity extends FragmentActivity {
         setResult(RESULT_CANCELED);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_calend_app_main, menu);
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_my_groups:
+                Intent intent = new Intent(this, GroupsActivity.class);
+                intent.putExtra("urlmygroups", user.getLinks().get("my-groups").getTarget());
+                startActivity(intent);
+                return true;
+            case R.id.action_create_event:
+                Intent intent_create = new Intent(this, CreateEventActivity.class);
+                intent_create.putExtra("userid", user.getUserid());
+                startActivity(intent_create);
+                finish();
+                return true;
+
+            case R.id.action_salir:
+                SharedPreferences prefs = getSharedPreferences("Calendapp-profile",
+                        Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit(); //Esto siempre se hace así -> obtener editor + clear
+                editor.clear();
+                editor.commit();
+                Intent intent1 = new Intent(this, LoginActivity.class);
+                startActivity(intent1);
+                finish();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
 
     public void putEvent(){
         EditText etCreateEventName = (EditText) findViewById(R.id.etCreateEventName);

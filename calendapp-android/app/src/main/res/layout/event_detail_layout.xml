@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dip">
+    android:layout_margin="10dip"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,24 +12,29 @@
         android:orientation="horizontal"
         android:paddingLeft="5dip"
         android:paddingRight="5dip"
-        android:layout_margin="20dip">
+        android:layout_margin="20dip"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/TextName"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
             android:text="@string/name"
+            android:textStyle="bold"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_weight="1.07" />
 
-        <TextView
-            android:id="@+id/tvNameEvent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="right"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNameEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.12"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,24 +42,28 @@
         android:orientation="horizontal"
         android:paddingLeft="5dip"
         android:paddingRight="5dip"
-        android:layout_margin="20dip">
+        android:layout_margin="20dip"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/DateInitial"
-            android:layout_width="115dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="@string/dateInitial"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/tvDateInitial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="right"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvDateInitial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.12"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,23 +71,20 @@
         android:orientation="horizontal"
         android:paddingLeft="5dip"
         android:paddingRight="5dip"
-        android:layout_margin="20dip">
+        android:layout_margin="20dip"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/DateFinish"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
             android:text="@string/dateFinish"
+            android:textStyle="bold"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_weight="1.05" />
 
-        <TextView
-            android:id="@+id/tvDateFinish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="right"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
 
@@ -86,21 +93,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/bCancel"
+        <TextView
+            android:id="@+id/tvDateFinish"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="51dp"
             android:layout_weight="0.5"
-            android:onClick="cancel"
-            android:text="@string/lb_cancel" />
-
-        <Button
-            android:id="@+id/bSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:onClick="putEvent"
-            android:text="@string/lb_edit" />
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/bCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="cancel"
+        android:text="@string/lb_cancel" />
+
+    <Button
+        android:id="@+id/bSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="putEvent"
+        android:text="@string/lb_edit" />
 
 </LinearLayout>

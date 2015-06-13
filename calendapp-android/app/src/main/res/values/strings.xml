@@ -56,15 +56,19 @@
     <string name="info_app">Info Calendapp</string>
 
 
-    <string name="name">Nombre: </string>
+    <string name="name">Nombre </string>
     <string name="dateInitial">Fecha inicio: </string>
     <string name="dateFinish">Fecha final: </string>
 
     <string name="lb_cancel">Cancelar</string>
     <string name="lb_edit">Editar</string>
     <string name="nameEdit">Editar evento</string>
-    <string name="TextAdmin">Administrador:</string>
-    <string name="TextDescription">Descripcion:</string>
+    <string name="TextAdmin">Administrador</string>
+    <string name="TextDescription">Descripcion</string>
     <string name="detail_events">Eventos del grupo:</string>
+
+    <string name="main_troll">No eres Troll</string>
+
+
 
 </resources>

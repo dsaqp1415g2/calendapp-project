@@ -2,7 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dip">
+    android:layout_margin="10dip"
+    android:weightSum="1"
+    android:background="#85bfe98e"
+    android:backgroundTint="@android:color/background_dark"
+    android:backgroundTintMode="screen"
+    android:baselineAligned="false"
+    android:clickable="false"
+    android:focusable="false"
+    android:measureWithLargestChild="false"
+    android:touchscreenBlocksFocus="false"
+    android:transitionGroup="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,9 +23,11 @@
 
         <TextView
             android:id="@+id/Name"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/name"
+            android:gravity="center"
+            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="20dp" />
 
@@ -37,9 +49,11 @@
 
         <TextView
             android:id="@+id/Admin"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/TextAdmin"
+            android:gravity="center"
+            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="20dp" />
 
@@ -61,9 +75,11 @@
 
         <TextView
             android:id="@+id/Description"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/TextDescription"
+            android:gravity="center"
+            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="20dp" />
 
@@ -77,13 +93,19 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="351dp"
         android:layout_height="wrap_content"
-        android:text="@string/detail_events"/>
+        android:gravity="center"
+        android:textStyle="italic"
+        android:text="@string/detail_events"
+        android:textSize="20dp"
+        android:layout_weight="0.15" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="166dp"
+        android:layout_weight="0.27"
+        android:background="#bbff646d" />
 
 </LinearLayout>
