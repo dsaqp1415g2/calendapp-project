@@ -341,6 +341,9 @@ function getUserIndex(username){
 			type : 'GET',
 			crossDomain : true,
 			dataType : 'json',
+					headers:{
+		Accept : 'application/vnd.calendapp.api.user+json',
+		}
 		}).done(function(data,status,jqxhr)
 		{
 			setCookie("username", data.name);
