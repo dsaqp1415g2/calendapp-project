@@ -2,9 +2,12 @@ package edu.upc.eetac.dsa.dsaqp1415g2.calendapp;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.AppException;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.CalendappAPI;
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Comment;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Event;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.EventCollection;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Group;
@@ -22,6 +26,7 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Group;
  */
 public class GroupDetailActivity extends ListActivity {
     private final static String TAG = GroupDetailActivity.class.toString();
+    private ArrayList<Comment> commentsList;
 
     private ArrayList<Event> eventsList;
     private EventsAdapter adapter;
@@ -120,6 +125,20 @@ public class GroupDetailActivity extends ListActivity {
             pd.show();
         }
     }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+
+        Comment comment = commentsList.get(position);
+
+        Intent intent = new Intent(this, CommentDetailActivity.class);
+        intent.putExtra("url", comment.getLinks().get("self").getTarget());
+        intent.putExtra("url-like", comment.getLinks().get("like").getTarget());
+        intent.putExtra("url-dislike", comment.getLinks().get("dislike").getTarget());
+        intent.putExtra("type", comment.getLinks().get("like").getParameters().get("type"));
+        startActivity(intent);
+    }
+
 
     private void addEvents(EventCollection events) {
         eventsList.addAll(events.getEvents());
