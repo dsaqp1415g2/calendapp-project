@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
-
 import java.util.ArrayList;
 
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.AppException;
@@ -26,7 +24,7 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.Group;
  */
 public class GroupDetailActivity extends ListActivity {
     private final static String TAG = GroupDetailActivity.class.toString();
-    private ArrayList<Comment> commentsList;
+
 
     private ArrayList<Event> eventsList;
     private EventsAdapter adapter;
@@ -129,13 +127,10 @@ public class GroupDetailActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
-        Comment comment = commentsList.get(position);
+        Event event = eventsList.get(position);
 
-        Intent intent = new Intent(this, CommentDetailActivity.class);
-        intent.putExtra("url", comment.getLinks().get("self").getTarget());
-        intent.putExtra("url-like", comment.getLinks().get("like").getTarget());
-        intent.putExtra("url-dislike", comment.getLinks().get("dislike").getTarget());
-        intent.putExtra("type", comment.getLinks().get("like").getParameters().get("type"));
+        Intent intent = new Intent(this, CommentsDetailActivity.class);
+        intent.putExtra("url", event.getLinks().get("comments").getTarget());
         startActivity(intent);
     }
 
@@ -144,4 +139,6 @@ public class GroupDetailActivity extends ListActivity {
         eventsList.addAll(events.getEvents());
         adapter.notifyDataSetChanged();
     }
+
+
 }
