@@ -1,7 +1,7 @@
-var API_BASE_URL = "http://www.grupt2.dsa";
+var API_BASE_URL = "http://147.83.7.158:8080/calendapp-api/";
 var USERNAME = getCookie("usuario");
 var PASSWORD = getCookie("password");
-//147.83.7.158
+//147.83.7.158:8080/calendapp-api/
 $.ajaxSetup({
     headers: { 'Authorization': "Basic "+ btoa(USERNAME+':'+PASSWORD) }
 });
