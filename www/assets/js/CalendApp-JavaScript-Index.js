@@ -30,7 +30,6 @@ function getCookie(cname) {
     }
     return "";
 }
-/*
 function getGroupsAdmin() {
 	var userid = getCookie("userid");
 	var url = API_BASE_URL + '/groups/admin/' + userid;
@@ -58,20 +57,60 @@ function getGroupsAdmin() {
 		$("#repos_result").text("No Groups.");
 	});	
 }
-*/
+//VERIFICACIÓN DE USUARIO
+$("#boton_login").click(function(e) {
+	var url = API_BASE_URL + '/users/login';
+	e.preventDefault();
+	document.cookieusername = $.cookie("usuario", ($("#usuario").val()));
+	document.cookieusername = $.cookie("password", ($("#password").val()));
+	var usuario = new Object();
+	usuario.username = getCookie("usuario");
+	usuario.userpass = getCookie("password");
+	var data = JSON.stringify(usuario);
+	console.log(usuario);
+	
+	$.ajax({
+		url : url,
+		type : 'POST',
+		crossDomain : true,
+		dataType : 'json',
+		contentType : 'application/vnd.calendapp.api.user+json',
+		data : data,
+		dataType:'json',
+		
+	}).done(function(result, status, jqxhr) {
+		var logCheck = result;		
+		if (logCheck.loginSuccessful) {	
+			console.log("Ususario " + logCheck.username  + " autenticado");
+			getUserIndex(logCheck.username);
+			var url2 = 'http://localhost/Index.html';
+			$(location).attr('href',url2);
+		}else if(!logCheck.loginSuccessful){
+			alert("Error, revisa tus datos");
+		}
+});
+});
+
+//GET EVENTOS
+$("#button_get_eventos").click(function(e){
+	e.preventDefault();
+	console.log("Entramos función listar eventos, buscamos por grupo default = 2");
+	var id = 2;
+	getEvents(id);
+	
+});
 
 //Cargar DOC
 $(document).ready(function(){
-	window.alert("AAAAAAAAAAA");
 		var x = getCookie("usuario");
 	console.log(x);
 	getUserIndex(x);
 	getGroupsAdmin();
 	getLiveEvents();
-
+	getPendingEvents();
 });
 
-/*function getPendingEvents()
+function getPendingEvents()
 {
 	window.alert("ENTRA EN PENDING");
 	var url = API_BASE_URL +'/events/state/'+getCookie("userid")+'/pending';
@@ -94,8 +133,8 @@ $(document).ready(function(){
 	});
 	
 }
-*/
-/*function getLiveEvents(){
+
+function getLiveEvents(){
 	var z = getCookie("userid");
 	var url = API_BASE_URL + '/events/now/' + z;
 	//console.log("ENTRA EN LIVE EVENTS");
@@ -128,8 +167,66 @@ $(document).ready(function(){
 	});
 	
 }
+/*$("#poner-nombre").click(function(e){
+	console.log("kjljklj");
+	e.preventDefault();
+	var x = getCookie("usuario");
+	console.log(x);
+	getUserIndex(x);
+	//console.log("Nombre ususario recogido de login.html :" + x);
+});*/
+
+/*$("#button_get_groups").click(function(e) {
+	e.preventDefault();
+	$.cookie("cookies_prueba", 10);
+	var x = getCookie("userid");
+	getGroups(getCookie("userid"));
+});
 */
-/*function getEvents(userid){
+/*$("#button_get_group").click(function(e) {
+	e.preventDefault();
+	getGrupo($("#nombre_grupo").val());
+	$.cookie("cookies_prueba", 10);
+	console.log("Imprime usando la funcion console "  + console.debug($.cookie("usuario")));
+	//console.log("El valor del cookie es " + x);
+	console.log($("#nombre_grupo").val())
+});
+*/
+$("#button_get_repo_to_edit").click(function(e) {
+	e.preventDefault();
+	getRepoToEdit($("#repository_name_get_to_edit").val());
+});
+
+
+$("#button_edit_repo").click(function(e) {
+	e.preventDefault();
+
+    var newRepo = new Object();
+	newRepo.name = $("#repository_name_to_edit").val()
+	newRepo.description = $("#description_to_edit").val()
+	
+	updateRepo(newRepo);
+});
+
+/*$("#button_create_group").click(function(e) {
+	e.preventDefault();
+
+    var group = new Object();
+	group.name = $("#group_name").val();
+	group.admin="angel";
+	group.description = $("#group_description").val();
+	//group.shared = true;
+	//if($("#button_create_group").val() == 'n')
+	//{
+	//	group.shared = false;
+	//}
+
+	createGroup(group);
+});
+*/
+
+
+function getEvents(userid){
 	var url = API_BASE_URL + '/events/group/' + userid;
 	console.log(url);
 	$("repos_result").text('');
@@ -157,6 +254,36 @@ $(document).ready(function(){
 	
 }
 
+/*function getGroups(abc) {
+	console.log("variable recogida " +abc);
+	var url = API_BASE_URL + '/groups/user/' + abc;
+	$("#repos_result").text('');
+	console.log(url);
+	$.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+				var repos = data;
+				$.each(repos, function(i, v) {
+					var repo = v;
+						//console.log(repo);
+						//console.log(repo.name);
+					
+					$.each(repo, function(j, k){
+						var z = k;
+					$('<div class="form-panel"> <br><strong> Name: ' + z.name + '</strong><br><strong> ID: </strong> ' + z.groupid + '<br></div>').appendTo($('#get_repo_result'));
+					});
+				});
+				
+
+	}).fail(function() {
+		$("#repos_result").text("No repositories.");
+	});
+
+}
+*/
 
 function getUserIndex(username){
 		$("#user_name").text('');
@@ -181,4 +308,30 @@ function getUserIndex(username){
 		});
 }
 
+/*function getGrupo(groupid) {
+	var url = API_BASE_URL + '/groups?name=' +groupid;
+	$("#get_repo_result").text('');
+
+	$.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+
+				var grupo = data;
+					$
+				console.log(grupo);
+				$("#get_repo_result").text('');
+				$('<strong> Nombre: </strong> ' + grupo.name + '<br>').appendTo($('#get_repo_result'));
+				$('<strong> Administrador: ' + grupo.admin + '<br>').appendTo($('#get_repo_result'));
+				$('<strong> Descripcion: </strong> ' + grupo.description + '<br>').appendTo($('#get_repo_result'));
+
+			}).fail(function() {
+				$('<div class="alert alert-danger"> <strong>Oh!</strong> Repository not found </div>').appendTo($("#get_repo_result"));
+	});
+
+}
 */
+
+

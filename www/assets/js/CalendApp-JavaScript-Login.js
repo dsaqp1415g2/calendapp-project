@@ -30,7 +30,6 @@ function getCookie(cname) {
     }
     return "";
 }
-
 //VERIFICACIÓN DE USUARIO
 $("#boton_login").click(function(e) {
 	var url = API_BASE_URL + '/users/login';
@@ -64,13 +63,40 @@ $("#boton_login").click(function(e) {
 		}
 });
 });
-
-
-
-
-function loginSuccessfull()
-{
-	
+//REGISTRAR
+$("#submit_register").click(function(e){
+	e.preventDefault();
+	if (($("#name_reg").val()) == '' || ($("#username_reg").val()) == '' | ($("#userpass_reg").val()) == '' || ($("#email_reg").val()) == '' || ($("#age_reg").val()) == ''){
+		window.alert("Debes rellenar todos los campos");
+	}
+	else{
+		var newuser = new Object();
+		newuser.username = ($("#username_reg").val());
+		newuser.userpass = ($("#userpass_reg").val());
+		newuser.name = ($("#name_reg").val());
+		newuser.age = ($("#age_reg").val());
+		newuser.email = ($("#email_reg").val());
+		registerUser(newuser);
+	}
+});
+function registerUser(userdata){
+	var url = API_BASE_URL + '/users/';
+	console.log("URL usada para registrar es " + url);
+	data=JSON.stringify(userdata);
+	console.log(data);
+		$.ajax({
+		url : url,
+		type : 'POST',
+		crossDomain : true,
+		dataType : 'json',
+		data : data,
+		contentType : 'application/vnd.calendapp.api.user+json',
+		Accept : 'application/vnd.calendapp.api.user+json'
+	}).done(function(data, status, jqxhr) {
+			window.alert("Bienvenido a CalendApp " +userdata.username);				
+  	}).fail(function() {
+			window.alert("Problema al registrarse");
+	});
 	
 }
 function getEvents(userid){
@@ -100,8 +126,6 @@ function getEvents(userid){
 	});
 	
 }
-
-
 function getUserIndex(username){
 		$("#user_name").text('');
 		$('<h5 class="centered" id="user_name"> Bienvenido, '+ username+'</h5>').appendTo($('#user_name'));
