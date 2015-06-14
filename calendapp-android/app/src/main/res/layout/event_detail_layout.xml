@@ -109,11 +109,4 @@
         android:onClick="cancel"
         android:text="@string/lb_cancel" />
 
-    <Button
-        android:id="@+id/bSend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="putEvent"
-        android:text="@string/lb_edit" />
-
 </LinearLayout>

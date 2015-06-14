@@ -118,6 +118,181 @@ public class CalendappAPI {
         return jsonComment;
     }
 
+    public CommentCollection getComments() throws AppException {
+        Log.d(TAG, "getComments()");
+        CommentCollection comments = new CommentCollection(); //Modelo de la colección
+
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) new URL(rootAPI.getLinks()
+                    .get("comments").getTarget()).openConnection(); //Cnx URL Contra el ROOT + el target del atributo "comments"
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't connect to Calendapp API Web Service");
+        }
+
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonObject = new JSONObject(sb.toString());
+            JSONArray jsonLinks = jsonObject.getJSONArray("links");
+            parseLinks(jsonLinks, comments.getLinks());
+
+            JSONArray jsonComments = jsonObject.getJSONArray("comments");
+            for (int i = 0; i < jsonComments.length(); i++) {
+                Comment comment = new Comment();
+                JSONObject jsonComment = jsonComments.getJSONObject(i);
+
+                comment.setCommentid(jsonComment.getInt("commentid"));
+                comment.setContent(jsonComment.getString("content"));
+                comment.setCreationTimestamp(jsonComment.getLong("creation_timestamp"));
+                comment.setDislikes(jsonComment.getInt("dislikes"));
+                comment.setLastModified(jsonComment.getLong("last_modified"));
+                comment.setLikes(jsonComment.getInt("likes"));
+                comment.setUsername(jsonComment.getString("username"));
+
+                jsonLinks = jsonComment.getJSONArray("links");
+                parseLinks(jsonLinks, comment.getLinks());
+                comments.getComments().add(comment);
+            }
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't get response from Calendapp API Web Service");
+        } catch (JSONException e) {
+            throw new AppException("Error parsing Calendapp Root API");
+        }
+
+        return comments;
+    }
+
+    public CommentCollection getPrevNextComments(String urlPN) throws AppException {
+        Log.d(TAG, "getPrevNextComments()");
+        CommentCollection comments = new CommentCollection(); //Modelo de la colección
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(urlPN);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't connect to Calendapp API Web Service");
+        }
+
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonObject = new JSONObject(sb.toString());
+            JSONArray jsonLinks = jsonObject.getJSONArray("links");
+            parseLinks(jsonLinks, comments.getLinks());
+
+            JSONArray jsonComments = jsonObject.getJSONArray("comments");
+            for (int i = 0; i < jsonComments.length(); i++) {
+                Comment comment = new Comment();
+                JSONObject jsonComment = jsonComments.getJSONObject(i);
+
+                comment.setCommentid(jsonComment.getInt("commentid"));
+                comment.setContent(jsonComment.getString("content"));
+                comment.setCreationTimestamp(jsonComment.getLong("creation_timestamp"));
+                comment.setDislikes(jsonComment.getInt("dislikes"));
+                comment.setLastModified(jsonComment.getLong("last_modified"));
+                comment.setLikes(jsonComment.getInt("likes"));
+                comment.setUsername(jsonComment.getString("username"));
+
+                jsonLinks = jsonComment.getJSONArray("links");
+                parseLinks(jsonLinks, comment.getLinks());
+                comments.getComments().add(comment);
+            }
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't get response from calendapp API Web Service");
+        } catch (JSONException e) {
+            throw new AppException("Error parsing calendapp Root API");
+        }
+
+        return comments;
+    }
+
+    private Map<String, Comment> commentsCache = new HashMap<String, Comment>();
+
+    public Comment getComment(String urlComment) throws AppException {
+        Comment comment = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(urlComment);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+
+            comment = commentsCache.get(urlComment);
+            String eTag = (comment == null) ? null : comment.geteTag();
+            if (eTag != null)
+                urlConnection.setRequestProperty("If-None-Match", eTag);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) { //Si el comment no se ha modificado, se devuelve el de la URL
+                Log.d(TAG, "CACHE");
+                return commentsCache.get(urlComment);
+            }
+            Log.d(TAG, "NOT IN CACHE"); //Si sí que se ha modificado, debemos obtenerlo
+            comment = new Comment();
+            eTag = urlConnection.getHeaderField("ETag");
+            comment.seteTag(eTag);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            JSONObject jsonComment = new JSONObject(sb.toString());
+
+            comment.setCommentid(jsonComment.getInt("commentid"));
+            comment.setContent(jsonComment.getString("content"));
+            comment.setCreationTimestamp(jsonComment.getLong("creation_timestamp"));
+            comment.setDislikes(jsonComment.getInt("dislikes"));
+            comment.setLastModified(jsonComment.getLong("last_modified"));
+            comment.setLikes(jsonComment.getInt("likes"));
+            comment.setUsername(jsonComment.getString("username"));
+
+            JSONArray jsonLinks = jsonComment.getJSONArray("links");
+            parseLinks(jsonLinks, comment.getLinks());
+
+            commentsCache.put(urlComment, comment); //Esta línea se pone al final por si hay error antes
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Bad comment url");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception when getting the comment");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception parsing response");
+        }
+
+        return comment;
+    }
+
+
     public User updateUser(String name, int age, String email) throws AppException {
         Log.d(TAG, "updateUser()");
         User user = new User();
@@ -579,6 +754,70 @@ public class CalendappAPI {
         }
         return group;
     }
+
+    public Comment LikeDislikeComment(String urlLikeDislike, String mediaType, String urlComment) throws AppException {
+        Comment comment = null;
+        HttpURLConnection urlConnection = null;
+
+        try {
+            URL url = new URL(urlLikeDislike);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept",
+                    mediaType); //Esto estaba mal en los gists
+            urlConnection.setRequestProperty("Content-Type",
+                    mediaType);
+            urlConnection.setRequestMethod("PUT");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+            comment = commentsCache.get(urlComment);
+            String eTag = (comment == null) ? null : comment.geteTag();
+            if (eTag != null)
+                urlConnection.setRequestProperty("If-None-Match", eTag);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED) { //Si el comment no se ha modificado, se devuelve el de la URL
+                Log.d(TAG, "CACHE");
+                return commentsCache.get(urlComment);
+            }
+            Log.d(TAG, "NOT IN CACHE"); //Si sí que se ha modificado, debemos obtenerlo
+            comment = new Comment();
+            eTag = urlConnection.getHeaderField("ETag");
+            comment.seteTag(eTag);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            JSONObject jsonComment = new JSONObject(sb.toString());
+
+            comment.setCommentid(jsonComment.getInt("commentid"));
+            comment.setContent(jsonComment.getString("content"));
+            comment.setCreationTimestamp(jsonComment.getLong("creation_timestamp"));
+            comment.setDislikes(jsonComment.getInt("dislikes"));
+            comment.setLikes(jsonComment.getInt("likes"));
+            comment.setUsername(jsonComment.getString("username"));
+
+            JSONArray jsonLinks = jsonComment.getJSONArray("links");
+            parseLinks(jsonLinks, comment.getLinks());
+
+            commentsCache.put(urlComment, comment); //Esta línea se pone al final por si hay error antes
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Bad comment url");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception when getting the comment");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Exception parsing response");
+        }
+
+        return comment;
+    }
+
     public GroupCollection getGroups(String urlMyGroups) throws AppException {
         Log.d(TAG, "getGroups()");
         GroupCollection groups = new GroupCollection();

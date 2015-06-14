@@ -66,6 +66,7 @@ public class Comment {
         this.dislikes = dislikes;
     }
 
+
     public long getLastModified() {
         return lastModified;
     }

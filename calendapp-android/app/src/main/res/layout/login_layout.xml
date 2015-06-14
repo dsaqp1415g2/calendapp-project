@@ -8,10 +8,9 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="600dp"
+
+
         android:background="@drawable/fondoeventospneumamusicacordoba">
 
         <LinearLayout
@@ -22,8 +21,8 @@
             android:id="@+id/linearLayout">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="128dp"
+                android:layout_height="107dp"
                 android:src="@drawable/login"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/imageView"
@@ -40,17 +39,17 @@
 
             <EditText
                 android:id="@+id/etUsername"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="330dp"
+                android:layout_height="45dp"
                 android:layout_marginBottom="20dip"
                 android:layout_marginTop="5dip"
                 android:gravity="center"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textColor="#ffd2cdc0"
+                android:textColor="#ffd2271d"
                 android:hint="Username"
                 android:background="#ffafadb0"
-                android:layout_weight="0.08" />
+                android:layout_weight="0.04" />
 
 
             <TextView
@@ -63,16 +62,16 @@
 
             <EditText
                 android:id="@+id/etPassword"
-                android:layout_width="fill_parent"
                 android:gravity="center"
-                android:layout_height="wrap_content"
+                android:layout_width="330dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="5dip"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:singleLine="true"
-                android:textColor="#ffd2cdc0"
+                android:textColor="#ffd22123"
                 android:background="#ffafadb0"
                 android:hint="Password"
-                android:layout_weight="0.08" />
+                android:layout_weight="0.05" />
 
 
 
@@ -83,7 +82,7 @@
                 android:layout_marginTop="25dip"
                 android:onClick="signIn"
                 android:text="@string/login_l_signin"
-                android:background="#28fff5e7"
+                android:background="#8ffff5e7"
                 android:textColor="#FFAA20"
                 android:textStyle="bold|italic"
                 android:textSize="20dip"
@@ -105,7 +104,7 @@
                     android:clickable="true"
                     android:onClick="register"
                     android:gravity="center"
-                    android:text="@string/login_l_register"
+                    android:text="Regístrate"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#ff7fadff"
                     android:background="#f02a2c2f"

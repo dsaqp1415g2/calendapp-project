@@ -80,10 +80,6 @@ public class CalendappMainActivity extends ListActivity {
                 finish();
                 return true;
 
-            case R.id.writeCommentMenuItem:
-                Intent intent3 = new Intent(this, GroupsActivity.class);
-                startActivity(intent3);
-                return true;
 
             case R.id.action_updateUser:
                 Intent intent_updateUser = new Intent(this, UpdateUserActivity.class);
