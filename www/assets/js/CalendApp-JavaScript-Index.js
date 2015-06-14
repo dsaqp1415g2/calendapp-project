@@ -38,7 +38,9 @@ function getGroupsAdmin() {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.group.collection+json'
+		headers :{ 
+		Accept : 'application/vnd.calendapp.api.group.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 
@@ -110,8 +112,7 @@ $(document).ready(function(){
 	getPendingEvents();
 });
 
-function getPendingEvents()
-{
+function getPendingEvents(){
 	var counter = 0;
 	var url = API_BASE_URL +'/events/states/'+getCookie("userid")+'/pending';
 			$.ajax({
@@ -282,6 +283,9 @@ function getEvents(userid){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.event.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 				$.each(repos, function(i, v) {

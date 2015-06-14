@@ -52,10 +52,10 @@ $("#boton_login").click(function(e) {
 		dataType:'json',
 			statusCode: {
 				    		404: function() {window.alert("Usuario no encontrado");},
-			}
-					headers:{
-		Accept : 'application/vnd.calendapp.api.group.user+json',
-		"Content-Type" : 'application/vnd.calendapp.api.group.user+json'
+			},
+			headers: {
+			Accept : 'application/vnd.calendapp.api.user+json',
+			"Content-Type" : 'application/vnd.calendapp.api.user+json'
 		}
 	}).done(function(result, status, jqxhr) {
 		var logCheck = result;		
