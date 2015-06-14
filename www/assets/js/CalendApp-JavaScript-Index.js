@@ -150,7 +150,7 @@ function getPendingEvents()
 function acceptgetID(id)
 {
 	window.alert("Evento accept " +id);
-	var url = API_BASE_URL +'events/state/'+id+'/'+getCookie("userid")+'/join';
+	var url = API_BASE_URL +'/events/state/'+id+'/'+getCookie("userid")+'/join';
 	$.ajax({
 		url : url,
 		type : 'PUT',
@@ -167,7 +167,7 @@ function acceptgetID(id)
 function declinegetID(id)
 {
 		window.alert("Evento decline " +id);
-	var url = API_BASE_URL +'events/state/'+id+'/'+getCookie("userid")+'/decline';
+	var url = API_BASE_URL +'/events/state/'+id+'/'+getCookie("userid")+'/decline';
 	console.log(url);
 	$.ajax({
 		url : url,
