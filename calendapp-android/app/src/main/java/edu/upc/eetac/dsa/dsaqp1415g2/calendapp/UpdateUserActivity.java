@@ -92,6 +92,13 @@ public class UpdateUserActivity extends Activity implements View.OnClickListener
             pd.setCancelable(false);
             pd.setIndeterminate(true);
             pd.show();
+            Context context = getApplicationContext();
+            CharSequence text = "Tus datos han sido actualizados";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
 
     }
@@ -112,8 +119,7 @@ public class UpdateUserActivity extends Activity implements View.OnClickListener
         Toast toast = Toast.makeText(context, text, duration);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
-
-    }
+}
 
    Button btn;
     ImageView img;
