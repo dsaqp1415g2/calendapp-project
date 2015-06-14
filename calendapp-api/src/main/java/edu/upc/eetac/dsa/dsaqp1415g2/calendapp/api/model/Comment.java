@@ -14,10 +14,10 @@ import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
 
 public class Comment {
 	@InjectLinks({
-		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "self edit", title = "Comment", type = MediaType.CALENDAPP_API_COMMENT, method = "getComment" ,bindings = @Binding(name = "commentid", value = "${instance.commentid}")),
+		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "self", title = "Comment", type = MediaType.CALENDAPP_API_COMMENT, method = "getComment" ,bindings = @Binding(name = "commentid", value = "${instance.commentid}")),
 		@InjectLink(value = "/comments/{eventid}", style = Style.ABSOLUTE, rel = "comments", title = "Latest comments", type = MediaType.CALENDAPP_API_COMMENT_COLLECTION, bindings = @Binding(name = "eventid", value = "${instance.eventid}")),
-		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "get likes", title = "Likes", type = MediaType.CALENDAPP_API_LIKE_COLLECTION, method = "getLikes", bindings = {@Binding(name = "commentid", value ="${instance.commentid}"), @Binding(name = "like", value = "likes")}),
-		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "get dislikes", title = "Dislikes", type = MediaType.CALENDAPP_API_LIKE_COLLECTION, method = "getLikes", bindings = {@Binding(name = "commentid", value ="${instance.commentid}"), @Binding(name = "like", value = "dislikes")}),
+		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "get-likes", title = "Likes", type = MediaType.CALENDAPP_API_LIKE_COLLECTION, method = "getLikes", bindings = {@Binding(name = "commentid", value ="${instance.commentid}"), @Binding(name = "like", value = "likes")}),
+		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "get-dislikes", title = "Dislikes", type = MediaType.CALENDAPP_API_LIKE_COLLECTION, method = "getLikes", bindings = {@Binding(name = "commentid", value ="${instance.commentid}"), @Binding(name = "like", value = "dislikes")}),
 		@InjectLink(resource = CommentResource.class, style = Style.ABSOLUTE, rel = "create-like", title = "Create Like", type = MediaType.CALENDAPP_API_LIKE, method = "createLike", bindings = @Binding(name = "commentid", value ="${instance.commentid}")) 
 	})
 	private List<Link> links;

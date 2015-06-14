@@ -104,6 +104,9 @@ public class CommentResource {
 				}
 				comments.addComment(comment);
 			}
+			if (comments.getComments().size() == 0){
+				throw new NotFoundException("No hay commentarios aun. Se el primero");
+			}
 			comments.setOldestTimestamp(oldestTimestamp);
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
