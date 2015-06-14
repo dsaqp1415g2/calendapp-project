@@ -473,7 +473,9 @@ public class GroupResource {
 	public User createUserInGroup(@PathParam("groupid") String groupid,
 			@PathParam("action") String action, User user) {
 		validateAdmin(groupid);
-
+		if (user.getUserid() == 0){
+			throw new BadRequestException("Necesito el userid del usuario en un JSON");
+		}
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -490,6 +492,7 @@ public class GroupResource {
 			int rows = stmt.executeUpdate();
 			if (rows == 1) {
 				pendingEvents(groupid, user.getUserid());
+				
 			} else
 				throw new BadRequestException("Bar url");
 		} catch (SQLException e) {
