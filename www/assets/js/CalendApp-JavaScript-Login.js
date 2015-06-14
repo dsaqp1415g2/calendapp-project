@@ -50,6 +50,9 @@ $("#boton_login").click(function(e) {
 		contentType : 'application/vnd.calendapp.api.user+json',
 		data : data,
 		dataType:'json',
+			statusCode: {
+				    		404: function() {window.alert("Usuario no encontrado");},
+			}
 		
 	}).done(function(result, status, jqxhr) {
 		var logCheck = result;		
@@ -59,7 +62,7 @@ $("#boton_login").click(function(e) {
 			var url2 = 'http://localhost/Index.html';
 			$(location).attr('href',url2);
 		}else if(!logCheck.loginSuccessful){
-			alert("Error, revisa tus datos");
+			window.alert("Error, revisa tus datos");
 		}
 });
 });

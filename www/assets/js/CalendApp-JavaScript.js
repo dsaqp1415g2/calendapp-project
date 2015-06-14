@@ -30,7 +30,7 @@ function getCookie(cname) {
     }
     return "";
 }
-/*
+
 function getGroupsAdmin() {
 	var userid = getCookie("userid");
 	var url = API_BASE_URL + '/groups/admin/' + userid;
@@ -58,11 +58,10 @@ function getGroupsAdmin() {
 		$("#repos_result").text("No Groups.");
 	});	
 }
-*/
+
 
 //Cargar DOC
 $(document).ready(function(){
-	window.alert("AAAAAAAAAAA");
 		var x = getCookie("usuario");
 	console.log(x);
 	getUserIndex(x);
@@ -71,7 +70,7 @@ $(document).ready(function(){
 
 });
 
-/*function getPendingEvents()
+function getPendingEvents()
 {
 	window.alert("ENTRA EN PENDING");
 	var url = API_BASE_URL +'/events/state/'+getCookie("userid")+'/pending';
@@ -94,8 +93,7 @@ $(document).ready(function(){
 	});
 	
 }
-*/
-/*function getLiveEvents(){
+function getLiveEvents(){
 	var z = getCookie("userid");
 	var url = API_BASE_URL + '/events/now/' + z;
 	//console.log("ENTRA EN LIVE EVENTS");
@@ -128,8 +126,8 @@ $(document).ready(function(){
 	});
 	
 }
-*/
-/*function getEvents(userid){
+
+function getEvents(userid){
 	var url = API_BASE_URL + '/events/group/' + userid;
 	console.log(url);
 	$("repos_result").text('');
@@ -181,4 +179,3 @@ function getUserIndex(username){
 		});
 }
 
-*/

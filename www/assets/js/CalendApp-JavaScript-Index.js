@@ -47,7 +47,7 @@ function getGroupsAdmin() {
 					$.each(repo, function(i, z) {
 							if(typeof z.name !== 'undefined'){
 						console.log("Grupos Admin : " +z.name);
-							$("<div class='details'><p><muted>" +z.name+" </muted><br/></p></div>").appendTo($('#desc'));}
+							$("<div class='desc'><div class='thumb'><span class='badge bg-theme'><i class='fa fa-clock-o'></i></span></div><div class='details'><p>"+z.name+"</muted></p></div></div>").appendTo($('#asd123'));}
 							else{}
 					});
 				});
@@ -112,21 +112,34 @@ $(document).ready(function(){
 
 function getPendingEvents()
 {
-	window.alert("ENTRA EN PENDING");
-	var url = API_BASE_URL +'/events/state/'+getCookie("userid")+'/pending';
+	var counter = 0;
+	var url = API_BASE_URL +'/events/states/'+getCookie("userid")+'/pending';
 			$.ajax({
 		url : url,
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.event.collection+json'
+				headers:{
+		Accept : 'application/vnd.calendapp.api.event.collection+json',
+		},
 	}).done(function(data, status, jqxhr) {
-		console.log("EEEEEEEEEEEEEEE" +data);
-				var repos = data;
-					if (typeof repos.name !== 'undefined'){
-						console.log("Listando pending " + repos.name);
-									$("<div class='thumb'><img class='img-circle' src='assets/img/ui-danro.jpg' width='20px' height='20px' align=''></div>" +repos.name).appendTo($('#def456'));
-					}
+					var repos = data;
+					console.log("Listando pending " + data);
+					$.each(repos,function(i,v){
+							$.each(v, function(j,y){
+							console.log("AAAAAAAAAAA"+ y.name);
+						if (typeof y.name !== 'undefined'){
+							$("<div class='desc'><div class='thumb'><span class='badge bg-theme'><i class='fa fa-clock-o'></i></span></div><div class='details'><p>"+y.name+"</muted></p><button onClick='acceptgetID("+y.eventid+")' class='btn btn-success btn-xs'><i class='fa fa-check'></i></button><button onClick='declinegetID("+y.eventid+")' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i></button></div></div>").appendTo($('#def456'));
+							counter += 1;
+							
+						}
+						});
+					});
+					$(counter).appendTo($('#not_counter'));
+					$(counter + "Invitaciones a eventos").appendTo($('#jeje'));
+				    $("Tienes " +counter+ " notificaciones").appendTo($('#nots'));
+
+				
 
 	}).fail(function() {
 			window.alert("Se ha producido un error al cargar tus eventos pendientes");
@@ -134,6 +147,40 @@ function getPendingEvents()
 	
 }
 
+function acceptgetID(id)
+{
+	window.alert("Evento accept " +id);
+	var url = API_BASE_URL +'events/state/'+id+'/'+getCookie("userid")+'/join';
+	$.ajax({
+		url : url,
+		type : 'PUT',
+		crossDomain : true,
+		dataType : 'json',
+		headers:{
+		},
+	}).done(function(data, status, jqxhr) {
+			window.alert("Has confirmado tu asistencia");
+  	}).fail(function() {
+			window.alert("Error");
+	});
+}
+function declinegetID(id)
+{
+		window.alert("Evento decline " +id);
+	var url = API_BASE_URL +'events/state/'+id+'/'+getCookie("userid")+'/decline';
+	console.log(url);
+	$.ajax({
+		url : url,
+		type : 'PUT',
+		crossDomain : true,
+		dataType : 'json'
+		}).done(function(data, status, jqxhr) {
+			window.alert("Has confirmado tu asistencia");
+  	}).fail(function() {
+			window.alert("Error");
+	});
+
+}
 function getLiveEvents(){
 	var z = getCookie("userid");
 	var url = API_BASE_URL + '/events/now/' + z;
@@ -154,7 +201,7 @@ function getLiveEvents(){
 						if(typeof asd.name !== "undefined"){
 								if(asd.groupid == 0)
 								{
-									$("<div class='details'><p><muted>" +z.name+" </muted><br/></p></div>").appendTo($('#abc123'));
+									$("<div class='desc'><div class='thumb'><span class='badge bg-theme'><i class='fa fa-clock-o'></i></span></div><div class='details'><p>"+asd.name+"</muted></p></div></div>").appendTo($('#abcd123'));
 								}
 								else{}
 														}
