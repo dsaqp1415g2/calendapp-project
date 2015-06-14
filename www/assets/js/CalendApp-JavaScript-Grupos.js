@@ -1,4 +1,4 @@
-var API_BASE_URL = "http://localhost:8080/calendapp-api";
+var API_BASE_URL = "http://www.grupt2.dsa";
 var USERNAME = getCookie("usuario");
 var PASSWORD = getCookie("password");
 
