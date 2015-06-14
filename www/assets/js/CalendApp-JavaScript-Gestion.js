@@ -83,8 +83,9 @@ function cambiarContra(abc)
 		contentType : 'application/vnd.calendapp.api.user+json',
 	}).done(function(data, status, jqxhr) {
 			window.alert("Contraseña camabiada correctamente");
-			getUserIndex(data.username);
 			setCookie("password", ($("#pass1").val()));
+			getUserIndex(data.username);
+			location.reload();
   	}).fail(function() {
 		window.alert("Error al cambiar la contraseña");
 	});

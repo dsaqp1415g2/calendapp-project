@@ -43,10 +43,17 @@ public class LoginActivity extends Activity {
         // password = "jordi";
 
         if ((username != null) && (password != null)) {
+<<<<<<< HEAD
            Intent intent = new Intent(this, CalendappMainActivity.class);
            startActivity(intent);
            finish();
        }
+=======
+          Intent intent = new Intent(this, CalendappMainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+>>>>>>> refs/remotes/origin/dev
      setContentView(R.layout.login_layout);
 
     }

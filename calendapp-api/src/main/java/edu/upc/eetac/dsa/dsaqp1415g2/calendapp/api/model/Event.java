@@ -9,6 +9,7 @@ import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
 import org.glassfish.jersey.linking.InjectLinks;
 
+import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.CommentResource;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.EventResource;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
 
@@ -16,7 +17,8 @@ public class Event {
 	@InjectLinks({
 		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "events", title = "Latest event", type = MediaType.CALENDAPP_API_EVENT_COLLECTION),
 		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "self-edit", title = "Event", type = MediaType.CALENDAPP_API_EVENT, method = "getEvent", bindings = @Binding(name = "eventid", value = "${instance.eventid}")),
-		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "who-is-comming", title = "Users comming", type = MediaType.CALENDAPP_API_USER_COLLECTION, method = "getUsersState", bindings = {@Binding(name = "eventid", value = "${instance.eventid}"), @Binding(name = "state", value = "accepted")})
+		@InjectLink(resource = EventResource.class, style = Style.ABSOLUTE, rel = "who-is-comming", title = "Users comming", type = MediaType.CALENDAPP_API_USER_COLLECTION, method = "getUsersState", bindings = {@Binding(name = "eventid", value = "${instance.eventid}"), @Binding(name = "state", value = "accepted")}),
+		@InjectLink(value = "/comments/{eventid}", style = Style.ABSOLUTE, rel = "comments", title = "Comments", type = MediaType.CALENDAPP_API_COMMENT_COLLECTION, bindings = @Binding(name = "name", value = "${instance.eventid}"))
 	})
 	private List<Link> links;
 	public List<Link> getLinks() {

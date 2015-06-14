@@ -468,7 +468,9 @@ public class EventResource {
 	@Produces(MediaType.CALENDAPP_API_EVENT)
 	public Event createEvent(Event event) {
 		validateEvent(event);
-		validateModifyEvent(event.getGroupid());
+		if (event.getGroupid() != 0) {
+			validateModifyEvent(event.getGroupid());
+		}
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -819,7 +821,7 @@ public class EventResource {
 	}
 
 	@GET
-	@Path("/state/{userid}/{state}")
+	@Path("/states/{userid}/{state}")
 	@Produces(MediaType.CALENDAPP_API_EVENT_COLLECTION)
 	public EventCollection getEventsState(@PathParam("userid") String userid,
 			@PathParam("state") String state) {

@@ -50,35 +50,55 @@ $("#button_create_event").click(function(e){
 	var event = new Object();
 	var z = document.getElementById("opts");
 	var opt = z.options[z.selectedIndex].value;
-	event.name = $("#group_name").val();
 	var myDate = $("#inicio").val();
 	var myDate = myDate+"T00:00:00";	
 	console.log(myDate);
 	var dateStart  = new Date(myDate);
 	dateStart = dateStart.getTime();
-	window.alert(dateStart);
-	//myDate=myDate.split("-");
-	//var newDate=myDate[1]+"/"+myDate[0]+"/"+myDate[2];
-	//alert(new Date(newDate).getTime());
-	//var endDate = $("#final").val();
-	//var dateEnd = endDate.split("-");
-	//var convertEnd = dateEnd[1]+","+dateEnd[0]+","+dateEnd[2];
-	//alert(new Date(convertEnd).getTime());
     var notmyDate = $("#final").val();
 	var notmyDate = notmyDate+"T00:00:00";
 	var dateEnd = new Date(notmyDate);
 	dateEnd = dateEnd.getTime();
+	event.name = $("#group_name").val();
 	event.dateInitial = dateStart;
-	//var finalTS = ($("#final").val()).split("-");
-	//var finTS = finalTS[1]+","+finalTS[0]+","+finalTS[2];
 	event.dateFinish = dateEnd;
 	event.groupid = opt;
-	event.userid = getCookie("username");
-	createEvent(event);
+	if ($("#group_name").val() !=''){
+			createEvent(event);
+	}else{
+		window.alert("El nombre no puede estar en blanco");
+	}
 	//console.log("Entramos función listar eventos, buscamos por grupo default = 2");
 
 	//FALTA REStRIngIR INPUT
 });
+$("#button_create_event_pri").click(function(e){
+	e.preventDefault();
+	var event = new Object();
+	event.name = $("#group_name_pri").val();
+	var myDate = $("#inicio_pri").val();
+	var myDate = myDate+"T00:00:00";	
+	console.log(myDate);
+	var dateStart  = new Date(myDate);
+	dateStart = dateStart.getTime();
+    var notmyDate = $("#final_pri").val();
+	var notmyDate = notmyDate+"T00:00:00";
+	var dateEnd = new Date(notmyDate);
+	dateEnd = dateEnd.getTime();
+	event.dateInitial = dateStart;
+	event.dateFinish = dateEnd;
+	event.userid = getCookie("userid");
+	event.groupid = 0;
+	if ($("#group_name_pri").val() !=''){
+			createEvent(event);
+	}else{
+		window.alert("El nombre no puede estar en blanco");
+	}
+	//console.log("Entramos función listar eventos, buscamos por grupo default = 2");
+
+	//FALTA REStRIngIR INPUT
+});
+
 
 
 //Cargar DOC
@@ -87,13 +107,15 @@ $(document).ready(function(){
 	//console.log(x);
 	getUserIndex(x);
 	getGroupsAdmin();
-	getGroups(getCookie("userid"));
+	//getGroups(getCookie("userid"));
 	getLiveEvents();
 });
 
 function createEvent(event){
 	var url = API_BASE_URL + '/events';
+	console.log(event);
 	var data = JSON.stringify(event);
+	console.log(data);
 	console.log("")
 	$("#get_repo_result").text('');
 	console.log(event);
@@ -103,8 +125,13 @@ function createEvent(event){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
+		headers:{
 		Accept : 'application/vnd.calendapp.api.event+json',
-		contentType : 'application/vnd.calendapp.api.event+json'
+		"content-Type": 'application/vnd.calendapp.api.event+json'
+		},
+		statusCode :{
+			400 : function() {window.alert("Error de formato en el JSON");}
+		}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Event Created</div>').appendTo($("#create_result"));				
   	}).fail(function() {
@@ -164,9 +191,9 @@ function getUserIndex(username){
 		});
 }
 
-function getGroups(abc) {
+function getGroupsAdmin() {
 	//console.log("variable recogida " +abc);
-	var url = API_BASE_URL + '/groups/user/' + abc;
+	var url = API_BASE_URL + '/groups/admin/' + getCookie("userid");
 	$("#repos_result").text('');
 	//console.log(url);
 	$.ajax({
@@ -184,6 +211,7 @@ function getGroups(abc) {
 					$.each(repo, function(j, k){
 						var z = k;
 						if(typeof z.name !== "undefined"){
+							console.log("Grupo - " +z.name);
 					$('<option value='+z.groupid+'>'+z.name+'</option>').appendTo($('#opts'));
 						}
 					});
@@ -245,7 +273,7 @@ function idevent(abc, def)
 //	}
 	
 }
-function getGroupsAdmin() {
+/*function getGroupsAdmin() {
 	var userid = getCookie("userid");
 	var url = API_BASE_URL + '/groups/admin/' + userid;
 		$.ajax({
@@ -253,7 +281,9 @@ function getGroupsAdmin() {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.group.collection+json'
+		headers:{
+		Accept : 'application/vnd.calendapp.api.group.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 				$.each(repos, function(i, v) {
@@ -271,7 +301,7 @@ function getGroupsAdmin() {
 		$("#repos_result").text("No Groups.");
 	});	
 }
-
+*/
 function deleteEvent(abc){
 	console.log(abc.eventid);
 	var url = API_BASE_URL + '/events/' + abc.eventid;
