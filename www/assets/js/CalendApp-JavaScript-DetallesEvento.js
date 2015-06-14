@@ -126,11 +126,21 @@ function loadComments(eventID){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.comment.collection+json'
+		headers:{
+		Accept : 'application/vnd.calendapp.api.comment.collection+json',
+		},
+		statusCode :{
+			400 : function() {window.alert("Este evento no tiene comentarios");}
+		}
 	}).done(function(data, status, jqxhr) {
 						$.each(data, function(i, v) {
-						console.log(data);
-						$('<div class="alert alert-info"> <strong>'+data.content+'. <br></strong> Por '+data.username+' el  '+TStoDate(data.creationTimestamp)+' </div>').appendTo($("#cargar_comentarios "));
+							var msg = v;
+								$.each(v, function(z,k){
+									var mens = k;
+										if(typeof k.content !== 'undefined'){
+						$('<div class="alert alert-info"> <strong>'+k.content+'. <br></strong> Por '+k.username+' el  '+TStoDate(k.creationTimestamp)+' </div>').appendTo($("#cargar_comentarios "));
+										}
+						});
 						//$('<div class="alert alert-danger"> <strong>Oh!</strong> Grupo no encontrado </div>').appendTo($("#cargar_comentarios "));
 						});
 			}).fail(function() {
@@ -170,9 +180,9 @@ function TStoDate(abc)
 	var completeDate =  day+'/'+month+'/'+year;
 	return completeDate;
 }
-function getEvent(userid){
-	var url = API_BASE_URL + '/events/' + userid;
-	//console.log(url);
+function getEvent(eventid){
+	var url = API_BASE_URL + '/events/' + eventid;
+	console.log("La url getEvent: "+url);
 	$("repos_result").text('');
 		$.ajax({
 		url : url,
@@ -194,7 +204,6 @@ function getEvent(userid){
 }
 
 function getJoin(eventid){
-	eventid =4;
 	var url = API_BASE_URL + '/events/state/' + eventid + '/join';
 	var lista = [];
 	$.ajax({
