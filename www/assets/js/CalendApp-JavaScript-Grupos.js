@@ -172,7 +172,7 @@ function idgrup(abc,def)
 	setCookie("groupstatus", def);
 	if($.cookie("groupid"))
 	{
-		$(location).attr('href', "http://localhost/Detalle Grupo.html");
+		$(location).attr('href', "/Detalle Grupo.html");
 	}
 	else{
 		window.alert("Impossible obtener ID grupo");

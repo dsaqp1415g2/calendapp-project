@@ -278,7 +278,7 @@ function idevent(abc, def)
 	setCookie("isprivate", def);
 	//if($.cookie("eventid"))
 	//{
-		$(location).attr('href', "http://localhost/Detalle Evento.html");
+		$(location).attr('href', "/Detalle Evento.html");
 	//}
 	//else{
 	//	window.alert("Impossible obtener ID grupo");
