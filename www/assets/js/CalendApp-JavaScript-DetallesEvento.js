@@ -258,8 +258,8 @@ function addComent(text, creator){
 		dataType : 'json',
 		data : data,
 		headers : {
-		Accept : 'application/vnd.calendapp.api.comment+json'
-		"Content-Type" : 'application/vnd.calendapp.api.comment+json',
+		Accept : 'application/vnd.calendapp.api.comment+json',
+		"Content-Type" : 'application/vnd.calendapp.api.comment+json'
 		}
 	}).done(function(data, status, jqxhr) {
 		window.alert("Comment creado");

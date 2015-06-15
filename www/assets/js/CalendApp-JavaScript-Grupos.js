@@ -180,7 +180,7 @@ function idgrup(abc,def)
 	
 }
 
-function getGrupo(groupid) {
+/*function getGrupo(groupid) {
 	var url = API_BASE_URL + '/groups/' +groupid;
 	$("#get_repo_result").text('');
 
@@ -213,9 +213,10 @@ function getGrupo(groupid) {
 	});
 
 }
+*/
 
 function getGrupoDel(groupid) {
-	var url = API_BASE_URL + '/groups/user/' + getCookie("userid");
+	var url = API_BASE_URL + '/groups/'+"groupid.id";
 	$("#get_repo_result").text('');
 	console.log("Buscamos el grupo con nombre " + groupid.name + "para borrar");
 	$.ajax({
