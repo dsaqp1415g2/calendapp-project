@@ -9,7 +9,6 @@ import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLink.Style;
 import org.glassfish.jersey.linking.InjectLinks;
 
-import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.CommentResource;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.EventResource;
 import edu.upc.eetac.dsa.dsaqp1415g2.calendapp.api.MediaType;
 

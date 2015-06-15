@@ -141,4 +141,6 @@ public class GroupDetailActivity extends ListActivity {
     }
 
 
+
 }
+

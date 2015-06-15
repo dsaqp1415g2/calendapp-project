@@ -47,6 +47,8 @@ public class CreateEventActivity extends FragmentActivity {
     private static TextView tvDateFinish = null;
     private static TextView tvTimeInitial = null;
     private static TextView tvTimeFinish= null;
+    long dateInitial = 0;
+    long dateFinish = 0;
     private static int userid = 0;
     User user = null;
 
@@ -231,6 +233,7 @@ public class CreateEventActivity extends FragmentActivity {
                     // Month is 0 based, just add 1
                     .append(year).append("-").append(month + 1).append("-")
                     .append(day));
+
         }
     }
 
