@@ -179,7 +179,7 @@ function idgrup(abc,def)
 	
 }
 
-/*function getGrupo(groupid) {
+function getGrupo(groupid) {
 	var url = API_BASE_URL + '/groups/' +groupid;
 	$("#get_repo_result").text('');
 
@@ -212,7 +212,7 @@ function idgrup(abc,def)
 	});
 
 }
-*/
+
 
 function getGrupoDel(groupid) {
 	var url = API_BASE_URL +'/groups/'+groupid.name;
