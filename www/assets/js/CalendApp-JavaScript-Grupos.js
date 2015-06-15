@@ -65,7 +65,7 @@ $("#button_delete_group").click(function(e){
 
 function deleteGroup(abc){
 	console.log(abc);
-	var url = API_BASE_URL + '/groups/' + 1;
+	var url = API_BASE_URL + '/groups/' + abc;
 	var grupo = getGrupo($("#group_name").val());
 	
 	$.ajax({
@@ -216,7 +216,7 @@ function idgrup(abc,def)
 */
 
 function getGrupoDel(groupid) {
-	var url = API_BASE_URL + '/groups/'+groupid.id;
+	var url = API_BASE_URL + '/groups/'+groupid;
 	$("#get_repo_result").text('');
 	console.log("Buscamos el grupo con nombre " + groupid.name + "para borrar");
 	$.ajax({
