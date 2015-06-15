@@ -66,7 +66,7 @@ $("#boton_login").click(function(e) {
 		var logCheck = result;		
 		if (logCheck.loginSuccessful) {	
 			console.log("Ususario " + logCheck.username  + " autenticado");
-			getUserIndex(logCheck.username);
+			//getUserIndex(logCheck.username);
 			var url2 = '/index.html';
 			$(location).attr('href',url2);
 		}else if(!logCheck.loginSuccessful){
