@@ -171,7 +171,7 @@ function getUserIndex(username){
 			dataType : 'json',
 			headers : {
 				Accept : 'application/vnd.calendapp.api.user+json',
-			}
+			},
 					statusCode: {
     		404: function() {window.alert("Usuario no encontrado");},
 			500: function() {window.alert("Error interno del servidor, porfavor asegurate que el usuario no está ya dentro del grupo");}
