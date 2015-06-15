@@ -129,6 +129,9 @@ function getGroups(abc) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+				Accept : 'application/vnd.calendapp.api.group.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 						var groups = data;
 				$.each(groups, function(i, v) {
@@ -186,6 +189,9 @@ function getGrupo(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+		},
 	}).done(function(data, status, jqxhr) {
 			$.each(data, function(i, v) {
 				var grupo = v;
@@ -217,6 +223,9 @@ function getGrupoDel(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+		}
 	}).done(function(data, status, jqxhr) {
 			$.each(data, function(i, v) {
 				var grupo = v;
@@ -252,7 +261,10 @@ function createGroup(group) {
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
-		contentType : 'application/vnd.calendapp.api.group+json'
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+			"Content-Type" : 'application/vnd.calendapp.api.group+json',
+		}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Grupo Creado</div>').appendTo($("#get_repo_result"));				
   	}).fail(function() {

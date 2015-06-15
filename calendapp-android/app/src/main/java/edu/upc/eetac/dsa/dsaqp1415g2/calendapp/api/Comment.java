@@ -14,7 +14,6 @@ public class Comment {
     private int likes;
     private int dislikes;
     private long lastModified;
-    private long creationTimestamp;
     private Map<String, Link> links = new HashMap<String, Link>();
     private String eTag;
 
@@ -73,14 +72,6 @@ public class Comment {
 
     public void setLastModified(long lastModified) {
         this.lastModified = lastModified;
-    }
-
-    public long getCreationTimestamp() {
-        return creationTimestamp;
-    }
-
-    public void setCreationTimestamp(long creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
     }
 
     public Map<String, Link> getLinks() {

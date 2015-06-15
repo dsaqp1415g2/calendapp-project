@@ -69,7 +69,7 @@ public class GroupsActivity extends ListActivity {
                 return true;
 
             case R.id.action_salir:
-                SharedPreferences prefs = getSharedPreferences("Calendapp-profile",
+                SharedPreferences prefs = getSharedPreferences("calendapp-profile",
                         Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit(); //Esto siempre se hace así -> obtener editor + clear
                 editor.clear();

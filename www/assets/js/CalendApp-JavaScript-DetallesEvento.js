@@ -162,8 +162,10 @@ function createEvent(event){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
+		headers : {
 		Accept : 'application/vnd.calendapp.api.event+json',
-		contentType : 'application/vnd.calendapp.api.event+json'
+		"Content-Type" : 'application/vnd.calendapp.api.event+json'
+		}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Event Created</div>').appendTo($("#create_result"));				
   	}).fail(function() {
@@ -189,7 +191,9 @@ function getEvent(eventid){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.event+json'
+		headers :  {
+		Accept : 'application/vnd.calendapp.api.event+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 
@@ -211,7 +215,7 @@ function getJoin(eventid){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.event+json',
+		Accept : 'application/vnd.calendapp.api.event.collection+json',
 		statusCode :{
 			403 : function() {window.alert("Este evento es privado");}
 		}
@@ -253,8 +257,10 @@ function addComent(text, creator){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
-		contentType : 'application/vnd.calendapp.api.comment+json',
+		headers : {
 		Accept : 'application/vnd.calendapp.api.comment+json'
+		"Content-Type" : 'application/vnd.calendapp.api.comment+json',
+		}
 	}).done(function(data, status, jqxhr) {
 		window.alert("Comment creado");
   	}).fail(function() {

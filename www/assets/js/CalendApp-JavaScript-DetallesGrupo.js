@@ -69,6 +69,9 @@ function getUsersGroup(a){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.user.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 				$.each(repos, function(i, v) {
@@ -103,6 +106,9 @@ function getEvents(groupid){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.event.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 				$.each(repos, function(i, v) {
@@ -163,6 +169,9 @@ function getUserIndex(username){
 			type : 'GET',
 			crossDomain : true,
 			dataType : 'json',
+			headers : {
+				Accept : 'application/vnd.calendapp.api.user+json',
+			}
 					statusCode: {
     		404: function() {window.alert("Usuario no encontrado");},
 			500: function() {window.alert("Error interno del servidor, porfavor asegurate que el usuario no está ya dentro del grupo");}
@@ -187,6 +196,9 @@ function getGrupo(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+		}
 	}).done(function(data, status, jqxhr) {
 
 				var grupo = data;
@@ -212,6 +224,10 @@ function getGrupoMod(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+			"Content-Type" : 'application/vnd.calendapp.api.group+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			changeName(data);
 			}).fail(function() {
@@ -229,6 +245,10 @@ function getGrupoMod2(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+			headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+			"Content-Type" : 'application/vnd.calendapp.api.group+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			changeDesc(data);
 			}).fail(function() {
@@ -266,8 +286,10 @@ function inviteUser(name){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
+		headers : {
 		Accept : 'application/vnd.calendapp.api.user+json',
-		contentType : 'application/vnd.calendapp.api.user+json',
+		"Content-Type" : 'application/vnd.calendapp.api.user+json',
+		},
 				statusCode: {
     		404: function() {window.alert("Usuario no encontrado");}
     	}
@@ -318,8 +340,10 @@ function changeName(asd){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
+		headers : {
 		Accept : 'application/vnd.calendapp.api.group+json',
-		contentType : 'application/vnd.calendapp.api.group+json'
+		"Content-Type" : 'application/vnd.calendapp.api.group+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			window.alert("Nombre cambiado con éxito");
   	}).fail(function() {
@@ -340,8 +364,10 @@ function changeDesc(asd){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
+		headers : {
 		Accept : 'application/vnd.calendapp.api.group+json',
-		contentType : 'application/vnd.calendapp.api.group+json'
+		"Content-Type" : 'application/vnd.calendapp.api.group+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			window.alert("Descripción cambiada con éxito");
   	}).fail(function() {
