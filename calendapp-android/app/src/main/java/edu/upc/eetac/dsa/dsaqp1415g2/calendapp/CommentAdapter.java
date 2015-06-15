@@ -73,4 +73,6 @@ public class CommentAdapter extends BaseAdapter{
         return convertView;
     }
 
+
 }
+

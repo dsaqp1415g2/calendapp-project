@@ -1,7 +1,7 @@
-var API_BASE_URL = "http://localhost:8080/calendapp-api";
+var API_BASE_URL = "http://147.83.7.158:8080/calendapp-api";
 var USERNAME = getCookie("usuario");
 var PASSWORD = getCookie("password");
-//147.83.7.158
+//147.83.7.158:8080/calendapp-api/
 $.ajaxSetup({
     headers: { 'Authorization': "Basic "+ btoa(USERNAME+':'+PASSWORD) }
 });
@@ -50,16 +50,24 @@ $("#boton_login").click(function(e) {
 		contentType : 'application/vnd.calendapp.api.user+json',
 		data : data,
 		dataType:'json',
+		headers :
+		{
+			Accept : 'application/vnd.calendapp.api.user+json',
+			"Content-Type" : 'application/vnd.calendapp.api.user+json'
+		},
 			statusCode: {
 				    		404: function() {window.alert("Usuario no encontrado");},
-			}
-		
+			},
+			headers: {
+			Accept : 'application/vnd.calendapp.api.user+json',
+			"Content-Type" : 'application/vnd.calendapp.api.user+json'
+		}
 	}).done(function(result, status, jqxhr) {
 		var logCheck = result;		
 		if (logCheck.loginSuccessful) {	
 			console.log("Ususario " + logCheck.username  + " autenticado");
-			getUserIndex(logCheck.username);
-			var url2 = 'http://localhost/Index.html';
+			//getUserIndex(logCheck.username);
+			var url2 = '/index.html';
 			$(location).attr('href',url2);
 		}else if(!logCheck.loginSuccessful){
 			window.alert("Error, revisa tus datos");
@@ -93,63 +101,17 @@ function registerUser(userdata){
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
-		contentType : 'application/vnd.calendapp.api.user+json',
-		Accept : 'application/vnd.calendapp.api.user+json'
+				headers :
+		{
+			Accept : 'application/vnd.calendapp.api.user+json',
+			"Content-Type" : 'application/vnd.calendapp.api.user+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			window.alert("Bienvenido a CalendApp " +userdata.username);				
   	}).fail(function() {
 			window.alert("Problema al registrarse");
 	});
 	
-}
-function getEvents(userid){
-	var url = API_BASE_URL + '/events/group/' + userid;
-	console.log(url);
-	$("repos_result").text('');
-		$.ajax({
-		url : url,
-		type : 'GET',
-		crossDomain : true,
-		dataType : 'json',
-	}).done(function(data, status, jqxhr) {
-				var repos = data;
-				$.each(repos, function(i, v) {
-					var repo = v;
-					$.each(repo, function(i, z) {
-
-					console.log(z);
-					$('<br><strong> Nombre del evento: ' + z.name + '</strong><br>').appendTo($('#get_repo_result'));
-					$('<strong> ID: </strong> ' + z.groupid + '<br>').appendTo($('#get_repo_result'));
-					});
-				});
-				
-
-	}).fail(function() {
-		$("#repos_result").text("No repositories.");
-	});
-	
-}
-function getUserIndex(username){
-		$("#user_name").text('');
-		$('<h5 class="centered" id="user_name"> Bienvenido, '+ username+'</h5>').appendTo($('#user_name'));
-		var url = API_BASE_URL + '/users/' + username;
-		$.ajax({
-			url : url,
-			type : 'GET',
-			crossDomain : true,
-			dataType : 'json',
-		}).done(function(data,status,jqxhr)
-		{
-			setCookie("username", data.name);
-			setCookie("mail", data.email);
-			setCookie("userid", data.userid);
-			setCookie("userage", data.age);
-			//var z=getCookie("username");
-			//var y = getCookie("mail");
-			//console.log("Post Login El nombre del usuario es " + z + " con mail " + y);
-			//console.log(data);
-			
-		});
 }
 
 

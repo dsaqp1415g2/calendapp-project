@@ -335,7 +335,7 @@ public class CalendappAPI {
         Log.e(as, "user: "+as);
         Log.e(pass, "pass: " + pass);
         HttpURLConnection urlConnection = null;
-       
+
         try {
             JSONObject jsonUser = createJsonUser(user);
             URL urlPostUsers = new URL(rootAPI.getLinks().get("login").getTarget());
@@ -468,10 +468,10 @@ public class CalendappAPI {
                 Log.d(TAG, "CACHE");
                 return null;
             }
-            } catch (IOException e) {
-                throw new AppException(
+        } catch (IOException e) {
+            throw new AppException(
                     "Can't connect to Calendapp API Web Service");
-            }
+        }
 
 
         BufferedReader reader;

@@ -1,4 +1,4 @@
-var API_BASE_URL = "http://localhost:8080/calendapp-api";
+var API_BASE_URL = "http://147.83.7.158:8080/calendapp-api";
 var USERNAME = getCookie("usuario");
 var PASSWORD = getCookie("password");
 
@@ -61,7 +61,10 @@ function cambiarMail(user)
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
-		contentType : 'application/vnd.calendapp.api.user+json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.user+json',
+		"Content-Type" : 'application/vnd.calendapp.api.user+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			window.alert("Mail camabiada correctamente");
 			getUserIndex(data.username);
@@ -80,7 +83,10 @@ function cambiarContra(abc)
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
-		contentType : 'application/vnd.calendapp.api.user+json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.user+json',
+		"Content-Type" : 'application/vnd.calendapp.api.user+json'
+		}
 	}).done(function(data, status, jqxhr) {
 			window.alert("Contraseña camabiada correctamente");
 			setCookie("password", ($("#pass1").val()));
@@ -146,6 +152,10 @@ function getUserIndex(username){
 			type : 'GET',
 			crossDomain : true,
 			dataType : 'json',
+			headers : 
+			{
+				Accept : 'application/vnd.calendapp.api.user+json',
+			}
 		}).done(function(data,status,jqxhr)
 		{
 			setCookie("username", data.username);

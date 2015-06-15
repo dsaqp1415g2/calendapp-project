@@ -12,16 +12,18 @@
         android:icon="@drawable/ic_action_person"
         app:showAsAction="never" />
 
-        <item
 
-         android:id="@+id/action_salir"
-         android:title="Salir"
-         android:icon="@drawable/salir"
-         app:showAsAction="withText|always" />
 
     <item android:id="@+id/action_updateUser"
         android:title="@string/action_updateUser"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+
+        <item
+
+            android:id="@+id/action_salir"
+            android:title="Salir"
+            android:icon="@drawable/salir"
+            app:showAsAction="withText|always" />
 </menu>
 

@@ -1,4 +1,4 @@
-var API_BASE_URL = "http://localhost:8080/calendapp-api";
+var API_BASE_URL = "http://147.83.7.158:8080/calendapp-api";
 var USERNAME = getCookie("usuario");
 var PASSWORD = getCookie("password");
 
@@ -129,6 +129,9 @@ function getGroups(abc) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+				Accept : 'application/vnd.calendapp.api.group.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 						var groups = data;
 				$.each(groups, function(i, v) {
@@ -169,7 +172,7 @@ function idgrup(abc,def)
 	setCookie("groupstatus", def);
 	if($.cookie("groupid"))
 	{
-		$(location).attr('href', "http://localhost/Detalle Grupo.html");
+		$(location).attr('href', "/Detalle Grupo.html");
 	}
 	else{
 		window.alert("Impossible obtener ID grupo");
@@ -186,6 +189,9 @@ function getGrupo(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+		},
 	}).done(function(data, status, jqxhr) {
 			$.each(data, function(i, v) {
 				var grupo = v;
@@ -217,6 +223,9 @@ function getGrupoDel(groupid) {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+		}
 	}).done(function(data, status, jqxhr) {
 			$.each(data, function(i, v) {
 				var grupo = v;
@@ -252,7 +261,10 @@ function createGroup(group) {
 		crossDomain : true,
 		dataType : 'json',
 		data : data,
-		contentType : 'application/vnd.calendapp.api.group+json'
+		headers : {
+			Accept : 'application/vnd.calendapp.api.group+json',
+			"Content-Type" : 'application/vnd.calendapp.api.group+json',
+		}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Grupo Creado</div>').appendTo($("#get_repo_result"));				
   	}).fail(function() {

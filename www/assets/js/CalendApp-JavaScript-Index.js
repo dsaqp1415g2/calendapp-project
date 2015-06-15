@@ -1,4 +1,4 @@
-var API_BASE_URL = "http://localhost:8080/calendapp-api";
+var API_BASE_URL = "http://147.83.7.158:8080/calendapp-api";
 var USERNAME = getCookie("usuario");
 var PASSWORD = getCookie("password");
 
@@ -38,7 +38,9 @@ function getGroupsAdmin() {
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
-		Accept : 'application/vnd.calendapp.api.group.collection+json'
+		headers :{ 
+		Accept : 'application/vnd.calendapp.api.group.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 
@@ -83,7 +85,7 @@ $("#boton_login").click(function(e) {
 		if (logCheck.loginSuccessful) {	
 			console.log("Ususario " + logCheck.username  + " autenticado");
 			getUserIndex(logCheck.username);
-			var url2 = 'http://localhost/Index.html';
+			var url2 = '/index.html';
 			$(location).attr('href',url2);
 		}else if(!logCheck.loginSuccessful){
 			alert("Error, revisa tus datos");
@@ -110,8 +112,7 @@ $(document).ready(function(){
 	getPendingEvents();
 });
 
-function getPendingEvents()
-{
+function getPendingEvents(){
 	var counter = 0;
 	var url = API_BASE_URL +'/events/states/'+getCookie("userid")+'/pending';
 			$.ajax({
@@ -150,7 +151,7 @@ function getPendingEvents()
 function acceptgetID(id)
 {
 	window.alert("Evento accept " +id);
-	var url = API_BASE_URL +'events/state/'+id+'/'+getCookie("userid")+'/join';
+	var url = API_BASE_URL +'/events/state/'+id+'/'+getCookie("userid")+'/join';
 	$.ajax({
 		url : url,
 		type : 'PUT',
@@ -167,7 +168,7 @@ function acceptgetID(id)
 function declinegetID(id)
 {
 		window.alert("Evento decline " +id);
-	var url = API_BASE_URL +'events/state/'+id+'/'+getCookie("userid")+'/decline';
+	var url = API_BASE_URL +'/events/state/'+id+'/'+getCookie("userid")+'/decline';
 	console.log(url);
 	$.ajax({
 		url : url,
@@ -282,6 +283,9 @@ function getEvents(userid){
 		type : 'GET',
 		crossDomain : true,
 		dataType : 'json',
+		headers : {
+			Accept : 'application/vnd.calendapp.api.event.collection+json',
+		}
 	}).done(function(data, status, jqxhr) {
 				var repos = data;
 				$.each(repos, function(i, v) {
@@ -341,6 +345,9 @@ function getUserIndex(username){
 			type : 'GET',
 			crossDomain : true,
 			dataType : 'json',
+					headers:{
+		Accept : 'application/vnd.calendapp.api.user+json',
+		}
 		}).done(function(data,status,jqxhr)
 		{
 			setCookie("username", data.name);

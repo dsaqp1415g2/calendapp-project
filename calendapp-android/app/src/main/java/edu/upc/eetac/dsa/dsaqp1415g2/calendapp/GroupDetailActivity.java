@@ -108,7 +108,7 @@ public class GroupDetailActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(EventCollection result) {
-          addEvents(result);
+            addEvents(result);
             if (pd != null) {
                 pd.dismiss();
             }
@@ -141,4 +141,6 @@ public class GroupDetailActivity extends ListActivity {
     }
 
 
+
 }
+
