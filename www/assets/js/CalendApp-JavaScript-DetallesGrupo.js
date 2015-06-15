@@ -49,7 +49,7 @@ $(document).ready(function(){
 	if(y == 'false')
 	{
 		window.alert(y);
-		 $('<input id="textbox_invite" type="text" class="form-control" disabled>').appendTo($("#nombre_invite"));
+		 $('<input id="textbox_invite" type="text" class="form-control">').appendTo($("#nombre_invite"));
 	}
 	else
 	{
@@ -291,7 +291,8 @@ function inviteUser(name){
 		"Content-Type" : 'application/vnd.calendapp.api.user+json',
 		},
 				statusCode: {
-    		404: function() {window.alert("Usuario no encontrado");}
+    		404: function() {window.alert("Usuario no encontrado");},
+			403 : function() {window.alert("No eres el admin");}
     	}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Amigo invitado</div>').appendTo($("#listar_grupos_id"));				
