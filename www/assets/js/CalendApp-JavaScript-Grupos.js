@@ -216,7 +216,7 @@ function idgrup(abc,def)
 */
 
 function getGrupoDel(groupid) {
-	var url = API_BASE_URL + '/groups/'+groupid.name;
+	var url = API_BASE_URL +'/groups/'+groupid.name;
 	$("#get_repo_result").text('');
 	console.log("Buscamos el grupo con nombre " + groupid.name + "para borrar");
 	$.ajax({
