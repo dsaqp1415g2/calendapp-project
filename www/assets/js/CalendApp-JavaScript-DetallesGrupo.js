@@ -48,7 +48,6 @@ $(document).ready(function(){
 	var y = getCookie("groupstatus");
 	if(y == 'false')
 	{
-		window.alert(y);
 		 $('<input id="textbox_invite" type="text" class="form-control">').appendTo($("#nombre_invite"));
 	}
 	else
