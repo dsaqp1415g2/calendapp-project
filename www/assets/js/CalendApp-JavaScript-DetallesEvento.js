@@ -198,7 +198,7 @@ function getEvent(eventid){
 				var repos = data;
 
 					if (typeof repos.name !== 'undefined'){
-						$('<h3 class="mb"><b class="fa fa-angle-right"></b>' +repos.name+ '</h3><br><b>Duración : </b>' +TStoDate(repos.dateInitial)+'-'+TStoDate(repos.dateFinish)+'<br><b>Último cambio : </b>' +TStoDate(repos.lastModified)+ '<br><b>Ultima modificación : </b>' +TStoDate(repos.lastModified)+ '<br>').appendTo($('#group_name'));
+						$('<h3 class="mb"><b class="fa fa-angle-right"></b>' +repos.name+ '</h3><br><b>Duración : </b>' +TStoDate(repos.dateInitial)+'-'+TStoDate(repos.dateFinish)+'<br><b>Ultima modificación : </b>' +TStoDate(repos.lastModified)+ '<br>').appendTo($('#group_name'));
 					}
 
 	}).fail(function() {
