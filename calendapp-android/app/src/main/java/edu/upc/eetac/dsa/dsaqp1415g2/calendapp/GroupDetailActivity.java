@@ -108,7 +108,13 @@ public class GroupDetailActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(EventCollection result) {
-            addEvents(result);
+            if (result == null){
+                pd.setTitle("No tienes eventos privados");
+                pd.setCancelable(false);
+                pd.setIndeterminate(true);
+                pd.show();
+            } else
+                addEvents(result);
             if (pd != null) {
                 pd.dismiss();
             }

@@ -130,7 +130,7 @@ public class CalendappMainActivity extends ListActivity {
         protected void onPostExecute(EventCollection result) {
             if (result == null){
                 pd.setTitle("No tienes eventos privados");
-                pd.setCancelable(false);
+               pd.setCancelable(false);
                 pd.setIndeterminate(true);
                 pd.show();
             } else
