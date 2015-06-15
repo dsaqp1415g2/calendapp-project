@@ -55,9 +55,8 @@ $("#button_delete_group").click(function(e){
 		window.alert("No puedes dejar el campo en blanco");
 	}
 	else{
-	var group = new Object();
-	group.name	= $("#group_name").val();
-	getGrupoDel(group);
+	var group =  $("#group_name").val();
+	deleteGroup(group);
 	}
 	
 })
@@ -146,9 +145,9 @@ function getGroups(abc) {
 							console.log("ENTRA");
 							console.log(z);
 							if (z.shared == 1){
-					$('<a onClick="idgrup('+z.groupid+','+z.shared+')"><div class="form-panel"  id=""> <br><strong> Name: ' + z.name + '</strong><br><strong> Tipo : </strong> Compartido<br></div></a>').appendTo($('#listar_grupos'));
+					$('<a onClick="idgrup('+z.groupid+','+z.shared+')"><div class="form-panel"  id=""> <br><strong> Name: ' + z.name + '</strong><br><strong> Tipo : </strong> Compartido<br><strong> ID : </strong>'+z.groupid+'<br></div></a>').appendTo($('#listar_grupos'));
 							}else{
-					$('<a onClick="idgrup('+z.groupid+','+z.shared+')"><div class="form-panel"  id=""> <br><strong> Name: ' + z.name + '</strong><br><strong> Tipo : </strong> Privado<br></div></a>').appendTo($('#listar_grupos'));
+					$('<a onClick="idgrup('+z.groupid+','+z.shared+')"><div class="form-panel"  id=""> <br><strong> Name: ' + z.name + '</strong><br><strong> Tipo : </strong> Privado<br><strong> ID : </strong>'+z.groupid+'<br></div></a>').appendTo($('#listar_grupos'));
 							}
 							
 					grupos.push(z.groupid);
